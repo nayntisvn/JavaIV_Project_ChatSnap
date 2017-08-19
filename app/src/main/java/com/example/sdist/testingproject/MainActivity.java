@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,20 +28,20 @@ public class MainActivity extends AppCompatActivity {
         animationDrawable.start();
     }
 
-
-
     public void redirectToNext(View v)
     {
-        nextPage = (Button) v;
+        if(v.getId() == R.id.button_login){
 
-        Button button= (Button) findViewById(R.id.button_login);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(i);
-            }
-        });
+            Intent i = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(i);
+
+        }
+        if(v.getId() == R.id.button_signUp){
+
+//            Intent i = new Intent(MainActivity.this, SignUp.class);
+//
+//            startActivity(i);
+        }
 
 
     }
