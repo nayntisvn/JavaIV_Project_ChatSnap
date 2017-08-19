@@ -27,27 +27,20 @@ public class MainActivity extends AppCompatActivity {
         animationDrawable.start();
     }
 
+
+
     public void redirectToNext(View v)
     {
         nextPage = (Button) v;
 
-        switch(nextPage.getText().toString())
-        {
-            case "login" : {
-
+        Button button= (Button) findViewById(R.id.button_login);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(i);
-
             }
-
-            case "sign_up":{
-
-
-            }
-
-
-
-        }
+        });
 
 
     }
