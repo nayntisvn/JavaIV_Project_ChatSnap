@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
 import org.w3c.dom.Text;
 
 public class LoginActivity extends AppCompatActivity {
@@ -32,9 +33,8 @@ public class LoginActivity extends AppCompatActivity {
 
             try {
                 resultPassword = WebServices.getJsonObject(Configurations.login + username).getString("password");
-            }catch(Exception e)
-            {
-
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
 
             return null;
