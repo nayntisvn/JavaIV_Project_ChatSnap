@@ -27,7 +27,8 @@
                 android:id="@+id/button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sign Up" />
+                android:text="@string/sign_up"
+                android:textColor="@color/colorAccent"/>
         </LinearLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>
