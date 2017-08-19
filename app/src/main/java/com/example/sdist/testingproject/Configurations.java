@@ -13,7 +13,7 @@ import java.net.URL;
 public class Configurations {
 
 //    Ip Address of server
-    private static String IpAddress = "";
+    private static String IpAddress = "192.168.254.101";
 
 //    WebServices
 //
