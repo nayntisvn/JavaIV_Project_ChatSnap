@@ -10,6 +10,9 @@ public class Configurations {
     private static String IpAddress = "";
 
 //    WebServices
+//
+//    format for webservice :
+//                      <identifier> = "http://" + IpAddress + "<insert webservice here>";
     public static String login = IpAddress + "";
 
 //    Public Variables
