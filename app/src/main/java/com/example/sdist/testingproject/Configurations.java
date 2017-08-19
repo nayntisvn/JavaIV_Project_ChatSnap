@@ -1,5 +1,11 @@
 package com.example.sdist.testingproject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 /**
  * Created by Sdist on 8/19/2017.
  */
@@ -13,7 +19,7 @@ public class Configurations {
 //
 //    format for webservice :
 //                      <identifier> = "http://" + IpAddress + "<insert webservice here>";
-    public static String login = IpAddress + "";
+    public static String login = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/login?username=";
 
 //    Public Variables
     private String Username;
@@ -35,5 +41,6 @@ public class Configurations {
     public void setPassword(String password) {
         Password = password;
     }
+
 
 }
