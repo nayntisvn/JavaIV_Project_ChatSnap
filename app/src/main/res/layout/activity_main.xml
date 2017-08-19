@@ -51,14 +51,16 @@
             android:id="@+id/button_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/MyButton"
+            android:onClick="redirectToNext"
+            android:text="@string/login"
             android:textColor="@color/text_shadow_white"
-            android:text="@string/login" />
+            android:theme="@style/MyButton" />
 
         <Button
             android:id="@+id/button_signUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="redirectToNext"
             android:text="@string/sign_up" />
     </LinearLayout>
 
