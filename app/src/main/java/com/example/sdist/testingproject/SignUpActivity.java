@@ -118,7 +118,7 @@ public class SignUpActivity extends AppCompatActivity{
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Sign Up failed : Mismatched Password", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Sign Up failed : Check fields", Toast.LENGTH_LONG).show();
 
         _signupButton.setEnabled(true);
     }

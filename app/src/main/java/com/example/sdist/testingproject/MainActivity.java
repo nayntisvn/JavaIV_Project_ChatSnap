@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private String password = "";
     private String resultPassword = "";
 
+    private int ClearToGo = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -90,15 +92,10 @@ public class MainActivity extends AppCompatActivity {
 
         new LoginTask().execute();
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+        progressDialog.dismiss();
+        _loginButton.setEnabled(true);
+
+
     }
 
     @Override
@@ -165,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Void... params) {
+
             try {
                 JSONObject jsonObject = new JSONObject(WebServices.getJsonObject(Configurations.login + username));
                 resultPassword = jsonObject.getString("password");
@@ -172,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
 
             }
+
             return null;
         }
 
@@ -179,11 +178,24 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
 
             if(password.matches(resultPassword)){
+
                 Toast.makeText(MainActivity.this, "Login success", Toast.LENGTH_SHORT).show();
+
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                // On complete call either onLoginSuccess or onLoginFailed
+                                onLoginSuccess();
+                                // onLoginFailed();
+
+                            }
+                        }, 0);
+
             }else{
+                ClearToGo = 0;
                 Toast.makeText(MainActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
             }
-
+;;
         }
 
     }
