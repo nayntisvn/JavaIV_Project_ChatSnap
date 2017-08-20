@@ -9,6 +9,6 @@
     <color name="text_shadow">#7F000000</color>
     <color name="text_shadow_white">#FFFFFF</color>
 
-    <color name="button_unclicked">#3231e1a7</color>
+    <color name="button_unclicked">#b531a680</color>
     <color name="button_clicked">#325aa3cd</color>
 </resources>
