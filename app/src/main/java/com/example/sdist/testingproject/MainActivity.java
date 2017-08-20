@@ -3,6 +3,7 @@ package com.example.sdist.testingproject;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -14,18 +15,24 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "SignUpActivity";
     private static final int REQUEST_SIGNUP = 0;
 
-    @InjectView(R.id.input_email) EditText _emailText;
+    @InjectView(R.id.input_username) EditText _usernameText;
     @InjectView(R.id.input_password) EditText _passwordText;
     @InjectView(R.id.btn_login) Button _loginButton;
     @InjectView(R.id.link_signup) TextView _signupLink;
+
+    private String username = "";
+    private String password = "";
+    private String resultPassword = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
                 startActivityForResult(intent, REQUEST_SIGNUP);
             }
         });
@@ -76,10 +83,12 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setMessage("Authenticating...");
         progressDialog.show();
 
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
+        username = _usernameText.getText().toString();
+        password = _passwordText.getText().toString();
 
         // TODO: Implement your own authentication logic here.
+
+        new LoginTask().execute();
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
@@ -111,12 +120,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onLoginSuccess() {
+
         _loginButton.setEnabled(true);
         finish();
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Login failed : Empty Fields", Toast.LENGTH_LONG).show();
 
         _loginButton.setEnabled(true);
     }
@@ -124,14 +134,14 @@ public class MainActivity extends AppCompatActivity {
     public boolean validate() {
         boolean valid = true;
 
-        String email = _emailText.getText().toString();
+        String email = _usernameText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address");
+        if (email.isEmpty()) {
+            _usernameText.setError("username is empty");
             valid = false;
         } else {
-            _emailText.setError(null);
+            _usernameText.setError(null);
         }
 
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
@@ -144,12 +154,44 @@ public class MainActivity extends AppCompatActivity {
         return valid;
     }
 
+    public class LoginTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected void onPreExecute(){
+
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                JSONObject jsonObject = new JSONObject(WebServices.getJsonObject(Configurations.login + username));
+                resultPassword = jsonObject.getString("password");
+
+            } catch (Exception e) {
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            if(password.matches(resultPassword)){
+                Toast.makeText(MainActivity.this, "Login success", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(MainActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+    }
+
 /*
     public void redirectToNext(View v)
     {
         if(v.getId() == R.id.button_login){
 
-            Intent i = new Intent(MainActivity.this, LoginActivity.class);
+            Intent i = new Intent(MainActivity.this, SignUpActivity.class);
             startActivity(i);
 
         }

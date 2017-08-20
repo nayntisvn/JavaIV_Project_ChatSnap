@@ -60,11 +60,6 @@ public class WebServices {
         try {
             URL url = new URL(uri);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(5000);
-            conn.setRequestProperty("Content-Type", "Application/json");
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            conn.setRequestMethod("GET");
 
             InputStream in = new BufferedInputStream(conn.getInputStream());
 

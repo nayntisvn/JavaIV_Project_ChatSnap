@@ -13,13 +13,14 @@ import java.net.URL;
 public class Configurations {
 
 //    Ip Address of server
-    private static String IpAddress = "192.168.254.101";
+    private static String IpAddress = "192.168.254.107";
 
 //    WebServices
 //
 //    format for webservice :
 //                      <identifier> = "http://" + IpAddress + "<insert webservice here>";
     public static String login = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/login?username=";
+    public static String signup = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/newuser";
 
 //    Public Variables
     private String Username;
