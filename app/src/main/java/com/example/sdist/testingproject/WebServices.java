@@ -53,13 +53,19 @@ public class WebServices {
 
     }
 
-    public static JSONObject getJsonObject(String uri) {
+    public static String getJsonObject(String uri) {
         StringBuilder result = new StringBuilder();
         JSONObject jsonObject = null;
 
         try {
             URL url = new URL(uri);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(5000);
+            conn.setRequestProperty("Content-Type", "Application/json");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setRequestMethod("GET");
+
             InputStream in = new BufferedInputStream(conn.getInputStream());
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(in, Charset.forName("UTF-8")));
@@ -69,19 +75,13 @@ public class WebServices {
                 result.append(line);
             }
 
-            //GET PASSWORD from object
-            jsonObject = new JSONObject(result.toString());
-
-
             conn.disconnect();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-
         }
 
-        return jsonObject;
-    }
 
+        return result.toString();
+    }
 
 }
