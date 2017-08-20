@@ -1,20 +1,12 @@
 package com.example.sdist.testingproject;
 
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-import java.net.HttpURLConnection;
-import java.io.*;
-import java.net.URL;
-import java.nio.charset.Charset;
 
 public class LoginActivity extends AppCompatActivity{
 
@@ -63,7 +55,7 @@ public class LoginActivity extends AppCompatActivity{
         }
 
     }
-
+/*
     public void login(View v){
 
         W_Username = (EditText) findViewById(R.id.text_Username);
@@ -74,5 +66,5 @@ public class LoginActivity extends AppCompatActivity{
 
         new LoginTask().execute();
 
-    }
+    }*/
 }
