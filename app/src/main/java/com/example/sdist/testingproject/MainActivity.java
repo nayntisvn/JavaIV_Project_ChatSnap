@@ -122,7 +122,9 @@ public class MainActivity extends AppCompatActivity {
     public void onLoginSuccess() {
 
         _loginButton.setEnabled(true);
-        finish();
+
+        Intent intent = new Intent(getApplicationContext(), homepage.class);
+        startActivity(intent);
     }
 
     public void onLoginFailed() {
