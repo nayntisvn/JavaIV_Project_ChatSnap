@@ -53,7 +53,7 @@ public class WebServices {
 
     }
 
-    public static String getJsonObject(String uri) {
+    protected static String getJsonObject(String uri) {
         StringBuilder result = new StringBuilder();
         JSONObject jsonObject = null;
 
@@ -79,7 +79,6 @@ public class WebServices {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         return result.toString();
     }

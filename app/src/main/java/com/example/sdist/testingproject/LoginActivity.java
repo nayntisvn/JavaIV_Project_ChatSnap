@@ -16,7 +16,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity{
 
     String username = "";
     String password = "";
@@ -31,43 +31,22 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
     }
 
-    public static String getJsonObject(String uri) {
-        StringBuilder result = new StringBuilder();
-        JSONObject jsonObject = null;
-
-        try {
-            URL url = new URL(uri);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            InputStream in = new BufferedInputStream(conn.getInputStream());
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in, Charset.forName("UTF-8")));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                result.append(line);
-            }
-
-            conn.disconnect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return result.toString();
-    }
-
     public class LoginTask extends AsyncTask<Void, Void, String> {
 
         @Override
-        protected String doInBackground(Void... params) {
-
+        protected void onPreExecute(){
             try {
-                JSONObject jsonObject = new JSONObject(getJsonObject(Configurations.login + username));
+                JSONObject jsonObject = new JSONObject(WebServices.getJsonObject(Configurations.login + username));
                 resultPassword = jsonObject.getString("password");
 
-            } catch (JSONException e) {
-                Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+
             }
+
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
 
             return null;
         }
