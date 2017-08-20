@@ -1,6 +1,7 @@
 package com.example.sdist.testingproject;
 
 import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -67,30 +68,44 @@ public class SignUpActivity extends AppCompatActivity{
 
         _signupButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(SignUpActivity.this,
-                R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Creating Account...");
-        progressDialog.show();
 
-        String name = _usernameText.getText().toString();
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
-        String conPassword = _conPasswordText.getText().toString();
-        String birthday = _birthday.getText().toString();
+        username = _usernameText.getText().toString();
+        email = _emailText.getText().toString();
+        password = _passwordText.getText().toString();
+        conPassword = _conPasswordText.getText().toString();
+        birthday = _birthday.getText().toString();
 
         // TODO: Implement your own signup logic here.
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+        if(password.equals(conPassword)) {
+            final ProgressDialog progressDialog = new ProgressDialog(SignUpActivity.this,
+                    R.style.AppTheme);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setMessage("Creating Account...");
+            progressDialog.show();
+
+            stringToPass = "{ \"username\":\"" + username + "\","
+                    + "\"email\":\"" + email + "\","
+                    + "\"password\":\"" + password + "\","
+                    + "\"birthday\":\"" + birthday + "\"}";
+
+            new SignUpTask().execute();
+
+            new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                            // On complete call either onSignupSuccess or onSignupFailed
+                            // depending on success
+                            onSignupSuccess();
+                            // onSignupFailed();
+                            progressDialog.dismiss();
+                        }
+                    }, 3000);
+        }
+        else
+        {
+            onSignupFailed();
+        }
     }
 
     public void onSignupSuccess() {
@@ -100,7 +115,7 @@ public class SignUpActivity extends AppCompatActivity{
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Sign Up failed : Mismatched Password", Toast.LENGTH_LONG).show();
 
         _signupButton.setEnabled(true);
     }
@@ -108,15 +123,15 @@ public class SignUpActivity extends AppCompatActivity{
     public boolean validate() {
         boolean valid = true;
 
-        String name = _nameText.getText().toString();
+        String name = _usernameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
-            _nameText.setError("at least 3 characters");
+            _usernameText.setError("at least 3 characters");
             valid = false;
         } else {
-            _nameText.setError(null);
+            _usernameText.setError(null);
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -136,57 +151,35 @@ public class SignUpActivity extends AppCompatActivity{
         return valid;
     }
 
-
-
-    /*
     public class SignUpTask extends AsyncTask<Void, Void, String> {
 
         @Override
         protected void onPreExecute(){
-
-            try {
-                WebServices.sendToJsonObject(Configurations.signup, stringToPass);
-            } catch (Exception e) {
-
-            }
 
         }
 
         @Override
         protected String doInBackground(Void... params) {
 
+            try {
+
+                    WebServices.sendToJsonObject(Configurations.signup, stringToPass);
+
+            } catch (Exception e) {
+
+            }
             return null;
         }
 
         @Override
         protected void onPostExecute(String result) {
 
-
+            if(password.matches(conPassword)){
+                Toast.makeText(SignUpActivity.this, "Sign Up Success", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(SignUpActivity.this, "Mismatched Password", Toast.LENGTH_SHORT).show();
+            }
         }
-
     }
 
-    public void onClick(View v){
-
-        username = _usernameText.getText().toString();
-        email = _emailText.getText().toString();
-        password = _passwordText.getText().toString();
-        conPassword = _conPasswordText.getText().toString();
-        birthday = "0000-00-00";
-
-        if(password.equals(conPassword))
-        {
-            stringToPass = "{ \"username\":\"" + username + "\","
-                    + "\"email\":\"" + email + "\","
-                    + "\"password\":\"" + password + "\","
-                    + "\"birthday\":\"" + birthday + "\"";
-
-            new SignUpTask().execute();
-        }
-        else
-        {
-            Toast.makeText(getBaseContext(), "Mismatch passwords", Toast.LENGTH_LONG).show();
-        }
-
-    }*/
 }
