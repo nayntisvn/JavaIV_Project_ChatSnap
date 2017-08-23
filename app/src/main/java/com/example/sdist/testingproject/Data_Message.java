@@ -8,6 +8,7 @@ import java.util.Date;
 
 public class Data_Message {
 
+//    Offline variables for Message table
     private String message;
     private int userId;
     private Date timestamp;

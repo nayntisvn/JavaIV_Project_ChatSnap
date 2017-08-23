@@ -8,6 +8,7 @@ import java.util.Date;
 
 public class Data_Stories {
 
+//     Offline variables for Stories table
     private String file;
     private int userId;
     private Date timestamp;
