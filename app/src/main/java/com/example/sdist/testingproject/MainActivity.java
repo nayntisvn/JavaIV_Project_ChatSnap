@@ -22,19 +22,21 @@ import butterknife.InjectView;
 
 public class MainActivity extends AppCompatActivity {
 
+
     private static final String TAG = "SignUpActivity";
     private static final int REQUEST_SIGNUP = 0;
 
+//    Controls/Swings/Views of page
     @InjectView(R.id.input_username) EditText _usernameText;
     @InjectView(R.id.input_password) EditText _passwordText;
     @InjectView(R.id.btn_login) Button _loginButton;
     @InjectView(R.id.link_signup) TextView _signupLink;
 
+//    Local variables
     private String username = "";
     private String password = "";
     private String resultPassword = "";
-
-    private int ClearToGo = 0;
+    private int ClearToGo = 0;  // Login Checker
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(Void... params) {
 
             try {
-                JSONObject jsonObject = new JSONObject(WebServices.getJsonObject(Configurations.login + username));
+                JSONObject jsonObject = new JSONObject(Set_WebServices.getJsonObject(Set_Configurations.login + username));
                 resultPassword = jsonObject.getString("password");
 
             } catch (Exception e) {

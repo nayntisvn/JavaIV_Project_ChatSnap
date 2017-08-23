@@ -10,12 +10,12 @@ import java.net.URL;
  * Created by Sdist on 8/19/2017.
  */
 
-public class Configurations {
+public class Set_Configurations {
 
 //    Ip Address of server
     private static String IpAddress = "192.168.254.107";
 
-//    WebServices
+//    Set_WebServices
 //
 //    format for webservice :
 //                      <identifier> = "http://" + IpAddress + "<insert webservice here>";

@@ -15,8 +15,9 @@ import java.nio.charset.Charset;
  * Created by Sdist on 8/20/2017.
  */
 
-public class WebServices {
+public class Set_WebServices {
 
+    //    Webservice for sending a JSON object from server
     public static String sendToJsonObject(String urlQuery, String stringToPass) {
         try {
             URL url = new URL(urlQuery);
@@ -53,6 +54,7 @@ public class WebServices {
 
     }
 
+    //    Webservice for getting a JSON object from server
     protected static String getJsonObject(String uri) {
         StringBuilder result = new StringBuilder();
         JSONObject jsonObject = null;

@@ -17,10 +17,12 @@ import butterknife.InjectView;
 
 public class SignUpActivity extends AppCompatActivity{
 
+//    String for JSON transfer
     private String stringToPass;
 
     private static final String TAG = "SignupActivity";
 
+//    Controls/Swings/Views of page
     @InjectView(R.id.input_username) EditText _usernameText;
     @InjectView(R.id.input_email) EditText _emailText;
     @InjectView(R.id.input_password) EditText _passwordText;
@@ -29,6 +31,7 @@ public class SignUpActivity extends AppCompatActivity{
     @InjectView(R.id.btn_signup) Button _signupButton;
     @InjectView(R.id.link_login) TextView _loginLink;
 
+//    Local Variables
     private String username;
     private String email;
     private String password;
@@ -166,7 +169,7 @@ public class SignUpActivity extends AppCompatActivity{
 
             try {
 
-                    WebServices.sendToJsonObject(Configurations.signup, stringToPass);
+                    Set_WebServices.sendToJsonObject(Set_Configurations.signup, stringToPass);
 
             } catch (Exception e) {
 
