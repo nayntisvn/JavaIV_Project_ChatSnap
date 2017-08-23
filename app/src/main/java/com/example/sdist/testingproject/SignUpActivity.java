@@ -79,7 +79,7 @@ public class SignUpActivity extends AppCompatActivity{
         conPassword = _conPasswordText.getText().toString();
         birthday = _birthday.getText().toString();
 
-        // TODO: Implement your own signup logic here.
+        // TODO: Implement your own Web_SignUp logic here.
 
         if(password.equals(conPassword)) {
             final ProgressDialog progressDialog = new ProgressDialog(SignUpActivity.this,
@@ -169,7 +169,7 @@ public class SignUpActivity extends AppCompatActivity{
 
             try {
 
-                    Set_WebServices.sendToJsonObject(Set_Configurations.signup, stringToPass);
+                    Set_WebServices.sendToJsonObject(Set_Configurations.Web_SignUp, stringToPass);
 
             } catch (Exception e) {
 

@@ -19,8 +19,8 @@ public class Set_Configurations {
 //
 //    format for webservice :
 //                      <identifier> = "http://" + IpAddress + "<insert webservice here>";
-    public static String login = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/login?username=";
-    public static String signup = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/newuser";
+    public static String Web_Login = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/Web_Login?username=";
+    public static String Web_SignUp = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/newuser";
 
 
 //    Public Variables

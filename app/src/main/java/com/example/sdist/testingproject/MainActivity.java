@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
 
-                // TODO: Implement successful signup logic here
+                // TODO: Implement successful Web_SignUp logic here
                 // By default we just finish the Activity and log them in automatically
                 this.finish();
             }
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(Void... params) {
 
             try {
-                JSONObject jsonObject = new JSONObject(Set_WebServices.getJsonObject(Set_Configurations.login + username));
+                JSONObject jsonObject = new JSONObject(Set_WebServices.getJsonObject(Set_Configurations.Web_Login + username));
                 resultPassword = jsonObject.getString("password");
 
             } catch (Exception e) {
