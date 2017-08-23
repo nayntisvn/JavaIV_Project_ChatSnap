@@ -5,4 +5,6 @@ package com.example.sdist.testingproject;
  */
 
 public class Data_Message {
+
+    private String pakyuBasinilio;
 }
