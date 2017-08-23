@@ -22,9 +22,13 @@ public class Set_Configurations {
     public static String login = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/login?username=";
     public static String signup = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/newuser";
 
+
 //    Public Variables
+    private int userId;
     private String Username;
     private String Password;
+    private String Email;
+    private String Birthday;
 
 //    Encapsulation
     public String getUsername() {
@@ -43,5 +47,27 @@ public class Set_Configurations {
         Password = password;
     }
 
+    public int getUserId() {
+        return userId;
+    }
 
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getEmail() {
+        return Email;
+    }
+
+    public void setEmail(String email) {
+        Email = email;
+    }
+
+    public String getBirthday() {
+        return Birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        Birthday = birthday;
+    }
 }
