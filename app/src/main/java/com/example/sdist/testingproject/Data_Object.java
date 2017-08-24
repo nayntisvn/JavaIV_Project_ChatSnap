@@ -1,5 +1,7 @@
 package com.example.sdist.testingproject;
 
+import android.graphics.Bitmap;
+
 import java.util.Date;
 
 /**
@@ -9,16 +11,16 @@ import java.util.Date;
 public class Data_Object {
 
 //    Offline variables for Object table
-    private String file;
+    private Bitmap file;
     private int userId;
     private Date timestamp;
     private int recipient;
 
-    public String getFile() {
+    public Bitmap getFile() {
         return file;
     }
 
-    public void setFile(String file) {
+    public void setFile(Bitmap file) {
         this.file = file;
     }
 

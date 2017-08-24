@@ -23,6 +23,7 @@ public class Set_DatabaseOffline extends SQLiteOpenHelper{
     private static final String COLUMN_PASS = "pass";
     public static final String EMPTY_RESULT = "null";
     SQLiteDatabase db;
+
     private static final String TABLE_CREATE = "create table contacts (id integer primary key not null, " +
             "name text not null, email text not null, uname text not null, pass text not null)";
 
