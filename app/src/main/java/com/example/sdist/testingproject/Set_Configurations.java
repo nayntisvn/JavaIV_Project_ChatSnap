@@ -1,6 +1,9 @@
 package com.example.sdist.testingproject;
 
+import android.os.Environment;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -15,13 +18,15 @@ public class Set_Configurations {
 //    Ip Address of server
     private static String IpAddress = "192.168.254.107";
 
+//    Address of user details file
+    protected static File user_Details;
+
 //    Set_WebServices
 //
 //    format for webservice :
 //                      <identifier> = "http://" + IpAddress + "<insert webservice here>";
     public static String Web_Login = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/Web_Login?username=";
     public static String Web_SignUp = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/newuser";
-
 
 //    Public Variables
     private int userId;

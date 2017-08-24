@@ -89,7 +89,9 @@ public class homepage extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_send) {
+            Set_Configurations.user_Details.delete();
 
+            super.onBackPressed();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

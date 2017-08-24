@@ -62,7 +62,6 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true">
 
-
                 <ImageView
                     android:id="@+id/add_friend"
                     android:layout_width="30dp"

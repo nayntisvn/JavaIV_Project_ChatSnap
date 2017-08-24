@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,6 +17,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -33,10 +38,13 @@ public class MainActivity extends AppCompatActivity {
     @InjectView(R.id.link_signup) TextView _signupLink;
 
 //    Local variables
+    private String error = "";
     private String username = "";
     private String password = "";
     private String resultPassword = "";
     private int ClearToGo = 0;  // Login Checker
+    Intent intent;
+    FileOutputStream file_Write;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,31 +52,38 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+        Set_Configurations.user_Details = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "userdetails.txt");
 
         ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.root_layout);
         AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
-        animationDrawable.setEnterFadeDuration(1000);
-        animationDrawable.setExitFadeDuration(500);
+        animationDrawable.setEnterFadeDuration(500);
+        animationDrawable.setExitFadeDuration(2000);
         animationDrawable.start();
 
-        _loginButton.setOnClickListener(new View.OnClickListener() {
+        if(CheckCurrentUser()) {
 
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
+            intent = new Intent(getApplicationContext(),homepage.class);
+            startActivity(intent);
+        }
+        else {
+            _loginButton.setOnClickListener(new View.OnClickListener() {
 
-        _signupLink.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    login();
+                }
+            });
 
-            @Override
-            public void onClick(View v) {
+            _signupLink.setOnClickListener(new View.OnClickListener() {
 
-                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);
-            }
-        });
+                @Override
+                public void onClick(View v) {
 
+                    Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
+                    startActivityForResult(intent, REQUEST_SIGNUP);
+                }
+            });
+        }
     }
 
     public void login() {
@@ -97,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.dismiss();
         _loginButton.setEnabled(true);
 
-
     }
 
     @Override
@@ -122,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
         _loginButton.setEnabled(true);
 
-        Intent intent = new Intent(getApplicationContext(), homepage.class);
+        intent = new Intent(getApplicationContext(), homepage.class);
         startActivity(intent);
     }
 
@@ -166,11 +180,12 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(Void... params) {
 
             try {
+
                 JSONObject jsonObject = new JSONObject(Set_WebServices.getJsonObject(Set_Configurations.Web_Login + username));
                 resultPassword = jsonObject.getString("password");
 
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
 
             return null;
@@ -183,23 +198,56 @@ public class MainActivity extends AppCompatActivity {
 
                 Toast.makeText(MainActivity.this, "Login success", Toast.LENGTH_SHORT).show();
 
+                try {
+                    file_Write = new FileOutputStream(Set_Configurations.user_Details);
+                    file_Write.write(username.getBytes());
+                    file_Write.flush();
+                    file_Write.close();
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
+
                 new android.os.Handler().postDelayed(
                         new Runnable() {
                             public void run() {
                                 // On complete call either onLoginSuccess or onLoginFailed
                                 onLoginSuccess();
                                 // onLoginFailed();
-
                             }
                         }, 0);
+
 
             }else{
                 ClearToGo = 0;
                 Toast.makeText(MainActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
             }
-;;
+
         }
 
+    }
+
+//    Insert checker of current user here.
+    public boolean CheckCurrentUser(){
+
+        try {
+            file_Write = new FileOutputStream(Set_Configurations.user_Details);
+            file_Write.write(username.getBytes());
+            file_Write.flush();
+            file_Write.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        if(Set_Configurations.user_Details.exists()){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 /*
