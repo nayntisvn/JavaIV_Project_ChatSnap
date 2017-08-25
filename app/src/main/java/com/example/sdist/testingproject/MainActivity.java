@@ -27,7 +27,6 @@ import butterknife.InjectView;
 
 public class MainActivity extends AppCompatActivity {
 
-
     private static final String TAG = "SignUpActivity";
     private static final int REQUEST_SIGNUP = 0;
 
