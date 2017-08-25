@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/JavaIV_Project_ChatSnap.iml" filepath="$PROJECT_DIR$/JavaIV_Project_ChatSnap.iml" />
-      <module fileurl="file://$PROJECT_DIR$/JavaIV_Project_ChatSnap.iml" filepath="$PROJECT_DIR$/JavaIV_Project_ChatSnap.iml" />
       <module fileurl="file://$PROJECT_DIR$/TestingProject.iml" filepath="$PROJECT_DIR$/TestingProject.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

@@ -26,7 +26,10 @@
         <activity
             android:name=".homepage"
             android:label="@string/title_activity_homepage"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".type_message_area" />
+        <activity android:name=".chat" />
+        <activity android:name=".friendlist"></activity>
     </application>
 
 </manifest>
