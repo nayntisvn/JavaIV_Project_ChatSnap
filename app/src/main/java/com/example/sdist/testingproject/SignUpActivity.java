@@ -27,7 +27,7 @@ public class SignUpActivity extends AppCompatActivity{
     @InjectView(R.id.input_email) EditText _emailText;
     @InjectView(R.id.input_password) EditText _passwordText;
     @InjectView(R.id.input_confirm_password) EditText _conPasswordText;
-    @InjectView(R.id.input_birthday) EditText _birthday;
+//    @InjectView(R.id.input_birthday) EditText _birthday;
     @InjectView(R.id.btn_signup) Button _signupButton;
     @InjectView(R.id.link_login) TextView _loginLink;
 
@@ -77,7 +77,7 @@ public class SignUpActivity extends AppCompatActivity{
         email = _emailText.getText().toString();
         password = _passwordText.getText().toString();
         conPassword = _conPasswordText.getText().toString();
-        birthday = _birthday.getText().toString();
+//        birthday = _birthday.getText().toString();
 
         // TODO: Implement your own Web_SignUp logic here.
 
@@ -168,7 +168,6 @@ public class SignUpActivity extends AppCompatActivity{
         protected String doInBackground(Void... params) {
 
             try {
-
                     Set_WebServices.sendToJsonObject(Set_Configurations.Web_SignUp, stringToPass);
 
             } catch (Exception e) {

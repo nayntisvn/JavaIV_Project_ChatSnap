@@ -34,6 +34,7 @@ public class Set_DatabaseOffline extends SQLiteOpenHelper{
     public Set_DatabaseOffline(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
     @Override
     public void onCreate(SQLiteDatabase db)
     {

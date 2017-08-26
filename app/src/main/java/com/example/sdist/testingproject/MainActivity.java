@@ -64,25 +64,25 @@ public class MainActivity extends AppCompatActivity {
             intent = new Intent(getApplicationContext(),homepage.class);
             startActivity(intent);
         }
-        else {
-            _loginButton.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    login();
-                }
-            });
+        _loginButton.setOnClickListener(new View.OnClickListener() {
 
-            _signupLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                login();
+            }
+        });
 
-                @Override
-                public void onClick(View v) {
+        _signupLink.setOnClickListener(new View.OnClickListener() {
 
-                    Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
-                    startActivityForResult(intent, REQUEST_SIGNUP);
-                }
-            });
-        }
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
+                startActivityForResult(intent, REQUEST_SIGNUP);
+            }
+        });
+
     }
 
     public void login() {
@@ -217,7 +217,6 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }, 0);
 
-
             }else{
                 ClearToGo = 0;
                 Toast.makeText(MainActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
@@ -248,6 +247,8 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     }
+
+
 
 /*
     public void redirectToNext(View v)

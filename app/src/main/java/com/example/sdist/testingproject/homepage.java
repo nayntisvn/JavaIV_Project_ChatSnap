@@ -21,7 +21,7 @@ public class homepage extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -89,6 +89,7 @@ public class homepage extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_send) {
+
             Set_Configurations.user_Details.delete();
 
             super.onBackPressed();
