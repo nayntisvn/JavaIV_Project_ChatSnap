@@ -28,7 +28,6 @@ public class Set_Configurations {
     public static String Web_Login = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/Web_Login?username=";
     public static String Web_SignUp = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/newuser";
 
-
 //    Public Variables
     private int userId;
     private String Username;

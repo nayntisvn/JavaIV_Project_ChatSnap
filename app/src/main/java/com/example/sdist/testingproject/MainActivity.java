@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.root_layout);
         AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
-        animationDrawable.setEnterFadeDuration(500);
+        animationDrawable.setEnterFadeDuration(2000);
         animationDrawable.setExitFadeDuration(2000);
         animationDrawable.start();
 
@@ -228,17 +228,17 @@ public class MainActivity extends AppCompatActivity {
 
 //    Insert checker of current user here.
     public boolean CheckCurrentUser(){
-
-        try {
-            file_Write = new FileOutputStream(Set_Configurations.user_Details);
-            file_Write.write(username.getBytes());
-            file_Write.flush();
-            file_Write.close();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+//
+//        try {
+//            file_Write = new FileOutputStream(Set_Configurations.user_Details);
+//            file_Write.write(username.getBytes());
+//            file_Write.flush();
+//            file_Write.close();
+//        }
+//        catch(Exception e)
+//        {
+//            e.printStackTrace();
+//        }
 
         if(Set_Configurations.user_Details.exists()){
             return true;
@@ -247,8 +247,6 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     }
-
-
 
 /*
     public void redirectToNext(View v)
