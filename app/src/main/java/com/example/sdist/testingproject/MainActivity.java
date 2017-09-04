@@ -167,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
             _passwordText.setError(null);
         }
 
+
         return valid;
     }
 
@@ -180,48 +181,67 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... params) {
 
+            String stat = null;
+            String toPass = "{\"username\" : \"%s\", \"password\" : \"%s\"}";
+
             try {
-
-                JSONObject jsonObject = new JSONObject(Set_WebServices.getJsonObject(Set_Configurations.Web_Login + username));
-                resultPassword = jsonObject.getString("password");
-
+                stat = Set_WebServices.putJsonObject(Set_Configurations.Web_Login, String.format(toPass, username, password));
+                ///
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            return null;
+            return stat;
         }
 
         @Override
         protected void onPostExecute(String result) {
 
-            if(password.matches(resultPassword)){
+            switch (result)
+            {
+                case "0" : {
+                    Toast.makeText(MainActivity.this, "Username doesn't exist!", Toast.LENGTH_SHORT).show();
+                    ClearToGo = 0;
 
-                Toast.makeText(MainActivity.this, "Login success", Toast.LENGTH_SHORT).show();
-
-                try {
-                    file_Write = new FileOutputStream(Set_Configurations.user_Details);
-                    file_Write.write(username.getBytes());
-                    file_Write.flush();
-                    file_Write.close();
+                    break;
                 }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
+                case "10": {
+                    Toast.makeText(MainActivity.this, "Incorrect Password!", Toast.LENGTH_SHORT).show();
+                    ClearToGo = 0;
+
+                    break;
                 }
+                case "11": {
+                    Toast.makeText(MainActivity.this, "Login success", Toast.LENGTH_SHORT).show();
 
-                new android.os.Handler().postDelayed(
-                        new Runnable() {
-                            public void run() {
-                                // On complete call either onLoginSuccess or onLoginFailed
-                                onLoginSuccess();
-                                // onLoginFailed();
-                            }
-                        }, 0);
+                    try {
+                        file_Write = new FileOutputStream(Set_Configurations.user_Details);
+                        file_Write.write(username.getBytes());
+                        file_Write.flush();
+                        file_Write.close();
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
 
-            }else{
-                ClearToGo = 0;
-                Toast.makeText(MainActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    // On complete call either onLoginSuccess or onLoginFailed
+                                    onLoginSuccess();
+                                    // onLoginFailed();
+                                }
+                            }, 0);
+
+                    break;
+                }
+                case "2": {
+                    Toast.makeText(MainActivity.this, "User already logged in!", Toast.LENGTH_SHORT).show();
+                    ClearToGo = 0;
+
+                    break;
+                }
             }
 
         }

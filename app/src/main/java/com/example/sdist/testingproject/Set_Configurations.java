@@ -16,7 +16,7 @@ import java.net.URL;
 public class Set_Configurations {
 
 //    Ip Address of server
-    private static String IpAddress = "10.1.15.154";
+    private static String IpAddress = "192.168.1.101";
 
 //    Address of user details file
     protected static File user_Details;
@@ -25,7 +25,7 @@ public class Set_Configurations {
 //
 //    format for webservice :
 //                      <identifier> = "http://" + IpAddress + "<insert webservice here>";
-    public static String Web_Login = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/Web_Login?username=";
+    public static String Web_Login = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/login";
     public static String Web_SignUp = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/newuser";
 
 //    Public Variables

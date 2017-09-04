@@ -91,7 +91,8 @@ public class SignUpActivity extends AppCompatActivity{
             stringToPass = "{ \"username\":\"" + username + "\","
                     + "\"email\":\"" + email + "\","
                     + "\"password\":\"" + password + "\","
-                    + "\"birthday\":\"" + birthday + "\"}";
+                    + "\"birthday\":\"" + birthday + "\","
+                    + "\"status\":\" 1}";
 
             new SignUpTask().execute();
 
@@ -168,7 +169,7 @@ public class SignUpActivity extends AppCompatActivity{
         protected String doInBackground(Void... params) {
 
             try {
-                    Set_WebServices.sendToJsonObject(Set_Configurations.Web_SignUp, stringToPass);
+                    Set_WebServices.postJsonObject(Set_Configurations.Web_SignUp, stringToPass);
 
             } catch (Exception e) {
 

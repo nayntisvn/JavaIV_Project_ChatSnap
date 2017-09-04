@@ -40,6 +40,7 @@ public class Set_DatabaseOffline extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db)
     {
         db.execSQL(String.format(TABLE_CREATE,"messages","_id",COLUMN_USERID, "INTEGER", COLUMN_MESSAGE, "TEXT", COLUMN_RECIPIENT, "TEXT", COLUMN_TIMESTAMP, "NUMERIC"));
+        db.execSQL(String.format(TABLE_CREATE,"messages","_id",COLUMN_USERID, "INTEGER", COLUMN_FILE, "TEXT", COLUMN_RECIPIENT, "TEXT", COLUMN_TIMESTAMP, "NUMERIC"));
         this.db = db;
     }
 

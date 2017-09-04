@@ -18,7 +18,7 @@ import java.nio.charset.Charset;
 public class Set_WebServices {
 
     //    Webservice for sending a JSON object from server
-    public static String sendToJsonObject(String urlQuery, String stringToPass) {
+    public static String postJsonObject(String urlQuery, String stringToPass) {
         try {
             URL url = new URL(urlQuery);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -47,6 +47,42 @@ public class Set_WebServices {
             conn.disconnect();
 
             return "";
+
+        } catch (Exception e) {
+            return "" + e;
+        }
+
+    }
+
+    public static String putJsonObject(String urlQuery, String stringToPass) {
+        try {
+            URL url = new URL(urlQuery);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(5000);
+            conn.setRequestProperty("Content-Type", "Application/json");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setRequestMethod("PUT");
+
+            OutputStream os = conn.getOutputStream();
+            os.write(stringToPass.getBytes());
+            os.flush();
+
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
+                return ("Failed : HTTP error code : " + conn.getResponseCode());
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+            String output;
+            String concatOutput = "";
+            while ((output = br.readLine()) != null) {
+                concatOutput += output;
+            }
+
+            conn.disconnect();
+
+            return concatOutput;
 
         } catch (Exception e) {
             return "" + e;
