@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.inject(this);
         Set_Configurations.user_Details = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "userdetails.txt");
 
+        Set_DatabaseOffline data = new Set_DatabaseOffline(this);
+
         ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.root_layout);
         AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
         animationDrawable.setEnterFadeDuration(2000);

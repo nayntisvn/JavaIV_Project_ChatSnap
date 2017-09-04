@@ -15,18 +15,19 @@ public class Set_DatabaseOffline extends SQLiteOpenHelper{
 
 //    Variables for offline database
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "contacts.db";
-    private static String TABLE_NAME = "";
+    private static final String DATABASE_NAME = "camshot.db";
+    private static final String TABLE_NAME = "";
     private static final String COLUMN_USERID = "userid";
     private static final String COLUMN_MESSAGE = "message";
+    private static final String COLUMN_FILE = "object";
     private static final String COLUMN_UNAME = "uname";
     private static final String COLUMN_PASS = "pass";
-    private static Bitmap COLUMN_FILE;
     private static final String COLUMN_RECIPIENT = "recipient";
+    private static final String COLUMN_TIMESTAMP = "timestamp";
     public static final String EMPTY_RESULT = "null";
     SQLiteDatabase db;
 
-    private static String TABLE_CREATE = "";
+    private static String TABLE_CREATE = "CREATE TABLE %S (%S INTEGER PRIMARY KEY, %S %S, %S %S, %S %S, %S %S)";
 
 //            "create table contacts (id integer primary key not null, " +
 //            "name text not null, email text not null, uname text not null, pass text not null)";
@@ -38,7 +39,7 @@ public class Set_DatabaseOffline extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        db.execSQL(TABLE_CREATE);
+        db.execSQL(String.format(TABLE_CREATE,"messages","_id",COLUMN_USERID, "INTEGER", COLUMN_MESSAGE, "TEXT", COLUMN_RECIPIENT, "TEXT", COLUMN_TIMESTAMP, "NUMERIC"));
         this.db = db;
     }
 
