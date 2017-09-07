@@ -27,13 +27,14 @@ public class Set_Configurations {
 //                      <identifier> = "http://" + IpAddress + "<insert webservice here>";
     public static String Web_Login = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/login";
     public static String Web_SignUp = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/newuser";
+    public static String Web_Logout = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.user/logout";
 
 //    Public Variables
-    private int userId;
-    private String Username;
-    private String Password;
-    private String Email;
-    private String Birthday;
+    public static int userId;
+    public static String Username;
+    private static String Password;
+    private static String Email;
+    private static String Birthday;
 
 //    Encapsulation
     public String getUsername() {

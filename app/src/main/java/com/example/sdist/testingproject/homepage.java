@@ -1,5 +1,6 @@
 package com.example.sdist.testingproject;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -86,7 +87,6 @@ public class homepage extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
 
-
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -94,12 +94,30 @@ public class homepage extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
             Set_Configurations.user_Details.delete();
-
+            new Logout().execute();
             super.onBackPressed();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public class Logout extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        public Void doInBackground(Void... params)
+        {
+            String toPass = "{ \"username\":\""+ Set_Configurations.Username + "\"}";
+
+            try {
+                Set_WebServices.putJsonObject(Set_Configurations.Web_Logout, toPass);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
     }
 }

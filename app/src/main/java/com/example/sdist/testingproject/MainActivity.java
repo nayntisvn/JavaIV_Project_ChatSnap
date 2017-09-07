@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
 
-            switch (result)
+            switch (result.split(",")[0])
             {
                 case "0" : {
                     Toast.makeText(MainActivity.this, "Username doesn't exist!", Toast.LENGTH_SHORT).show();
@@ -215,6 +215,9 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Login success", Toast.LENGTH_SHORT).show();
 
                     try {
+                        Set_Configurations.Username = username;
+                        Set_Configurations.userId = Integer.parseInt(result.split(",")[1]);
+
                         file_Write = new FileOutputStream(Set_Configurations.user_Details);
                         file_Write.write(username.getBytes());
                         file_Write.flush();

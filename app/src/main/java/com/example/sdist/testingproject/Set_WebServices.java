@@ -24,6 +24,7 @@ public class Set_WebServices {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(5000);
             conn.setRequestProperty("Content-Type", "Application/json");
+            conn.setRequestProperty("Accept", "Text/plain");
             conn.setDoOutput(true);
             conn.setDoInput(true);
             conn.setRequestMethod("POST");
@@ -32,19 +33,20 @@ public class Set_WebServices {
             os.write(stringToPass.getBytes());
             os.flush();
 
-            if (conn.getResponseCode() != HttpURLConnection.HTTP_ACCEPTED) {
-                return ("Failed : HTTP error code : " + conn.getResponseCode());
+            if(conn.getResponseCode() == HttpURLConnection.HTTP_CREATED){
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+                String output;
+                String concatOutput = "";
+                while ((output = br.readLine()) != null) {
+                    concatOutput += output;
+                }
+
+                conn.disconnect();
+
+                return concatOutput;
             }
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-            String output;
-            String concatOutput = "";
-            while ((output = br.readLine()) != null) {
-                concatOutput += output;
-            }
-
-            conn.disconnect();
 
             return "";
 

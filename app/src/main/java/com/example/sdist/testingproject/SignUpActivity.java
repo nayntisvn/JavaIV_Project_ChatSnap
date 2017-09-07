@@ -92,7 +92,7 @@ public class SignUpActivity extends AppCompatActivity{
                     + "\"email\":\"" + email + "\","
                     + "\"password\":\"" + password + "\","
                     + "\"birthday\":\"" + birthday + "\","
-                    + "\"status\":\" 1}";
+                    + "\"status\": 1}";
 
             new SignUpTask().execute();
 
@@ -168,19 +168,21 @@ public class SignUpActivity extends AppCompatActivity{
         @Override
         protected String doInBackground(Void... params) {
 
-            try {
-                    Set_WebServices.postJsonObject(Set_Configurations.Web_SignUp, stringToPass);
+            String Result = null;
 
+            try {
+                Result = Set_WebServices.postJsonObject(Set_Configurations.Web_SignUp, stringToPass);
+                Result += "";
             } catch (Exception e) {
 
             }
-            return null;
+            return Result;
         }
 
         @Override
         protected void onPostExecute(String result) {
 
-            if(password.matches(conPassword)){
+            if(result.equals("true")){
                 Toast.makeText(SignUpActivity.this, "Sign Up Success", Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(SignUpActivity.this, "Mismatched Password", Toast.LENGTH_SHORT).show();
