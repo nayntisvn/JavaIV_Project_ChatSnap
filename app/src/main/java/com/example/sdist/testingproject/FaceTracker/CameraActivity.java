@@ -74,7 +74,7 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_camera);
 
         switchCamera = (ImageButton) findViewById(R.id.btnSwitchCam);
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
