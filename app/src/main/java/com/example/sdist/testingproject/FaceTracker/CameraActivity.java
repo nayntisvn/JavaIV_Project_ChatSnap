@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sdist.testingproject.FaceTracker.camera.CameraSourcePreview;
@@ -80,6 +81,7 @@ public class CameraActivity extends AppCompatActivity {
     ImageButton takePicture;
     LinearLayout cameraLayout;
     ImageView preview;
+    TextView tempTxt;
 
     ImageButton btnBack;
     ImageButton btnBack2;
@@ -111,7 +113,7 @@ public class CameraActivity extends AppCompatActivity {
         btnBack2 = (ImageButton) findViewById(R.id.btnBack2);
         btnSend = (ImageButton) findViewById(R.id.btnSend);
         btnSave = (ImageButton) findViewById(R.id.btnSave);
-        sensorsClass = new SensorsClass(CameraActivity.this);
+        sensorsClass = new SensorsClass(CameraActivity.this, tempTxt);
 
         takePicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,8 +171,8 @@ public class CameraActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 new Send().execute();
-                Toast.makeText(CameraActivity.this, "Sent!", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -212,7 +214,7 @@ public class CameraActivity extends AppCompatActivity {
             String txt;
             public void onSwipeRight() {
                 if (preview.getHeight() > 0){
-                    txt = sensorsClass.temperature;
+                    txt = tempTxt.getText().toString();
                     Canvas canvas = new Canvas(picture);
                     canvas.drawColor(0, PorterDuff.Mode.CLEAR);
                     paint.setColor(Color.WHITE);
