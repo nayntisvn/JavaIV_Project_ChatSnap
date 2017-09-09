@@ -88,7 +88,7 @@ public class homepage extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
-            intent = new Intent(getApplicationContext(), CameraActivity.class);
+            intent = new Intent(getApplicationContext(), type_message_area.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_gallery) {
