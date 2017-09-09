@@ -597,7 +597,7 @@ public class CameraActivity extends AppCompatActivity {
 
                 String stringToPass = "{\"file\" : \"%s\", \"userId\" : { \"userId\" : %s}, \"timestamp\" : \"2009-09-17T00:00:00+08:00\", \"recipient\" : 2}";
 
-                Set_WebServices.postJsonObject(Set_Configurations.User_Friends + Set_Configurations.userId, String.format(stringToPass, pic, "" + 1));
+                Set_WebServices.postJsonObject(Set_Configurations.User_Object_Send + Set_Configurations.userId, String.format(stringToPass, pic, "" + 1));
 
             }catch(Exception e)
             {
