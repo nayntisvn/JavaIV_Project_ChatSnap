@@ -147,6 +147,8 @@ public class CameraActivity extends AppCompatActivity {
 
                         temp = picture.copy(Bitmap.Config.ARGB_8888, true);
                         preview.setImageBitmap(picture);
+
+
                     }
                 });
             }
