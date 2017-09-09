@@ -14,9 +14,11 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.hardware.Sensor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Looper;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
@@ -35,6 +37,7 @@ import com.example.sdist.testingproject.FaceTracker.camera.CameraSourcePreview;
 import com.example.sdist.testingproject.FaceTracker.camera.GraphicOverlay;
 import com.example.sdist.testingproject.FaceTracker.facedetection.FaceGraphic;
 import com.example.sdist.testingproject.R;
+import com.example.sdist.testingproject.Sensors.SensorsClass;
 import com.example.sdist.testingproject.Set_Configurations;
 import com.example.sdist.testingproject.Set_WebServices;
 import com.example.sdist.testingproject.friendlist;
@@ -109,6 +112,7 @@ public class CameraActivity extends AppCompatActivity {
         btnSend = (ImageButton) findViewById(R.id.btnSend);
         btnSave = (ImageButton) findViewById(R.id.btnSave);
 
+        SensorsClass sensorsClass = new SensorsClass(CameraActivity.this);
         takePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -591,19 +595,22 @@ public class CameraActivity extends AppCompatActivity {
             picture.compress(Bitmap.CompressFormat.PNG, 100, bos);
 
             byte[] test = bos.toByteArray();
-            String pic = new String(test);
+            String pic = Base64.encodeToString(test, Base64.DEFAULT);
+            Log.d("send", pic);
+            pic.replaceAll(System.getProperty("line.separator"), "");
+            String stringToPass = "{\"file\" : \"%s\", \"userId\" : { \"userId\" : %s}, \"timestamp\" : \"2009-09-17T00:00:00+08:00\", \"recipient\" : 2}";
+            try {
 
-            try{
-
-                String stringToPass = "{\"file\" : \"%s\", \"userId\" : { \"userId\" : %s}, \"timestamp\" : \"2009-09-17T00:00:00+08:00\", \"recipient\" : 2}";
-
-                Set_WebServices.postJsonObject(Set_Configurations.User_Friends + Set_Configurations.userId, String.format(stringToPass, pic, "" + 1));
-
-            }catch(Exception e)
-            {
-                Toast.makeText(CameraActivity.this, "Testing", Toast.LENGTH_SHORT).show();
+                Set_WebServices.postJsonObject(Set_Configurations.User_Object_Send + Set_Configurations.userId, String.format(stringToPass, pic.trim(), "" + 1));
             }
 
+            catch (Exception ex) {
+                Log.d("Error", ex.getMessage());
+            }
+
+            String asd = String.format(stringToPass, pic.trim(), "" + 1);
+
+            asd+= "";
             return null;
         }
 
