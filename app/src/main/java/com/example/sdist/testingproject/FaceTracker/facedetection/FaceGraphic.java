@@ -20,10 +20,7 @@ import java.util.List;
  * graphic overlay view.
  */
 public class FaceGraphic extends GraphicOverlay.Graphic {
-    private static final float FACE_POSITION_RADIUS = 10.0f;
     private static final float ID_TEXT_SIZE = 40.0f;
-    private static final float ID_Y_OFFSET = 50.0f;
-    private static final float ID_X_OFFSET = -50.0f;
     private static final float BOX_STROKE_WIDTH = 5.0f;
 
     private static final int COLOR_CHOICES[] = {
@@ -93,36 +90,32 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
     public void draw(Canvas canvas) {
         Face face = mFace;
         if (face == null) {
+            width = 0;
+            height = 0;
+            posX = 0;
+            posY = 0;
             return;
         }
 
-        List<Landmark> landmarks = face.getLandmarks();
-        //landmarks.get(1).getPosition().
-        // Draws a circle at the position of the detected face, with the face's track id below.
         float x = translateX(face.getPosition().x + face.getWidth() / 2);
         float y = translateY(face.getPosition().y + face.getHeight() / 2);
-        //canvas.drawCircle(x, y, FACE_POSITION_RADIUS, mFacePositionPaint);
-        //canvas.drawText("id: " + mFaceId, x + ID_X_OFFSET, y + ID_Y_OFFSET, mIdPaint);
-        //canvas.drawText("happiness: " + String.format("%.2f", face.getIsSmilingProbability()), x - ID_X_OFFSET, y - ID_Y_OFFSET, mIdPaint);
-        //canvas.drawText("right eye: " + String.format("%.2f", face.getIsRightEyeOpenProbability()), x + ID_X_OFFSET * 2, y + ID_Y_OFFSET * 2, mIdPaint);
-        //canvas.drawText("left eye: " + String.format("%.2f", face.getIsLeftEyeOpenProbability()), x - ID_X_OFFSET*2, y - ID_Y_OFFSET*2, mIdPaint);
 
-        // Draws a bounding box around the face.
-        float xOffset = scaleX(face.getWidth() / 2.0f);
-        float yOffset = scaleY(face.getHeight() / 2.0f);
-        //float left = x - xOffset;
-        //float top = y - yOffset;
-        //float right = x + xOffset;
-        //float bottom = y + yOffset;
-        //canvas.drawRect(left, top, right, bottom, mBoxPaint);
 
+        //ERICK
         width = (int) ((filter.getWidth() + face.getWidth()) * 0.63f);
         height = (int) ((filter.getHeight() + face.getHeight() + 60) * 0.63f);
+
+        //RJ
+//        width = (int) ((filter.getWidth() + face.getWidth()) * 0.65f);
+//        height = (int) ((filter.getHeight() + face.getHeight() + 60) * 0.65f);
+
         posX = (x - filter.getWidth()/2);
-        posY = y - (filter.getHeight()/2) + 60;
+        posY = y - (filter.getHeight()/2) + 80; //ERICK
+//        posY = y - (filter.getHeight()/2) + 120; //RJ
 
         filter = filter.copy(Bitmap.Config.ARGB_8888, true);
         filter = Bitmap.createScaledBitmap(filter, width, height, false);
         canvas.drawBitmap(filter, posX,  posY, mIdPaint);
+
     }
 }
