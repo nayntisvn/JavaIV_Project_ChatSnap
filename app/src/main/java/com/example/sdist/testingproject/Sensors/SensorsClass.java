@@ -14,8 +14,8 @@ public class SensorsClass implements SensorEventListener{
     SensorManager mSensorManager;
     Sensor tmpSensor, accSensor, lightSensor;
     String SENSOR_TYPE;
-    String temperature;
-
+    public String temperature;
+    public boolean isDark;
 
     Context context;
     public SensorsClass (Context c){
@@ -34,7 +34,7 @@ public class SensorsClass implements SensorEventListener{
             temperature = String.valueOf(sensorEvent.values[0]);
         }
         if(sensor.getType()== sensor.TYPE_LIGHT){
-            boolean isDark = false;
+            isDark = false;
             if(sensorEvent.values[0] < 1000){
                 isDark = true;
             }
@@ -47,6 +47,7 @@ public class SensorsClass implements SensorEventListener{
     public void onAccuracyChanged(Sensor sensor, int i) {
 
     }
+
     public void resumeAcc(){
         accSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this, accSensor, SensorManager.SENSOR_DELAY_GAME);

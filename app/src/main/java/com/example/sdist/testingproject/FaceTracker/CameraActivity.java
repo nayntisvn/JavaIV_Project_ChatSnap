@@ -169,8 +169,8 @@ public class CameraActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 new Send().execute();
+                Toast.makeText(CameraActivity.this, "Sent!", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -212,7 +212,7 @@ public class CameraActivity extends AppCompatActivity {
             String txt;
             public void onSwipeRight() {
                 if (preview.getHeight() > 0){
-                    txt = "TEMP";
+                    txt = sensorsClass.temperature;
                     Canvas canvas = new Canvas(picture);
                     canvas.drawColor(0, PorterDuff.Mode.CLEAR);
                     paint.setColor(Color.WHITE);
