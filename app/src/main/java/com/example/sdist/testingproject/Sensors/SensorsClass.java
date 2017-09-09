@@ -14,16 +14,33 @@ public class SensorsClass implements SensorEventListener{
     SensorManager mSensorManager;
     Sensor tmpSensor, accSensor, lightSensor;
     String SENSOR_TYPE;
+    String temperature;
+
 
     Context context;
     public SensorsClass (Context c){
         context = c;
+        mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
     }
 
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
+        Sensor sensor = sensorEvent.sensor;
+        if(sensor.getType()== sensor.TYPE_ACCELEROMETER){
 
+        }
+        if(sensor.getType()== sensor.TYPE_AMBIENT_TEMPERATURE){
+            temperature = String.valueOf(sensorEvent.values[0]);
+        }
+        if(sensor.getType()== sensor.TYPE_LIGHT){
+            boolean isDark = false;
+            if(sensorEvent.values[0] < 1000){
+                isDark = true;
+            }
+            else
+                isDark = false;
+        }
     }
 
     @Override
@@ -31,13 +48,16 @@ public class SensorsClass implements SensorEventListener{
 
     }
     public void resumeAcc(){
-
+        accSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorManager.registerListener(this, accSensor, SensorManager.SENSOR_DELAY_GAME);
     }
     public void resumeTmp(){
-
+        tmpSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
+        mSensorManager.registerListener(this, tmpSensor, SensorManager.SENSOR_DELAY_GAME);
     }
     public void resumeLight(){
-
+        lightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        mSensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_GAME);
     }
 
     public void pauseAcc(){

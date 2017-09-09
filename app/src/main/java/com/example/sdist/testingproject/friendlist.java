@@ -47,6 +47,7 @@ public class friendlist extends AppCompatActivity {
 
         adapter = new ArrayAdapter<Friend>(friendlist.this,
                 R.layout.friend, listFriends) {
+
             protected void getView(int position, View v, Friend model) {
                 // Get references to the views of message.xml
                 TextView friendText = (TextView)v.findViewById(R.id.friend);
@@ -55,7 +56,6 @@ public class friendlist extends AppCompatActivity {
                 friendText.setText(model.getFriendName());
             }
         };
-
         listOfFriends.setAdapter(adapter);
     }
 
