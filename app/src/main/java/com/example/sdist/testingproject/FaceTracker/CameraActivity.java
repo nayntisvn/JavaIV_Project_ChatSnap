@@ -10,8 +10,10 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.Snackbar;
@@ -54,13 +56,14 @@ public class CameraActivity extends AppCompatActivity {
     private static final int RC_HANDLE_GMS = 9001;
     private static final int RC_HANDLE_CAMERA_PERM = 2;
 
-    Bitmap filter;
-    ImageButton switchCamera;
-    ImageButton takePicture;
-
     private GraphicOverlay mOverlay;
     private FaceGraphic mFaceGraphic;
 
+    Bitmap temp;
+    Bitmap picture;
+    Bitmap filter;
+    ImageButton switchCamera;
+    ImageButton takePicture;
     LinearLayout cameraLayout;
     ImageView preview;
     //==============================================================================================
@@ -84,6 +87,56 @@ public class CameraActivity extends AppCompatActivity {
         takePicture = (ImageButton) findViewById(R.id.btnCapture);
         cameraLayout = (LinearLayout) findViewById(R.id.cameraLayout);
         preview = (ImageView) findViewById(R.id.imgViewPreview);
+
+        takePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCameraSource.takePicture(null, new CameraSource.PictureCallback(){
+                    @Override
+                    public void onPictureTaken(byte[] bytes) {
+                        mCameraSource.stop();
+                        Resources r = getResources();
+                        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 512, r.getDisplayMetrics());
+                        cameraLayout.getLayoutParams().height = 0;
+                        preview.getLayoutParams().height = (int) px;
+
+                        picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        Matrix matrix = new Matrix();
+
+                        //ERICK
+                        if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
+                            matrix.postRotate(-90f);
+                            matrix.preScale(1, -1);
+                        }
+
+                        else if (cameraFacing == CameraSource.CAMERA_FACING_BACK) {
+                            matrix.postRotate(90f);
+                        }
+
+                        //RJ
+//                        if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
+//                            matrix.preScale(-1, 1);
+//                        }
+
+                        picture = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(), picture.getHeight(), matrix, false);
+                        picture = picture.copy(Bitmap.Config.ARGB_8888, true);
+                        Canvas canvas = new Canvas(picture);
+
+                        try {
+                            filter = Bitmap.createScaledBitmap(filter, (int) (mFaceGraphic.width * 2.5), (int) (mFaceGraphic.height * 2.5), false);
+                            canvas.drawBitmap(filter, mFaceGraphic.posX * 3, mFaceGraphic.posY  * 3, new Paint()); //ERICK
+                            //canvas.drawBitmap(filter, (int) (mFaceGraphic.posX * 2), (int) (mFaceGraphic.posY  * 2), new Paint()); //RJ
+                        }
+
+                        catch (Exception ex) { }
+
+                        temp = picture.copy(Bitmap.Config.ARGB_8888, true);
+                        preview.setImageBitmap(picture);
+                    }
+                });
+            }
+        });
+
         mPreview.setOnTouchListener(new OnSwipeTouchListener(CameraActivity.this) {
 
             public void onSwipeRight() {
@@ -116,6 +169,37 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
 
+        preview.setOnTouchListener(new OnSwipeTouchListener(CameraActivity.this) {
+
+            Paint paint = new Paint();
+            String txt;
+            public void onSwipeRight() {
+                if (preview.getHeight() > 0){
+                    txt = "TEMP";
+                    Canvas canvas = new Canvas(picture);
+                    canvas.drawColor(0, PorterDuff.Mode.CLEAR);
+                    paint.setColor(Color.WHITE);
+                    paint.setStyle(Paint.Style.FILL);
+                    paint.setTextSize(200f);
+                    canvas.drawBitmap(temp, 0, 0, new Paint());
+                    canvas.drawText(txt, (picture.getWidth()-paint.getTextSize()*Math.abs(4/1.8f))/2, picture.getHeight()/1.5f, paint);
+                    preview.setImageBitmap(picture);
+                }
+            }
+            public void onSwipeLeft() {
+                if (preview.getHeight() > 0){
+                    txt = "LOCATION";
+                    Canvas canvas = new Canvas(picture);
+                    canvas.drawColor(0, PorterDuff.Mode.CLEAR);
+                    paint.setColor(Color.WHITE);
+                    paint.setStyle(Paint.Style.FILL);
+                    paint.setTextSize(200f);
+                    canvas.drawBitmap(temp, 0, 0, new Paint());
+                    canvas.drawText(txt, (picture.getWidth()-paint.getTextSize()*Math.abs(8/1.8f))/2, picture.getHeight()/1.5f, paint);
+                    preview.setImageBitmap(picture);
+                }
+            }
+        });
         switchCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,70 +220,6 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
 
-        takePicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCameraSource.takePicture(null, new CameraSource.PictureCallback(){
-                    @Override
-                    public void onPictureTaken(byte[] bytes) {
-                        Resources r = getResources();
-                        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 512, r.getDisplayMetrics());
-                        cameraLayout.getLayoutParams().height = 0;
-                        preview.getLayoutParams().height = (int) px;
-
-                        Bitmap picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        Matrix matrix = new Matrix();
-
-                        if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
-                            matrix.postRotate(-90f);
-                            matrix.preScale(1, -1);
-                        }
-
-                        else if (cameraFacing == CameraSource.CAMERA_FACING_BACK) {
-                            matrix.postRotate(90f);
-                        }
-                        picture = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(), picture.getHeight(), matrix, false);
-                        picture = picture.copy(Bitmap.Config.ARGB_8888, true);
-                        Canvas canvas = new Canvas(picture);
-
-                        try {
-                            filter = Bitmap.createScaledBitmap(filter, (int) (mFaceGraphic.width * 2.5), (int) (mFaceGraphic.height * 2.5), false);
-                            canvas.drawBitmap(filter, mFaceGraphic.posX * 3, mFaceGraphic.posY * 3, new Paint());
-                        }
-
-                        catch (Exception ex) { }
-
-                        ((ImageView) findViewById(R.id.imgViewPreview)).setImageBitmap(picture);
-                        mCameraSource.stop();
-//                        picture = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(), picture.getHeight(), matrix, false);
-//                        File file = getOutputMediaFile();
-//                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//                        FileOutputStream fos = null;
-//                        try {
-//                            fos = new FileOutputStream(file.getAbsoluteFile());
-//                            picture.compress(Bitmap.CompressFormat.PNG, 100, bos);
-//                            byte[] imgBytes = bos.toByteArray();
-//                            fos.write(imgBytes);
-//                            fos.close();
-//                            picture.recycle();
-//                        } catch (FileNotFoundException e) {
-//                            e.printStackTrace();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                        Intent intent = new Intent(MainActivity.this, EditImageActivity.class);
-//                        intent.putExtra("imageFileName", file.getPath());
-//                        intent.putExtra("posX", mFaceGraphic.posX);
-//                        intent.putExtra("posY", mFaceGraphic.posY);
-//                        intent.putExtra("height", mFaceGraphic.height);
-//                        intent.putExtra("width", mFaceGraphic.width);
-//                        intent.putExtra("filterId", filters[i]);
-//                        MainActivity.this.startActivity(intent);
-                    }
-                });
-            }
-        });
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
@@ -469,6 +489,7 @@ public class CameraActivity extends AppCompatActivity {
          */
         @Override
         public void onUpdate(FaceDetector.Detections<Face> detectionResults, Face face) {
+            mOverlay.clear();
             mOverlay.add(mFaceGraphic);
             mFaceGraphic.updateFace(face);
         }
@@ -480,6 +501,11 @@ public class CameraActivity extends AppCompatActivity {
          */
         @Override
         public void onMissing(FaceDetector.Detections<Face> detectionResults) {
+            mFaceGraphic.width = 0;
+            mFaceGraphic.height = 0;
+            mFaceGraphic.posX = 0;
+            mFaceGraphic.posY = 0;
+            mOverlay.clear();
             mOverlay.remove(mFaceGraphic);
         }
 
