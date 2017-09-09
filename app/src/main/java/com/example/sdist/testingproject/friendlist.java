@@ -16,7 +16,7 @@ public class friendlist extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendlist);
 
-
+        new RefreshFriends().execute();
     }
 
     public class RefreshFriends extends AsyncTask<Void, Void, JSONObject>
@@ -43,7 +43,7 @@ public class friendlist extends AppCompatActivity {
 
             if(result != null)
             {
-
+                Toast.makeText(friendlist.this, "Result", Toast.LENGTH_SHORT).show();
 
             }
 
