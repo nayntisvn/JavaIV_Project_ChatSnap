@@ -109,6 +109,7 @@ public class homepage extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
             Set_Configurations.user_Details.delete();
+
             new Logout().execute();
             super.onBackPressed();
         }
