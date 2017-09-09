@@ -603,10 +603,10 @@ public class CameraActivity extends AppCompatActivity {
             String pic = Base64.encodeToString(test, Base64.DEFAULT);
             Log.d("send", pic);
             pic.replaceAll(System.getProperty("line.separator"), "");
-            String stringToPass = "{\"file\" : \"%s\", \"userId\" : { \"userId\" : %s}, \"timestamp\" : \"2009-09-17T00:00:00+08:00\", \"recipient\" : 2}";
+            String stringToPass = "{\"userId\" : { \"userId\" : %s}, \"file\" : \"%s\", \"timestamp\" : \"2009-09-17T00:00:00+08:00\"}";
             try {
 
-                Set_WebServices.postJsonObject(Set_Configurations.User_Object_Send + Set_Configurations.userId, String.format(stringToPass, pic.trim(), "" + 1));
+                Set_WebServices.postJsonObject(Set_Configurations.User_Stories_Send + Set_Configurations.userId, String.format(stringToPass,"" + 1, pic.trim()));
             }
 
             catch (Exception ex) {
