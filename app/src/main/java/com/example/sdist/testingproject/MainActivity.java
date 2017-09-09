@@ -220,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
 
                         file_Write = new FileOutputStream(Set_Configurations.user_Details);
                         file_Write.write(username.getBytes());
+                        file_Write.write(Set_Configurations.userId);
                         file_Write.flush();
                         file_Write.close();
                     }
