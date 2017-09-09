@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class type_message_area extends AppCompatActivity {
@@ -20,15 +21,10 @@ public class type_message_area extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_type_message_area);
-
-        displayChatMessages();
-
     }
 
-    private void displayChatMessages() {
+    private void displayChatMessages(JSONArray result) {
         ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
-
-
         adapter = new ArrayAdapter<ChatMessage>(type_message_area.this,
         R.layout.message/*,lagay dito yung messages*/) {
             protected void getView(int position, View v, ChatMessage model) {
@@ -42,17 +38,22 @@ public class type_message_area extends AppCompatActivity {
                 messageUser.setText(model.getMessageUser());
 
                 // Format the date before showing it
-                messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
-                        model.getMessageTime()));
+                messageTime.setText(model.getMessageTime());
             }
         };
-        ChatMessage c = new ChatMessage();
-        for (int i =10; i<11; i++){
-            c.setMessageText("hi"+i);
-            c.setMessageUser("user"+i);
-            adapter.add(c);
+        try {
+            JSONArray ar = new JSONArray(result.toString());
+            for (int i = 0; i < ar.length(); i++){
+                JSONObject a = ar.getJSONObject(i);
+                ChatMessage msg = new ChatMessage();
+                msg.setMessageUser(a.getJSONObject("userId").getString("username"));
+                msg.setMessageText(a.getString("message"));
+                msg.setMessageTime(a.getString("timestamp"));
+                adapter.add(msg);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-
         listOfMessages.setAdapter(adapter);
 
     }
@@ -81,6 +82,7 @@ public class type_message_area extends AppCompatActivity {
             if(result != null)
             {
                 Toast.makeText(type_message_area.this, "Result", Toast.LENGTH_SHORT).show();
+                displayChatMessages(result);
 
             }
 

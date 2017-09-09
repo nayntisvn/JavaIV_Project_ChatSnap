@@ -27,7 +27,7 @@ public class friendlist extends AppCompatActivity {
     }
 
     private void displayFriends(JSONArray result) {
-        ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
+        ListView listOfFriends = (ListView)findViewById(R.id.list_of_friends);
 
         adapter = new ArrayAdapter<Friend>(friendlist.this,
                 R.layout.friend/*,lagay dito yung messages*/) {
@@ -50,7 +50,7 @@ public class friendlist extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        listOfMessages.setAdapter(adapter);
+        listOfFriends.setAdapter(adapter);
     }
 
     public class RefreshFriends extends AsyncTask<Void, Void, JSONArray>
