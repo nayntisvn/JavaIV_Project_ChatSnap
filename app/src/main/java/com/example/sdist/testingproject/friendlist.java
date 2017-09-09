@@ -1,14 +1,15 @@
 package com.example.sdist.testingproject;
 
+import android.net.ParseException;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class friendlist extends AppCompatActivity {
-
 
 
     @Override
@@ -19,16 +20,16 @@ public class friendlist extends AppCompatActivity {
         new RefreshFriends().execute();
     }
 
-    public class RefreshFriends extends AsyncTask<Void, Void, JSONObject>
+    public class RefreshFriends extends AsyncTask<Void, Void, JSONArray>
     {
 
         @Override
-        public JSONObject doInBackground(Void... params){
+        public JSONArray doInBackground(Void... params){
 
-            JSONObject resultSet = null;
-
+            JSONArray resultSet = null;
             try{
-                resultSet = new JSONObject(Set_WebServices.getJsonObject(Set_Configurations.User_Friends + Set_Configurations.userId));
+
+                resultSet = new JSONArray(Set_WebServices.getJsonObject(Set_Configurations.User_Friends + Set_Configurations.userId));
 
             }catch(Exception e)
             {
@@ -39,7 +40,7 @@ public class friendlist extends AppCompatActivity {
         }
 
         @Override
-        public void onPostExecute(JSONObject result){
+        public void onPostExecute(JSONArray result){
 
             if(result != null)
             {

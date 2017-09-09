@@ -111,6 +111,8 @@ public class Set_WebServices {
             }
 
             conn.disconnect();
+
+            return result.toString();
         } catch (Exception e) {
             e.printStackTrace();
         }
