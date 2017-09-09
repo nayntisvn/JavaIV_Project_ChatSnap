@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.sdist.testingproject.FaceTracker.camera.CameraSourcePreview;
 import com.example.sdist.testingproject.FaceTracker.camera.GraphicOverlay;
@@ -41,6 +42,8 @@ import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -48,7 +51,7 @@ import java.util.Date;
 public class CameraActivity extends AppCompatActivity {
     private static final String TAG = "FaceTracker";
     private CameraSource mCameraSource = null;
-    private int cameraFacing;
+    public static int cameraFacing;
     private int[] filters = new int[] { R.drawable.dog, R.drawable.cat };
     private int i = 0;
     private CameraSourcePreview mPreview;
@@ -66,6 +69,12 @@ public class CameraActivity extends AppCompatActivity {
     ImageButton takePicture;
     LinearLayout cameraLayout;
     ImageView preview;
+
+    ImageButton btnBack;
+    ImageButton btnBack2;
+    ImageButton btnSend;
+    ImageButton btnSave;
+
     //==============================================================================================
     // Activity Methods
     //==============================================================================================
@@ -79,14 +88,18 @@ public class CameraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
+        cameraFacing = CameraSource.CAMERA_FACING_BACK;
         switchCamera = (ImageButton) findViewById(R.id.btnSwitchCam);
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
         filter = BitmapFactory.decodeResource(getResources(), filters[0]);
-        cameraFacing = CameraSource.CAMERA_FACING_BACK;
         takePicture = (ImageButton) findViewById(R.id.btnCapture);
         cameraLayout = (LinearLayout) findViewById(R.id.cameraLayout);
         preview = (ImageView) findViewById(R.id.imgViewPreview);
+        btnBack = (ImageButton) findViewById(R.id.btnBack);
+        btnBack2 = (ImageButton) findViewById(R.id.btnBack2);
+        btnSend = (ImageButton) findViewById(R.id.btnSend);
+        btnSave = (ImageButton) findViewById(R.id.btnSave);
 
         takePicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,9 +136,11 @@ public class CameraActivity extends AppCompatActivity {
                         Canvas canvas = new Canvas(picture);
 
                         try {
-                            filter = Bitmap.createScaledBitmap(filter, (int) (mFaceGraphic.width * 2.5), (int) (mFaceGraphic.height * 2.5), false);
-                            canvas.drawBitmap(filter, mFaceGraphic.posX * 3, mFaceGraphic.posY  * 3, new Paint()); //ERICK
-                            //canvas.drawBitmap(filter, (int) (mFaceGraphic.posX * 2), (int) (mFaceGraphic.posY  * 2), new Paint()); //RJ
+                            if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
+                                filter = Bitmap.createScaledBitmap(filter, (int) (mFaceGraphic.width * 2.5), (int) (mFaceGraphic.height * 2.5), false);
+                                canvas.drawBitmap(filter, mFaceGraphic.posX * 3, mFaceGraphic.posY  * 3, new Paint()); //ERICK
+                                //canvas.drawBitmap(filter, (int) (mFaceGraphic.posX * 2), (int) (mFaceGraphic.posY  * 2), new Paint()); //RJ
+                            }
                         }
 
                         catch (Exception ex) { }
@@ -182,7 +197,7 @@ public class CameraActivity extends AppCompatActivity {
                     paint.setStyle(Paint.Style.FILL);
                     paint.setTextSize(200f);
                     canvas.drawBitmap(temp, 0, 0, new Paint());
-                    canvas.drawText(txt, (picture.getWidth()-paint.getTextSize()*Math.abs(4/1.8f))/2, picture.getHeight()/1.5f, paint);
+                    canvas.drawText(txt, (picture.getWidth()-paint.getTextSize()*Math.abs(txt.length()/1.8f))/2, picture.getHeight()/1.5f, paint);
                     preview.setImageBitmap(picture);
                 }
             }
@@ -195,11 +210,12 @@ public class CameraActivity extends AppCompatActivity {
                     paint.setStyle(Paint.Style.FILL);
                     paint.setTextSize(200f);
                     canvas.drawBitmap(temp, 0, 0, new Paint());
-                    canvas.drawText(txt, (picture.getWidth()-paint.getTextSize()*Math.abs(8/1.8f))/2, picture.getHeight()/1.5f, paint);
+                    canvas.drawText(txt, (picture.getWidth()-paint.getTextSize()*Math.abs(txt.length()/1.8f))/2, picture.getHeight()/1.5f, paint);
                     preview.setImageBitmap(picture);
                 }
             }
         });
+
         switchCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -220,7 +236,36 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
 
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
+        btnBack2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                File file = getOutputMediaFile();
+                try {
+                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                    picture.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+                    fileOutputStream.close();
+                    Toast.makeText(CameraActivity.this, "Saved!", Toast.LENGTH_LONG).show();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
         int rc = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
@@ -250,7 +295,7 @@ public class CameraActivity extends AppCompatActivity {
         File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
                 + "/Android/data/"
                 + getApplicationContext().getPackageName()
-                + "/Temp");
+                + "/Images");
 
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
