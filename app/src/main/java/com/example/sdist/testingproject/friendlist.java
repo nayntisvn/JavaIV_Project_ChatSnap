@@ -15,6 +15,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class friendlist extends AppCompatActivity {
 
     ArrayAdapter<Friend> adapter;
@@ -28,9 +31,22 @@ public class friendlist extends AppCompatActivity {
 
     private void displayFriends(JSONArray result) {
         ListView listOfFriends = (ListView)findViewById(R.id.list_of_friends);
+        ArrayList<Friend> listFriends = new ArrayList<Friend>();
+
+        try {
+            JSONArray ar = new JSONArray(result.toString());
+            for (int i = 0; i < ar.length(); i++){
+                JSONObject a = ar.getJSONObject(i);
+                Friend friend = new Friend();
+                friend.setFriendName(a.getJSONObject("UserId").getString("username"));
+                listFriends.add(friend);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         adapter = new ArrayAdapter<Friend>(friendlist.this,
-                R.layout.friend/*,lagay dito yung messages*/) {
+                R.layout.friend, listFriends) {
             protected void getView(int position, View v, Friend model) {
                 // Get references to the views of message.xml
                 TextView friendText = (TextView)v.findViewById(R.id.friend);
@@ -39,17 +55,7 @@ public class friendlist extends AppCompatActivity {
                 friendText.setText(model.getFriendName());
             }
         };
-        try {
-            JSONArray ar = new JSONArray(result.toString());
-            for (int i = 0; i < ar.length(); i++){
-                JSONObject a = ar.getJSONObject(i);
-                Friend friend = new Friend();
-                friend.setFriendName(a.getJSONObject("UserId").getString("username"));
-                adapter.add(friend);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
         listOfFriends.setAdapter(adapter);
     }
 
