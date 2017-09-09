@@ -31,6 +31,7 @@ public class Set_Configurations {
 
     public static String User_Friends = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.friend/friends/";
     public static String User_Message = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.message/message/";
+    public static String User_Object_Send = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.object1/new/";
 
     //    Public Variables
     public static int userId;

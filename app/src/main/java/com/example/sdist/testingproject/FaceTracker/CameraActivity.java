@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.Snackbar;
@@ -33,6 +34,9 @@ import com.example.sdist.testingproject.FaceTracker.camera.CameraSourcePreview;
 import com.example.sdist.testingproject.FaceTracker.camera.GraphicOverlay;
 import com.example.sdist.testingproject.FaceTracker.facedetection.FaceGraphic;
 import com.example.sdist.testingproject.R;
+import com.example.sdist.testingproject.Set_Configurations;
+import com.example.sdist.testingproject.Set_WebServices;
+import com.example.sdist.testingproject.friendlist;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.vision.CameraSource;
@@ -40,6 +44,8 @@ import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.FaceDetector;
+
+import org.json.JSONArray;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -151,6 +157,14 @@ public class CameraActivity extends AppCompatActivity {
 
                     }
                 });
+            }
+        });
+
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                new Send().execute();
             }
         });
 
@@ -564,5 +578,25 @@ public class CameraActivity extends AppCompatActivity {
         public void onDone() {
             mOverlay.remove(mFaceGraphic);
         }
+    }
+
+    public class Send extends AsyncTask<Void, Void, Void>
+    {
+        @Override
+        public Void doInBackground(Void... params)
+        {
+            try{
+
+                String stringToPass = "{\"file\" : \"%s\", \"userId\" : { \"userId\" : %s}, \"timestamp\" : \"2009-09-17T00:00:00+08:00\", \"recipient\" : 2}";
+
+                Set_WebServices.postJsonObject(Set_Configurations.User_Friends + Set_Configurations.userId, String.format(stringToPass, picture.toString(), "" + 1));
+
+            }catch(Exception e)
+            {
+                Toast.makeText(CameraActivity.this, "Testing", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
     }
 }
