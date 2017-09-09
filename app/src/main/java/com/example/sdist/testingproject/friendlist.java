@@ -29,11 +29,8 @@ public class friendlist extends AppCompatActivity {
     private void displayFriends(JSONArray result) {
         ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
 
-
         adapter = new ArrayAdapter<Friend>(friendlist.this,
                 R.layout.friend/*,lagay dito yung messages*/) {
-
-
             protected void getView(int position, View v, Friend model) {
                 // Get references to the views of message.xml
                 TextView friendText = (TextView)v.findViewById(R.id.friend);
@@ -42,16 +39,16 @@ public class friendlist extends AppCompatActivity {
                 friendText.setText(model.getFriendName());
             }
         };
-
-        while (result!=null){
-            Friend c = new Friend();
-            try {
-                c.setFriendName(result.getString(1).toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
+        try {
+            JSONArray ar = new JSONArray(result.toString());
+            for (int i = 0; i < ar.length(); i++){
+                JSONObject a = ar.getJSONObject(i);
+                Friend friend = new Friend();
+                friend.setFriendName(a.getJSONObject("UserId").getString("username"));
+                adapter.add(friend);
             }
-            adapter.add(c);
-
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         listOfMessages.setAdapter(adapter);
     }
