@@ -85,7 +85,7 @@ public class CameraActivity extends AppCompatActivity {
     ImageButton btnBack2;
     ImageButton btnSend;
     ImageButton btnSave;
-
+    SensorsClass sensorsClass;
     //==============================================================================================
     // Activity Methods
     //==============================================================================================
@@ -111,8 +111,8 @@ public class CameraActivity extends AppCompatActivity {
         btnBack2 = (ImageButton) findViewById(R.id.btnBack2);
         btnSend = (ImageButton) findViewById(R.id.btnSend);
         btnSave = (ImageButton) findViewById(R.id.btnSave);
+        sensorsClass = new SensorsClass(CameraActivity.this);
 
-        SensorsClass sensorsClass = new SensorsClass(CameraActivity.this);
         takePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -408,7 +408,9 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        sensorsClass.resumeTmp();
+        sensorsClass.resumeAcc();
+        sensorsClass.resumeLight();
         Log.d("RESUME", "On Resume");
         startCameraSource();
     }
@@ -419,6 +421,9 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        sensorsClass.pauseTmp();
+        sensorsClass.pauseAcc();
+        sensorsClass.pauseLight();
         Log.d("STOP", "On Stop");
         mPreview.stop();
     }
