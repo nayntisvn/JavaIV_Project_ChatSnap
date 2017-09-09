@@ -9,7 +9,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import com.example.sdist.testingproject.FaceTracker.CameraActivity;
 import com.example.sdist.testingproject.FaceTracker.camera.GraphicOverlay;
+import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.face.Face;
 import com.google.android.gms.vision.face.Landmark;
 
@@ -89,11 +91,7 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
     @Override
     public void draw(Canvas canvas) {
         Face face = mFace;
-        if (face == null) {
-            width = 0;
-            height = 0;
-            posX = 0;
-            posY = 0;
+        if (face == null || CameraActivity.cameraFacing == CameraSource.CAMERA_FACING_BACK) {
             return;
         }
 
