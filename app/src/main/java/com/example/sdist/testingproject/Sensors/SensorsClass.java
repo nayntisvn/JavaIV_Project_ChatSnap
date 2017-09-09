@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.widget.TextView;
 
 /**
  * Created by ezeki on 09/09/2017.
@@ -13,12 +14,12 @@ import android.hardware.SensorManager;
 public class SensorsClass implements SensorEventListener{
     SensorManager mSensorManager;
     Sensor tmpSensor, accSensor, lightSensor;
-    String SENSOR_TYPE;
-    String temperature;
-
+    public TextView temperature;
+    public boolean isDark;
 
     Context context;
-    public SensorsClass (Context c){
+    public SensorsClass (Context c, TextView txtTmp){
+        temperature = txtTmp;
         context = c;
         mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
     }
@@ -31,10 +32,9 @@ public class SensorsClass implements SensorEventListener{
 
         }
         if(sensor.getType()== sensor.TYPE_AMBIENT_TEMPERATURE){
-            temperature = String.valueOf(sensorEvent.values[0]);
+            temperature.setText(String.valueOf(sensorEvent.values[0]));
         }
         if(sensor.getType()== sensor.TYPE_LIGHT){
-            boolean isDark = false;
             if(sensorEvent.values[0] < 1000){
                 isDark = true;
             }
