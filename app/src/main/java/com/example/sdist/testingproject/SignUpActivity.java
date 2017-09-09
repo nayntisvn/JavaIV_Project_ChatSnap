@@ -17,18 +17,21 @@ import butterknife.InjectView;
 
 public class SignUpActivity extends AppCompatActivity{
 
+//    String for JSON transfer
     private String stringToPass;
 
     private static final String TAG = "SignupActivity";
 
+//    Controls/Swings/Views of page
     @InjectView(R.id.input_username) EditText _usernameText;
     @InjectView(R.id.input_email) EditText _emailText;
     @InjectView(R.id.input_password) EditText _passwordText;
     @InjectView(R.id.input_confirm_password) EditText _conPasswordText;
-    @InjectView(R.id.input_birthday) EditText _birthday;
+//    @InjectView(R.id.input_birthday) EditText _birthday;
     @InjectView(R.id.btn_signup) Button _signupButton;
     @InjectView(R.id.link_login) TextView _loginLink;
 
+//    Local Variables
     private String username;
     private String email;
     private String password;
@@ -74,9 +77,9 @@ public class SignUpActivity extends AppCompatActivity{
         email = _emailText.getText().toString();
         password = _passwordText.getText().toString();
         conPassword = _conPasswordText.getText().toString();
-        birthday = _birthday.getText().toString();
+//        birthday = _birthday.getText().toString();
 
-        // TODO: Implement your own signup logic here.
+        // TODO: Implement your own Web_SignUp logic here.
 
         if(password.equals(conPassword)) {
             final ProgressDialog progressDialog = new ProgressDialog(SignUpActivity.this,
@@ -88,7 +91,8 @@ public class SignUpActivity extends AppCompatActivity{
             stringToPass = "{ \"username\":\"" + username + "\","
                     + "\"email\":\"" + email + "\","
                     + "\"password\":\"" + password + "\","
-                    + "\"birthday\":\"" + birthday + "\"}";
+                    + "\"birthday\":\"" + birthday + "\","
+                    + "\"status\": 1}";
 
             new SignUpTask().execute();
 
@@ -164,20 +168,21 @@ public class SignUpActivity extends AppCompatActivity{
         @Override
         protected String doInBackground(Void... params) {
 
+            String Result = null;
+
             try {
-
-                    WebServices.sendToJsonObject(Configurations.signup, stringToPass);
-
+                Result = Set_WebServices.postJsonObject(Set_Configurations.Web_SignUp, stringToPass);
+                Result += "";
             } catch (Exception e) {
 
             }
-            return null;
+            return Result;
         }
 
         @Override
         protected void onPostExecute(String result) {
 
-            if(password.matches(conPassword)){
+            if(result.equals("true")){
                 Toast.makeText(SignUpActivity.this, "Sign Up Success", Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(SignUpActivity.this, "Mismatched Password", Toast.LENGTH_SHORT).show();

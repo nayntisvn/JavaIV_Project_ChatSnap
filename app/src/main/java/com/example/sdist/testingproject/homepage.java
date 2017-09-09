@@ -1,5 +1,7 @@
 package com.example.sdist.testingproject;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,15 +15,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.sdist.testingproject.FaceTracker.CameraActivity;
+
 public class homepage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -82,18 +88,52 @@ public class homepage extends AppCompatActivity
 
         if (id == R.id.nav_camera) {
             // Handle the camera action
+            intent = new Intent(getApplicationContext(), CameraActivity.class);
+            startActivity(intent);
+
         } else if (id == R.id.nav_gallery) {
+
+            intent = new Intent(getApplicationContext(), friendlist.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_slideshow) {
 
+//            intent = new Intent(getApplicationContext(), CameraActivity.class);
+//            startActivity(intent);
+
         } else if (id == R.id.nav_manage) {
+
+//            intent = new Intent(getApplicationContext(), CameraActivity.class);
+//            startActivity(intent);
 
         } else if (id == R.id.nav_send) {
 
+            Set_Configurations.user_Details.delete();
+
+            new Logout().execute();
+            super.onBackPressed();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public class Logout extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        public Void doInBackground(Void... params)
+        {
+            String toPass = "{ \"username\":\""+ Set_Configurations.Username + "\"}";
+
+            try {
+                Set_WebServices.putJsonObject(Set_Configurations.Web_Logout, toPass);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
     }
 }

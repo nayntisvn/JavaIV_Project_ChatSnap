@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -17,6 +18,10 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -25,16 +30,20 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "SignUpActivity";
     private static final int REQUEST_SIGNUP = 0;
 
+//    Controls/Swings/Views of page
     @InjectView(R.id.input_username) EditText _usernameText;
     @InjectView(R.id.input_password) EditText _passwordText;
     @InjectView(R.id.btn_login) Button _loginButton;
     @InjectView(R.id.link_signup) TextView _signupLink;
 
+//    Local variables
+    private String error = "";
     private String username = "";
     private String password = "";
     private String resultPassword = "";
-
-    private int ClearToGo = 0;
+    private int ClearToGo = 0;  // Login Checker
+    Intent intent;
+    FileOutputStream file_Write;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +51,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
+        Set_Configurations.user_Details = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "userdetails.txt");
+
+        Set_DatabaseOffline data = new Set_DatabaseOffline(this);
 
         ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.root_layout);
         AnimationDrawable animationDrawable = (AnimationDrawable) constraintLayout.getBackground();
-        animationDrawable.setEnterFadeDuration(1000);
-        animationDrawable.setExitFadeDuration(500);
+        animationDrawable.setEnterFadeDuration(2000);
+        animationDrawable.setExitFadeDuration(2000);
         animationDrawable.start();
+
+        if(CheckCurrentUser()) {
+
+            intent = new Intent(getApplicationContext(),homepage.class);
+            startActivity(intent);
+        }
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -95,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.dismiss();
         _loginButton.setEnabled(true);
 
-
     }
 
     @Override
@@ -103,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
 
-                // TODO: Implement successful signup logic here
+                // TODO: Implement successful Web_SignUp logic here
                 // By default we just finish the Activity and log them in automatically
                 this.finish();
             }
@@ -120,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
         _loginButton.setEnabled(true);
 
-        Intent intent = new Intent(getApplicationContext(), homepage.class);
+        intent = new Intent(getApplicationContext(), homepage.class);
         startActivity(intent);
     }
 
@@ -150,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
             _passwordText.setError(null);
         }
 
+
         return valid;
     }
 
@@ -163,41 +181,97 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... params) {
 
+            String stat = null;
+            String toPass = "{\"username\" : \"%s\", \"password\" : \"%s\"}";
+
             try {
-                JSONObject jsonObject = new JSONObject(WebServices.getJsonObject(Configurations.login + username));
-                resultPassword = jsonObject.getString("password");
-
+                stat = Set_WebServices.putJsonObject(Set_Configurations.Web_Login, String.format(toPass, username, password));
+                ///
             } catch (Exception e) {
-
+                stat = "Login Failed : Network Error";
             }
 
-            return null;
+            return stat;
         }
 
         @Override
         protected void onPostExecute(String result) {
 
-            if(password.matches(resultPassword)){
+            switch (result.split(",")[0])
+            {
+                case "0" : {
+                    Toast.makeText(MainActivity.this, "Username doesn't exist!", Toast.LENGTH_SHORT).show();
+                    ClearToGo = 0;
 
-                Toast.makeText(MainActivity.this, "Login success", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                case "10": {
+                    Toast.makeText(MainActivity.this, "Incorrect Password!", Toast.LENGTH_SHORT).show();
+                    ClearToGo = 0;
 
-                new android.os.Handler().postDelayed(
-                        new Runnable() {
-                            public void run() {
-                                // On complete call either onLoginSuccess or onLoginFailed
-                                onLoginSuccess();
-                                // onLoginFailed();
+                    break;
+                }
+                case "11": {
+                    Toast.makeText(MainActivity.this, "Login success", Toast.LENGTH_SHORT).show();
 
-                            }
-                        }, 0);
+                    try {
+                        Set_Configurations.Username = username;
+                        Set_Configurations.userId = Integer.parseInt(result.split(",")[1]);
 
-            }else{
-                ClearToGo = 0;
-                Toast.makeText(MainActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
+                        file_Write = new FileOutputStream(Set_Configurations.user_Details);
+                        file_Write.write(username.getBytes());
+                        file_Write.write(Set_Configurations.userId);
+                        file_Write.flush();
+                        file_Write.close();
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+
+                    new android.os.Handler().postDelayed(
+                            new Runnable() {
+                                public void run() {
+                                    // On complete call either onLoginSuccess or onLoginFailed
+                                    onLoginSuccess();
+                                    // onLoginFailed();
+                                }
+                            }, 0);
+
+                    break;
+                }
+                case "2": {
+                    Toast.makeText(MainActivity.this, "User already logged in!", Toast.LENGTH_SHORT).show();
+                    ClearToGo = 0;
+
+                    break;
+                }
             }
-;;
+
         }
 
+    }
+
+//    Insert checker of current user here.
+    public boolean CheckCurrentUser(){
+//
+//        try {
+//            file_Write = new FileOutputStream(Set_Configurations.user_Details);
+//            file_Write.write(username.getBytes());
+//            file_Write.flush();
+//            file_Write.close();
+//        }
+//        catch(Exception e)
+//        {
+//            e.printStackTrace();
+//        }
+
+        if(Set_Configurations.user_Details.exists()){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 /*

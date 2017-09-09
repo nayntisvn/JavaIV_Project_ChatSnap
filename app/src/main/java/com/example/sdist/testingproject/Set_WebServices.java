@@ -15,14 +15,16 @@ import java.nio.charset.Charset;
  * Created by Sdist on 8/20/2017.
  */
 
-public class WebServices {
+public class Set_WebServices {
 
-    public static String sendToJsonObject(String urlQuery, String stringToPass) {
+    //    Webservice for sending a JSON object from server
+    public static String postJsonObject(String urlQuery, String stringToPass) {
         try {
             URL url = new URL(urlQuery);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(5000);
             conn.setRequestProperty("Content-Type", "Application/json");
+            conn.setRequestProperty("Accept", "Text/plain");
             conn.setDoOutput(true);
             conn.setDoInput(true);
             conn.setRequestMethod("POST");
@@ -31,7 +33,44 @@ public class WebServices {
             os.write(stringToPass.getBytes());
             os.flush();
 
-            if (conn.getResponseCode() != HttpURLConnection.HTTP_ACCEPTED) {
+            if(conn.getResponseCode() == HttpURLConnection.HTTP_CREATED){
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+                String output;
+                String concatOutput = "";
+                while ((output = br.readLine()) != null) {
+                    concatOutput += output;
+                }
+
+                conn.disconnect();
+
+                return concatOutput;
+            }
+
+            return "";
+
+        } catch (Exception e) {
+            return "" + e;
+        }
+
+    }
+
+    public static String putJsonObject(String urlQuery, String stringToPass) {
+        try {
+            URL url = new URL(urlQuery);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(5000);
+            conn.setRequestProperty("Content-Type", "Application/json");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setRequestMethod("PUT");
+
+            OutputStream os = conn.getOutputStream();
+            os.write(stringToPass.getBytes());
+            os.flush();
+
+            if (conn.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
                 return ("Failed : HTTP error code : " + conn.getResponseCode());
             }
 
@@ -45,7 +84,7 @@ public class WebServices {
 
             conn.disconnect();
 
-            return "";
+            return concatOutput;
 
         } catch (Exception e) {
             return "" + e;
@@ -53,6 +92,7 @@ public class WebServices {
 
     }
 
+    //    Webservice for getting a JSON object from server
     protected static String getJsonObject(String uri) {
         StringBuilder result = new StringBuilder();
         JSONObject jsonObject = null;
@@ -71,6 +111,8 @@ public class WebServices {
             }
 
             conn.disconnect();
+
+            return result.toString();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -5,37 +5,41 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.widget.TextView;
 
 /**
- * Created by ezeki on 20/08/2017.
+ * Created by ezeki on 09/09/2017.
  */
 
-public class SensorsClass implements SensorEventListener {
-    SensorManager sensorManager;
-    Sensor tmp;
-    Sensor acc;
-    String sensorType;
+public class SensorsClass implements SensorEventListener{
+    SensorManager mSensorManager;
+    Sensor tmpSensor, accSensor, lightSensor;
+    String SENSOR_TYPE;
+    String temperature;
 
-    TextView txtTmp, txtSpd;
+
     Context context;
-
-    public SensorsClass(Context c,TextView temp, TextView speed){
+    public SensorsClass (Context c){
         context = c;
-        txtTmp = temp;
-        txtSpd = speed;
+        mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
     }
+
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        if(sensorEvent.sensor.getType() == Sensor.TYPE_AMBIENT_TEMPERATURE){
-            float[] tmpValues = sensorEvent.values.clone();
-            txtTmp.setText("AMBIENT TEMPERATURE: " + String.valueOf(tmpValues[0]));
-        }
-        else if(sensorEvent.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
-            float[] accelValues = sensorEvent.values.clone();
+        Sensor sensor = sensorEvent.sensor;
+        if(sensor.getType()== sensor.TYPE_ACCELEROMETER){
 
-            txtSpd.setText("SPEED: "  );
+        }
+        if(sensor.getType()== sensor.TYPE_AMBIENT_TEMPERATURE){
+            temperature = String.valueOf(sensorEvent.values[0]);
+        }
+        if(sensor.getType()== sensor.TYPE_LIGHT){
+            boolean isDark = false;
+            if(sensorEvent.values[0] < 1000){
+                isDark = true;
+            }
+            else
+                isDark = false;
         }
     }
 
@@ -43,30 +47,26 @@ public class SensorsClass implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int i) {
 
     }
-
-    public void resumeTmp(){
-        sensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
-        acc = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
-        sensorManager.registerListener(this, acc, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorType = "SENSOR_TEMPERATURE";
-    }
-
     public void resumeAcc(){
-        sensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
-        acc = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        sensorManager.registerListener(this, acc, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorType = "SENSOR_ACCELEROMETER";
+        accSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorManager.registerListener(this, accSensor, SensorManager.SENSOR_DELAY_GAME);
+    }
+    public void resumeTmp(){
+        tmpSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
+        mSensorManager.registerListener(this, tmpSensor, SensorManager.SENSOR_DELAY_GAME);
+    }
+    public void resumeLight(){
+        lightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        mSensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_GAME);
     }
 
-    public void pause(){
-        if (sensorManager != null) {
-            if(sensorType.equals("SENSOR_ACCELEROMETER")){
-                sensorManager.unregisterListener(this, acc);
-            }
-            else if (sensorType.equals("SENSOR_TEMPERATURE")){
-                sensorManager.unregisterListener(this, tmp);
-            }
-            sensorManager = null;
-        }
+    public void pauseAcc(){
+        mSensorManager.unregisterListener(this, accSensor);
+    }
+    public void pauseTmp(){
+        mSensorManager.unregisterListener(this, tmpSensor);
+    }
+    public void pauseLight(){
+        mSensorManager.unregisterListener(this, lightSensor);
     }
 }
