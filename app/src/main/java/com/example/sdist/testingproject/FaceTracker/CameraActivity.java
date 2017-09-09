@@ -21,6 +21,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -47,6 +48,7 @@ import com.google.android.gms.vision.face.FaceDetector;
 
 import org.json.JSONArray;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -585,16 +587,24 @@ public class CameraActivity extends AppCompatActivity {
         @Override
         public Void doInBackground(Void... params)
         {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            picture.compress(Bitmap.CompressFormat.PNG, 100, bos);
+
+            byte[] test = bos.toByteArray();
+            String pic = new String(test);
+
             try{
 
                 String stringToPass = "{\"file\" : \"%s\", \"userId\" : { \"userId\" : %s}, \"timestamp\" : \"2009-09-17T00:00:00+08:00\", \"recipient\" : 2}";
 
-                Set_WebServices.postJsonObject(Set_Configurations.User_Friends + Set_Configurations.userId, String.format(stringToPass, picture.toString(), "" + 1));
+                Set_WebServices.postJsonObject(Set_Configurations.User_Friends + Set_Configurations.userId, String.format(stringToPass, pic, "" + 1));
 
             }catch(Exception e)
             {
                 Toast.makeText(CameraActivity.this, "Testing", Toast.LENGTH_SHORT).show();
             }
+
+            return null;
         }
 
 
