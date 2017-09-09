@@ -11,16 +11,16 @@
         android:layout_height="495dp"
         android:gravity="bottom"
         android:orientation="horizontal"
-        tools:layout_editor_absoluteY="8dp"
-        tools:layout_editor_absoluteX="8dp">
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textColorHint="#CFD8DC"
+            android:hint="Write a message"
             android:textColor="#CFD8DC"
-            android:hint="Write a message" />
+            android:textColorHint="#CFD8DC" />
 
         <ImageView
             android:layout_width="match_parent"
