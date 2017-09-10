@@ -49,7 +49,6 @@ public class friendlist extends AppCompatActivity {
 
             viewHolder.textView.setText(myModel.getFriendName());
 
-
             return view;
         }
         public class ViewHolder {
@@ -73,7 +72,7 @@ public class friendlist extends AppCompatActivity {
             for (int i = 0; i < ar.length(); i++){
                 JSONObject a = ar.getJSONObject(i);
                 Friend friend = new Friend();
-                friend.setFriendName(a.getJSONObject("UserId").getString("username"));
+                friend.setFriendName(a.getJSONObject("userId").getString("username"));
                 listFriends.add(friend);
             }
         } catch (JSONException e) {
@@ -94,6 +93,7 @@ public class friendlist extends AppCompatActivity {
 
         mAdapter adapter = new mAdapter(friendlist.this, listFriends);
         listOfFriends.setAdapter(adapter);
+
     }
 
     public class RefreshFriends extends AsyncTask<Void, Void, JSONArray>
@@ -122,7 +122,6 @@ public class friendlist extends AppCompatActivity {
             {
                 Toast.makeText(friendlist.this, "Result", Toast.LENGTH_SHORT).show();
                 displayFriends(result);
-
             }
 
         }
