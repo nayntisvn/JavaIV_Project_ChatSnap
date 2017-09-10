@@ -7,6 +7,7 @@ package com.example.sdist.testingproject;
 public class Friend
 {
     private String friendName;
+    private int friendUserId;
 
     public String getFriendName() {
         return friendName;
@@ -14,5 +15,13 @@ public class Friend
 
     public void setFriendName(String friendName) {
         this.friendName = friendName;
+    }
+
+    public int getFriendUserId() {
+        return friendUserId;
+    }
+
+    public void setFriendUserId(int friendUserId) {
+        this.friendUserId = friendUserId;
     }
 }

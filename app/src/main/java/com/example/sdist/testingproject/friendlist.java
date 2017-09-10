@@ -1,6 +1,7 @@
 package com.example.sdist.testingproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ParseException;
 import android.os.AsyncTask;
 import android.support.annotation.LayoutRes;
@@ -26,6 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class friendlist extends AppCompatActivity {
+    Intent intent;
+    ListView listOfFriends;
+    ArrayList<Friend> listFriends;
+    int friendUserId;
     public class mAdapter extends ArrayAdapter<Friend>{
 
         public mAdapter(@NonNull Context context, ArrayList<Friend> objects) {
@@ -59,13 +64,28 @@ public class friendlist extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendlist);
-
+        listOfFriends = (ListView)findViewById(R.id.list_of_friends);
+        listFriends = new ArrayList<Friend>();
         new RefreshFriends().execute();
     }
+    public void onClick(View v){
+        switch (v.getId()) {
+            //make csv
+            case R.id.list_of_friends:
+                intent = new Intent(getApplicationContext(), type_message_area.class);
+                for(int i = 0; i < listFriends.size(); i++){
+                    if(listOfFriends.getSelectedItem().toString()== listFriends.get(i).getFriendName()){
+                        friendUserId = listFriends.get(i).getFriendUserId();
+                    }
+                }
+                intent.putExtra("friendUserId", friendUserId);
 
+                startActivity(intent);
+                break;
+        }
+    }
     private void displayFriends(JSONArray result) {
-        ListView listOfFriends = (ListView)findViewById(R.id.list_of_friends);
-        ArrayList<Friend> listFriends = new ArrayList<Friend>();
+
 
         try {
             JSONArray ar = new JSONArray(result.toString());
@@ -73,6 +93,7 @@ public class friendlist extends AppCompatActivity {
                 JSONObject a = ar.getJSONObject(i);
                 Friend friend = new Friend();
                 friend.setFriendName(a.getJSONObject("userId").getString("username"));
+                friend.setFriendUserId(Integer.valueOf(a.getJSONObject("userId").getString("userId")));
                 listFriends.add(friend);
             }
         } catch (JSONException e) {

@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class type_message_area extends AppCompatActivity {
+    int friendUserId;
     public class mAdapter extends ArrayAdapter<ChatMessage>{
 
         public mAdapter(@NonNull Context context, ArrayList<ChatMessage> objects) {
@@ -59,6 +60,10 @@ public class type_message_area extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle extras = getIntent().getExtras();
+        if(extras!=null){
+            friendUserId = Integer.valueOf(extras.getString("friendUserId"));
+        }
         setContentView(R.layout.activity_type_message_area);
     }
 
@@ -93,7 +98,7 @@ public class type_message_area extends AppCompatActivity {
             JSONArray resultSet = null;
             try{
 
-                resultSet = new JSONArray(Set_WebServices.getJsonObject(Set_Configurations.User_Message + Set_Configurations.userId + "/2"));
+                resultSet = new JSONArray(Set_WebServices.getJsonObject(Set_Configurations.User_Message + Set_Configurations.userId + friendUserId));
 
             }catch(Exception e)
             {
