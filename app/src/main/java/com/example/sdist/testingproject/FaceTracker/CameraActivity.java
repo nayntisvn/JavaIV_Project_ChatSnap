@@ -171,7 +171,6 @@ public class CameraActivity extends AppCompatActivity {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 new Send().execute();
             }
         });
@@ -603,19 +602,19 @@ public class CameraActivity extends AppCompatActivity {
 
             byte[] test = bos.toByteArray();
             String pic = Base64.encodeToString(test, Base64.DEFAULT);
+            pic = pic.replace(System.getProperty("line.separator"), "\\n");
             Log.d("send", pic);
-            pic.replaceAll(System.getProperty("line.separator"), "");
-            String stringToPass = "{\"userId\" : { \"userId\" : %s}, \"file\" : \"%s\", \"timestamp\" : \"2009-09-17T00:00:00+08:00\"}";
-            try {
+            String stringToPass = "{\"file\" : \"%s\", \"timestamp\" : \"2009-09-17T00:00:00+08:00\"}";
 
-                Set_WebServices.postJsonObject(Set_Configurations.User_Stories_Send + Set_Configurations.userId, String.format(stringToPass,"" + 1, pic.trim()));
+            try {
+                Set_WebServices.postJsonObject(Set_Configurations.User_Stories_Send + 1, String.format(stringToPass, pic.trim()));
             }
 
             catch (Exception ex) {
                 Log.d("Error", ex.getMessage());
             }
 
-            String asd = String.format(stringToPass, pic.trim(), "" + 1);
+            String asd = String.format(stringToPass, pic.trim());
 
             asd+= "";
             return null;
