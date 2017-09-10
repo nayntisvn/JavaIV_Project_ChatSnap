@@ -213,7 +213,7 @@ public class CameraActivity extends AppCompatActivity {
             String txt;
             public void onSwipeRight() {
                 if (preview.getHeight() > 0){
-                    txt = tempTxt.getText().toString();
+                    txt = "TEMP";
                     Canvas canvas = new Canvas(picture);
                     canvas.drawColor(0, PorterDuff.Mode.CLEAR);
                     paint.setColor(Color.WHITE);
@@ -592,31 +592,29 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
+    Bitmap aaa;
+    String pic;
     public class Send extends AsyncTask<Void, Void, Void>
     {
         @Override
         public Void doInBackground(Void... params)
         {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            picture.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            picture.compress(Bitmap.CompressFormat.JPEG, 90, bos);
 
             byte[] test = bos.toByteArray();
-            String pic = Base64.encodeToString(test, Base64.DEFAULT);
-            pic = pic.replace(System.getProperty("line.separator"), "\\n");
+            pic = Base64.encodeToString(test, Base64.DEFAULT);
+            pic = pic.replaceAll(System.getProperty("line.separator"), "NEWLINE");
             Log.d("send", pic);
-            String stringToPass = "{\"file\" : \"%s\", \"timestamp\" : \"2009-09-17T00:00:00+08:00\"}";
+            String stringToPass = "{\"file\" : \"" + pic + "\", \"timestamp\" : \"null\"}";
 
             try {
-                Set_WebServices.postJsonObject(Set_Configurations.User_Stories_Send + 1, String.format(stringToPass, pic.trim()));
+                Set_WebServices.postJsonObject(Set_Configurations.User_Stories_Send + 1, stringToPass);
             }
 
             catch (Exception ex) {
                 Log.d("Error", ex.getMessage());
             }
-
-            String asd = String.format(stringToPass, pic.trim());
-
-            asd+= "";
             return null;
         }
 
