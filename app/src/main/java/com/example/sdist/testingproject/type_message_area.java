@@ -1,10 +1,14 @@
 package com.example.sdist.testingproject;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,9 +18,44 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class type_message_area extends AppCompatActivity {
+import java.util.ArrayList;
 
-    ArrayAdapter<ChatMessage> adapter;
+public class type_message_area extends AppCompatActivity {
+    public class mAdapter extends ArrayAdapter<ChatMessage>{
+
+        public mAdapter(@NonNull Context context, ArrayList<ChatMessage> objects) {
+            super(context, 0, objects);
+        }
+        @Override
+        public View getView(int position, View view, ViewGroup viewGroup) {
+            type_message_area.mAdapter.ViewHolder viewHolder;
+            if (view == null) {
+                view = LayoutInflater.from(getContext()).inflate(R.layout.message, viewGroup, false);
+
+                viewHolder = new type_message_area.mAdapter.ViewHolder();
+
+                viewHolder.textViewText = (TextView) view.findViewById(R.id.message_text);
+                viewHolder.textViewUser = (TextView) view.findViewById(R.id.message_user);
+                viewHolder.textViewTime = (TextView) view.findViewById(R.id.message_time);
+                view.setTag(viewHolder);
+            } else {
+                viewHolder = (type_message_area.mAdapter.ViewHolder) view.getTag();
+            }
+
+            ChatMessage myModel = getItem(position);
+
+            viewHolder.textViewText.setText(myModel.getMessageText());
+            viewHolder.textViewUser.setText(myModel.getMessageUser());
+            viewHolder.textViewTime.setText(myModel.getMessageTime());
+
+            return view;
+        }
+        public class ViewHolder {
+            TextView textViewText;
+            TextView textViewUser;
+            TextView textViewTime;
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,22 +64,8 @@ public class type_message_area extends AppCompatActivity {
 
     private void displayChatMessages(JSONArray result) {
         ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
-        adapter = new ArrayAdapter<ChatMessage>(type_message_area.this,
-        R.layout.message/*,lagay dito yung messages*/) {
-            protected void getView(int position, View v, ChatMessage model) {
-                // Get references to the views of message.xml
-                TextView messageText = (TextView)v.findViewById(R.id.message_text);
-                TextView messageUser = (TextView)v.findViewById(R.id.message_user);
-                TextView messageTime = (TextView)v.findViewById(R.id.message_time);
+        ArrayList<ChatMessage> listMessages = new ArrayList<ChatMessage>();
 
-                // Set their text
-                messageText.setText(model.getMessageText());
-                messageUser.setText(model.getMessageUser());
-
-                // Format the date before showing it
-                messageTime.setText(model.getMessageTime());
-            }
-        };
         try {
             JSONArray ar = new JSONArray(result.toString());
             for (int i = 0; i < ar.length(); i++){
@@ -49,11 +74,13 @@ public class type_message_area extends AppCompatActivity {
                 msg.setMessageUser(a.getJSONObject("userId").getString("username"));
                 msg.setMessageText(a.getString("message"));
                 msg.setMessageTime(a.getString("timestamp"));
-                adapter.add(msg);
+                listMessages.add(msg);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        mAdapter adapter = new mAdapter(type_message_area.this, listMessages);
         listOfMessages.setAdapter(adapter);
 
     }

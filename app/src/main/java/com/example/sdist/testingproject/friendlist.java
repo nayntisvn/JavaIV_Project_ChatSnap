@@ -80,18 +80,6 @@ public class friendlist extends AppCompatActivity {
             e.printStackTrace();
         }
 
-//        adapter = new ArrayAdapter<Friend>(friendlist.this,
-//                R.layout.friend, listFriends) {
-//
-//            protected void getView(int position, View v, Friend model) {
-//                // Get references to the views of message.xml
-//                TextView friendText = (TextView)v.findViewById(R.id.friend);
-//
-//                // Set their text
-//                friendText.setText(model.getFriendName());
-//            }
-//        };
-
         mAdapter adapter = new mAdapter(friendlist.this, listFriends);
         listOfFriends.setAdapter(adapter);
     }
