@@ -22,6 +22,7 @@ public class Set_WebServices {
         try {
             URL url = new URL(urlQuery);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            stringToPass += "";
             conn.setConnectTimeout(5000);
             conn.setRequestProperty("Content-Type", "Application/json");
             conn.setRequestProperty("Accept", "Text/plain");
