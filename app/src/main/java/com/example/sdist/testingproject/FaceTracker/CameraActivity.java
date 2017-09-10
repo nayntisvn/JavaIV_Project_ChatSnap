@@ -266,7 +266,7 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
             String txt;
             public void onSwipeRight() {
                 if (preview.getHeight() > 0){
-                    txt = "LOCATION";
+                    txt = "LOCATiON";
                     Canvas canvas = new Canvas(picture);
                     canvas.drawColor(0, PorterDuff.Mode.CLEAR);
                     paint.setColor(Color.WHITE);
