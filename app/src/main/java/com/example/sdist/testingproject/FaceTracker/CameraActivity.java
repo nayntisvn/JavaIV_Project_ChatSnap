@@ -21,7 +21,6 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Looper;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
@@ -34,7 +33,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sdist.testingproject.FaceTracker.camera.CameraSourcePreview;
@@ -89,12 +87,13 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
     ImageButton btnBack2;
     ImageButton btnSend;
     ImageButton btnSave;
-    SensorsClass sensorsClass;
+    ImageButton btnFlash;
+    int flash = 0;
 
     SensorManager mSensorManager;
     Sensor tmpSensor, accSensor, lightSensor;
     String temperature = "";
-    boolean isDark = false;
+    boolean isDark;
     //==============================================================================================
     // Activity Methods
     //==============================================================================================
@@ -120,6 +119,7 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
         btnBack2 = (ImageButton) findViewById(R.id.btnBack2);
         btnSend = (ImageButton) findViewById(R.id.btnSend);
         btnSave = (ImageButton) findViewById(R.id.btnSave);
+        btnFlash = (ImageButton) findViewById(R.id.btnFlash);
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         tmpSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
@@ -168,11 +168,8 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                         }
 
                         catch (Exception ex) { }
-
                         temp = picture.copy(Bitmap.Config.ARGB_8888, true);
                         preview.setImageBitmap(picture);
-
-
                     }
                 });
             }
@@ -181,7 +178,44 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Send().execute();
+                AlertDialog.Builder builder = new AlertDialog.Builder(CameraActivity.this);
+                builder.setTitle("Send");
+                builder.setMessage("Select where you want to send the image");
+                builder.setPositiveButton("Story", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        new Send().execute();
+                        onBackPressed();
+                        Toast.makeText(CameraActivity.this, "Sent!", Toast.LENGTH_LONG);
+                    }
+                });
+
+
+                builder.setPositiveButton("Friend", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.show();
+            }
+        });
+
+        btnFlash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (flash == 0) {
+                    flash++;
+                    btnFlash.setImageResource(R.mipmap.flash_off);
+                }
+
+                else if (flash == 1) {
+                    flash++;
+                    btnFlash.setImageResource(R.mipmap.flash_auto);
+                }
+
+                else if (flash == 2) {
+                    flash = 0;
+                    btnFlash.setImageResource(R.mipmap.flash_on);
+                }
             }
         });
 
@@ -223,7 +257,10 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
             String txt;
             public void onSwipeRight() {
                 if (preview.getHeight() > 0){
-                    txt = temperature;
+                    if(isDark == false)
+                    txt = "not dark";
+                    else
+                    txt = "dark";
                     Canvas canvas = new Canvas(picture);
                     canvas.drawColor(0, PorterDuff.Mode.CLEAR);
                     paint.setColor(Color.WHITE);
