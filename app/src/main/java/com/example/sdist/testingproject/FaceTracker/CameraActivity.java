@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -21,6 +22,7 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
@@ -58,6 +60,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -93,7 +96,7 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
     SensorManager mSensorManager;
     Sensor tmpSensor, accSensor, lightSensor;
     String temperature = "";
-    boolean isDark;
+    boolean isDark = true;
     //==============================================================================================
     // Activity Methods
     //==============================================================================================
@@ -128,6 +131,12 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
         takePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                flashOnButton();
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 mCameraSource.takePicture(null, new CameraSource.PictureCallback(){
                     @Override
                     public void onPictureTaken(byte[] bytes) {
@@ -257,10 +266,7 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
             String txt;
             public void onSwipeRight() {
                 if (preview.getHeight() > 0){
-                    if(isDark == false)
-                    txt = "not dark";
-                    else
-                    txt = "dark";
+                    txt = "LOCATION";
                     Canvas canvas = new Canvas(picture);
                     canvas.drawColor(0, PorterDuff.Mode.CLEAR);
                     paint.setColor(Color.WHITE);
@@ -345,6 +351,51 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
         } else {
             requestCameraPermission();
         }
+    }
+
+    private Camera camera = null;
+    private void flashOnButton() {
+        camera=getCamera(mCameraSource);
+        if (camera != null) {
+            try {
+                Camera.Parameters param = camera.getParameters();
+                if (flash == 0)
+                    param.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+
+                else if (flash == 1)
+                    param.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+
+                else if (flash == 2)
+                    param.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
+
+
+                camera.setParameters(param);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private static Camera getCamera(@NonNull CameraSource cameraSource) {
+        Field[] declaredFields = CameraSource.class.getDeclaredFields();
+
+        for (Field field : declaredFields) {
+            if (field.getType() == Camera.class) {
+                field.setAccessible(true);
+                try {
+                    Camera camera = (Camera) field.get(cameraSource);
+                    if (camera != null) {
+                        return camera;
+                    }
+                    return null;
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -581,11 +632,11 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
             temperature = String.valueOf(sensorEvent.values[0]);
         }
         if(sensor.getType()== sensor.TYPE_LIGHT){
-            if(sensorEvent.values[0] < 1000){
-                isDark = true;
+            if(sensorEvent.values[0] > 1000){
+                isDark = false;
             }
             else
-                isDark = false;
+                isDark = true;
         }
     }
 
