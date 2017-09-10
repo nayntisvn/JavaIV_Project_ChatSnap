@@ -15,6 +15,9 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -60,7 +63,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CameraActivity extends AppCompatActivity {
+public class CameraActivity extends AppCompatActivity implements SensorEventListener{
     private static final String TAG = "FaceTracker";
     private CameraSource mCameraSource = null;
     public static int cameraFacing;
@@ -81,13 +84,17 @@ public class CameraActivity extends AppCompatActivity {
     ImageButton takePicture;
     LinearLayout cameraLayout;
     ImageView preview;
-    TextView tempTxt;
 
     ImageButton btnBack;
     ImageButton btnBack2;
     ImageButton btnSend;
     ImageButton btnSave;
     SensorsClass sensorsClass;
+
+    SensorManager mSensorManager;
+    Sensor tmpSensor, accSensor, lightSensor;
+    String temperature = "";
+    boolean isDark = false;
     //==============================================================================================
     // Activity Methods
     //==============================================================================================
@@ -113,8 +120,11 @@ public class CameraActivity extends AppCompatActivity {
         btnBack2 = (ImageButton) findViewById(R.id.btnBack2);
         btnSend = (ImageButton) findViewById(R.id.btnSend);
         btnSave = (ImageButton) findViewById(R.id.btnSave);
-        sensorsClass = new SensorsClass(CameraActivity.this, tempTxt);
 
+        mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        tmpSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
+        accSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        lightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         takePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -213,7 +223,7 @@ public class CameraActivity extends AppCompatActivity {
             String txt;
             public void onSwipeRight() {
                 if (preview.getHeight() > 0){
-                    txt = tempTxt.getText().toString();
+                    txt = temperature;
                     Canvas canvas = new Canvas(picture);
                     canvas.drawColor(0, PorterDuff.Mode.CLEAR);
                     paint.setColor(Color.WHITE);
@@ -226,7 +236,8 @@ public class CameraActivity extends AppCompatActivity {
             }
             public void onSwipeLeft() {
                 if (preview.getHeight() > 0){
-                    txt = "LOCATION";
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                    txt = sdf.format(new Date());
                     Canvas canvas = new Canvas(picture);
                     canvas.drawColor(0, PorterDuff.Mode.CLEAR);
                     paint.setColor(Color.WHITE);
@@ -409,9 +420,12 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        sensorsClass.resumeTmp();
-        sensorsClass.resumeAcc();
-        sensorsClass.resumeLight();
+        accSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorManager.registerListener(this, accSensor, SensorManager.SENSOR_DELAY_GAME);
+        tmpSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
+        mSensorManager.registerListener(this, tmpSensor, SensorManager.SENSOR_DELAY_GAME);
+        lightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        mSensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_GAME);
         Log.d("RESUME", "On Resume");
         startCameraSource();
     }
@@ -422,9 +436,9 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        sensorsClass.pauseTmp();
-        sensorsClass.pauseAcc();
-        sensorsClass.pauseLight();
+        mSensorManager.unregisterListener(this, accSensor);
+        mSensorManager.unregisterListener(this, tmpSensor);
+        mSensorManager.unregisterListener(this, lightSensor);
         Log.d("STOP", "On Stop");
         mPreview.stop();
     }
@@ -520,6 +534,29 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        Sensor sensor = sensorEvent.sensor;
+        if(sensor.getType()== sensor.TYPE_ACCELEROMETER){
+
+        }
+        if(sensor.getType()== sensor.TYPE_AMBIENT_TEMPERATURE){
+            temperature = String.valueOf(sensorEvent.values[0]);
+        }
+        if(sensor.getType()== sensor.TYPE_LIGHT){
+            if(sensorEvent.values[0] < 1000){
+                isDark = true;
+            }
+            else
+                isDark = false;
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
+
     //==============================================================================================
     // Graphic Face Tracker
     //==============================================================================================
@@ -592,31 +629,29 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
+    Bitmap aaa;
+    String pic;
     public class Send extends AsyncTask<Void, Void, Void>
     {
         @Override
         public Void doInBackground(Void... params)
         {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            picture.compress(Bitmap.CompressFormat.PNG, 100, bos);
+            picture.compress(Bitmap.CompressFormat.JPEG, 90, bos);
 
             byte[] test = bos.toByteArray();
-            String pic = Base64.encodeToString(test, Base64.DEFAULT);
-            pic = pic.replace(System.getProperty("line.separator"), "\\n");
+            pic = Base64.encodeToString(test, Base64.DEFAULT);
+            pic = pic.replaceAll(System.getProperty("line.separator"), "NEWLINE");
             Log.d("send", pic);
-            String stringToPass = "{\"file\" : \"%s\", \"timestamp\" : \"2009-09-17T00:00:00+08:00\"}";
+            String stringToPass = "{\"file\" : \"" + pic + "\", \"timestamp\" : \"null\"}";
 
             try {
-                Set_WebServices.postJsonObject(Set_Configurations.User_Stories_Send + 1, String.format(stringToPass, pic.trim()));
+                Set_WebServices.postJsonObject(Set_Configurations.User_Stories_Send + 1, stringToPass);
             }
 
             catch (Exception ex) {
                 Log.d("Error", ex.getMessage());
             }
-
-            String asd = String.format(stringToPass, pic.trim());
-
-            asd+= "";
             return null;
         }
 
