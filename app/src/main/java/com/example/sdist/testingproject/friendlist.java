@@ -71,25 +71,23 @@ public class friendlist extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                switch (view.getId()) {
-                    //make csv
-                    case R.id.list_of_friends:
-                        intent = new Intent(getApplicationContext(), type_message_area.class);
-                        for(i = 0; i < listFriends.size(); i++){
-                            if(listOfFriends.getItemAtPosition(listOfFriends.getSelectedItemPosition()).toString()== listFriends.get(i).getFriendName()){
-                                friendUserId = listFriends.get(i).getFriendUserId();
-                            }
-                        }
-                        intent.putExtra("friendUserId", friendUserId);
+                   intent = new Intent(getApplicationContext(), type_message_area.class);
 
-                        startActivity(intent);
-                        break;
-                }
+                    for(i = 0; i < listFriends.size(); i++){
+                        if(listOfFriends.getSelectedItem().toString()== listFriends.get(i).getFriendName()){
+                            friendUserId = listFriends.get(i).getFriendUserId();
+                        }
+                    }
+
+                    intent.putExtra("friendUserId", friendUserId);
+
+                    startActivity(intent);
             }
         });
 
         listFriends = new ArrayList<Friend>();
         new RefreshFriends().execute();
+
     }
 
     private void displayFriends(JSONArray result) {

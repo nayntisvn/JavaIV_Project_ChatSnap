@@ -2,6 +2,7 @@ package com.example.sdist.testingproject;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +25,10 @@ import java.util.ArrayList;
 
 public class type_message_area extends AppCompatActivity {
     int friendUserId;
+    String messageToBeSend= "";
+    EditText Message;
+    ImageView Send;
+
     public class mAdapter extends ArrayAdapter<ChatMessage>{
 
         public mAdapter(@NonNull Context context, ArrayList<ChatMessage> objects) {
@@ -65,6 +72,28 @@ public class type_message_area extends AppCompatActivity {
             friendUserId = Integer.valueOf(extras.getString("friendUserId"));
         }
         setContentView(R.layout.activity_type_message_area);
+
+        Send = (ImageView) findViewById(R.id.imageView8);
+        Message = (EditText) findViewById(R.id.editText);
+
+        Send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                messageToBeSend = "{ \n" +
+                        "\t\"message\" : \"%s\",\n" +
+                        "\t\"timestamp\" : \"2009-09-17T00:00:00+08:00\",\n" +
+                        "\t\"recipient\" : %s\n" +
+                        "}";
+
+                messageToBeSend = String.format(messageToBeSend, Message.getText().toString(), friendUserId);
+
+                new SendMessages().execute();
+
+            }
+        });
+
+        new RefreshMessages().execute();
     }
 
     private void displayChatMessages(JSONArray result) {
@@ -118,6 +147,33 @@ public class type_message_area extends AppCompatActivity {
 
             }
 
+        }
+
+    }
+
+    public class SendMessages extends AsyncTask<Void, Void, Void>
+    {
+        @Override
+        public Void doInBackground(Void... params)
+        {
+            try{
+
+                Set_WebServices.postJsonObject(Set_Configurations.User_Message + Set_Configurations.userId, messageToBeSend);
+
+            }catch(Exception e)
+            {
+                Toast.makeText(type_message_area.this, "Send Failed", Toast.LENGTH_SHORT).show();
+            }
+
+            return null;
+        }
+
+        @Override
+        public void onPostExecute(Void result){
+
+            Toast.makeText(type_message_area.this, "MessageSent", Toast.LENGTH_SHORT).show();
+
+            new RefreshMessages().execute();
         }
 
     }

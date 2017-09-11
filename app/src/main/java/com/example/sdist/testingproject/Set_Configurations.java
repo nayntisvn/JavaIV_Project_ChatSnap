@@ -33,17 +33,15 @@ public class Set_Configurations {
     public static String User_Message = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.message/message/";
     public static String User_Object_Send = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.object1/new/";
     public static String User_Stories_Send = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.stories/new/";
-    public static String User_Message_Send = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.message/{id}/send";
+    public static String User_Message_Send = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.message/send/";
 
     //    Public Variables
     public static int userId;
     public static String Username;
     public static int recId;
-    private static String Password;
-    private static String Email;
-    private static String Birthday;
-
-
+    public static String Password;
+    public static String Email;
+    public static String Birthday;
 
 //    Encapsulation
     public String getUsername() {

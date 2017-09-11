@@ -18,9 +18,13 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.nio.Buffer;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -220,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
 
                         file_Write = new FileOutputStream(Set_Configurations.user_Details);
                         file_Write.write(username.getBytes());
-                        file_Write.write(Set_Configurations.userId);
+                        file_Write.write(("," + Set_Configurations.userId + "").getBytes());
                         file_Write.flush();
                         file_Write.close();
                     }
@@ -254,19 +258,33 @@ public class MainActivity extends AppCompatActivity {
 
 //    Insert checker of current user here.
     public boolean CheckCurrentUser(){
-//
-//        try {
-//            file_Write = new FileOutputStream(Set_Configurations.user_Details);
-//            file_Write.write(username.getBytes());
-//            file_Write.flush();
-//            file_Write.close();
-//        }
-//        catch(Exception e)
-//        {
-//            e.printStackTrace();
-//        }
+
+        String loggedIn = "";
+        BufferedReader br;
 
         if(Set_Configurations.user_Details.exists()){
+
+            try {
+                FileReader file_Read = new FileReader(Set_Configurations.user_Details);
+
+                br = new BufferedReader(file_Read);
+
+                String sCurrentLine;
+
+                while ((sCurrentLine = br.readLine()) != null) {
+
+                    loggedIn += sCurrentLine;
+                }
+
+                Set_Configurations.userId = Integer.parseInt(loggedIn.substring(loggedIn.lastIndexOf(',') + 1,loggedIn.length()));
+                Set_Configurations.Username = loggedIn.substring(0, loggedIn.lastIndexOf(','));
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+
+
             return true;
         }
         else{
