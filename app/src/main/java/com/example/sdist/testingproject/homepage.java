@@ -96,6 +96,8 @@ public class homepage extends AppCompatActivity
             intent = new Intent(getApplicationContext(), friendlist.class);
             startActivity(intent);
 
+            String asd = "";
+
         } else if (id == R.id.nav_slideshow) {
 
 //            intent = new Intent(getApplicationContext(), CameraActivity.class);

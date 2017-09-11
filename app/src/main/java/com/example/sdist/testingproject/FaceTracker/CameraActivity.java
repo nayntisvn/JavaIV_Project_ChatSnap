@@ -183,16 +183,15 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                 builder.setMessage("Select where you want to send the image");
                 builder.setPositiveButton("Story", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        new Send().execute();
+                        new Send().execute("1");
                         onBackPressed();
                         Toast.makeText(CameraActivity.this, "Sent!", Toast.LENGTH_LONG);
                     }
                 });
 
-
                 builder.setPositiveButton("Friend", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-
+                        new Send().execute("2");
                     }
                 });
                 builder.show();
@@ -207,15 +206,15 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                     btnFlash.setImageResource(R.mipmap.flash_off);
                 }
 
-                else if (flash == 1) {
-                    flash++;
-                    btnFlash.setImageResource(R.mipmap.flash_auto);
-                }
-
-                else if (flash == 2) {
-                    flash = 0;
-                    btnFlash.setImageResource(R.mipmap.flash_on);
-                }
+//                else if (flash == 1) {
+//                    flash++;
+//                    btnFlash.setImageResource(R.mipmap.flash_auto);
+//                }
+//
+//                else if (flash == 2) {
+//                    flash = 0;
+//                    btnFlash.setImageResource(R.mipmap.flash_on);
+//                }
             }
         });
 
@@ -668,10 +667,10 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
 
     Bitmap aaa;
     String pic;
-    public class Send extends AsyncTask<Void, Void, Void>
+    public class Send extends AsyncTask<String, Void, Void>
     {
         @Override
-        public Void doInBackground(Void... params)
+        public Void doInBackground(String... params)
         {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             picture.compress(Bitmap.CompressFormat.JPEG, 90, bos);
@@ -680,14 +679,28 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
             pic = Base64.encodeToString(test, Base64.DEFAULT);
             pic = pic.replaceAll(System.getProperty("line.separator"), "NEWLINE");
             Log.d("send", pic);
-            String stringToPass = "{\"file\" : \"" + pic + "\", \"timestamp\" : \"null\"}";
+            String stringToPass;
+            if(params.equals("1"))
+            {
+                stringToPass = "{\"file\" : \"" + pic + "\", \"timestamp\" : \"null\"}";
 
-            try {
-                Set_WebServices.postJsonObject(Set_Configurations.User_Stories_Send + 1, stringToPass);
+                try {
+                    Set_WebServices.postJsonObject(Set_Configurations.User_Stories_Send + 1, stringToPass);
+                }
+                catch (Exception ex) {
+                    Log.d("Error", ex.getMessage());
+                }
             }
+            else if(params.equals("2"))
+            {
+                stringToPass = "{\"file\" : \"" + pic + "\", \"userId\" : {\"userId\" : %s}, \"timestamp\" : \"null\", \"recipient\" : %s}";
 
-            catch (Exception ex) {
-                Log.d("Error", ex.getMessage());
+                try {
+                    Set_WebServices.postJsonObject(Set_Configurations.User_Object_Send + 1, String.format(stringToPass,Set_Configurations.userId, "" + 2));
+                }
+                catch (Exception ex) {
+                    Log.d("Error", ex.getMessage());
+                }
             }
             return null;
         }

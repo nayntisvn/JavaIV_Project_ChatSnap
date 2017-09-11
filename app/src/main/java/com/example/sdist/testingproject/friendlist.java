@@ -68,32 +68,16 @@ public class friendlist extends AppCompatActivity {
         listFriends = new ArrayList<Friend>();
         new RefreshFriends().execute();
     }
-    public void onClick(View v){
-        switch (v.getId()) {
-            //make csv
-            case R.id.list_of_friends:
-                intent = new Intent(getApplicationContext(), type_message_area.class);
-                for(int i = 0; i < listFriends.size(); i++){
-                    if(listOfFriends.getSelectedItem().toString()== listFriends.get(i).getFriendName()){
-                        friendUserId = listFriends.get(i).getFriendUserId();
-                    }
-                }
-                intent.putExtra("friendUserId", friendUserId);
 
-                startActivity(intent);
-                break;
-        }
-    }
     private void displayFriends(JSONArray result) {
-
 
         try {
             JSONArray ar = new JSONArray(result.toString());
             for (int i = 0; i < ar.length(); i++){
                 JSONObject a = ar.getJSONObject(i);
                 Friend friend = new Friend();
-                friend.setFriendName(a.getJSONObject("userId").getString("username"));
-                friend.setFriendUserId(Integer.valueOf(a.getJSONObject("userId").getString("userId")));
+                friend.setFriendName(a.getString("username"));
+                friend.setFriendUserId(Integer.valueOf(a.getString("userId")));
                 listFriends.add(friend);
             }
         } catch (JSONException e) {
