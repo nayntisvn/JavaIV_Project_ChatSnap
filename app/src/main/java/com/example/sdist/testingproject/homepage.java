@@ -107,6 +107,10 @@ public class homepage extends AppCompatActivity
 
         } else if (id == R.id.nav_slideshow) {
 
+            intent = new Intent(getApplicationContext(), type_message_area.class);
+            intent.putExtra("friendUserId", "3");
+            startActivity(intent);
+
 //            intent = new Intent(getApplicationContext(), CameraActivity.class);
 //            startActivity(intent);
 

@@ -71,17 +71,17 @@ public class friendlist extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                   intent = new Intent(getApplicationContext(), type_message_area.class);
+               intent = new Intent(getApplicationContext(), type_message_area.class);
 
-                    for(i = 0; i < listFriends.size(); i++){
-                        if(listOfFriends.getSelectedItem().toString()== listFriends.get(i).getFriendName()){
-                            friendUserId = listFriends.get(i).getFriendUserId();
-                        }
+                for(int z = 0; i < listFriends.size(); z++){
+                    if(listOfFriends.getSelectedItem().toString()== listFriends.get(z).getFriendName()){
+                        friendUserId = listFriends.get(z).getFriendUserId();
                     }
+                }
 
-                    intent.putExtra("friendUserId", friendUserId);
+                intent.putExtra("friendUserId", friendUserId);
 
-                    startActivity(intent);
+                startActivity(intent);
             }
         });
 

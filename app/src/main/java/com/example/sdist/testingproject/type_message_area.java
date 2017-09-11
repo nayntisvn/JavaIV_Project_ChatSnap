@@ -2,6 +2,7 @@ package com.example.sdist.testingproject;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +25,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class type_message_area extends AppCompatActivity {
-    int friendUserId;
+    int friendUserId = 1;
     String messageToBeSend= "";
     EditText Message;
     ImageView Send;
@@ -36,7 +37,7 @@ public class type_message_area extends AppCompatActivity {
         }
         @Override
         public View getView(int position, View view, ViewGroup viewGroup) {
-            type_message_area.mAdapter.ViewHolder viewHolder;
+            ViewHolder viewHolder;
             if (view == null) {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.message, viewGroup, false);
 
@@ -47,7 +48,7 @@ public class type_message_area extends AppCompatActivity {
                 viewHolder.textViewTime = (TextView) view.findViewById(R.id.message_time);
                 view.setTag(viewHolder);
             } else {
-                viewHolder = (type_message_area.mAdapter.ViewHolder) view.getTag();
+                viewHolder = (ViewHolder) view.getTag();
             }
 
             ChatMessage myModel = getItem(position);
@@ -93,7 +94,22 @@ public class type_message_area extends AppCompatActivity {
             }
         });
 
-        new RefreshMessages().execute();
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    while(true) {
+                        sleep(500);
+                        new RefreshMessages().execute();
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        thread.start();
+
     }
 
     private void displayChatMessages(JSONArray result) {
@@ -127,7 +143,7 @@ public class type_message_area extends AppCompatActivity {
             JSONArray resultSet = null;
             try{
 
-                resultSet = new JSONArray(Set_WebServices.getJsonObject(Set_Configurations.User_Message + Set_Configurations.userId + friendUserId));
+                resultSet = new JSONArray(Set_WebServices.getJsonObject(Set_Configurations.User_Message + Set_Configurations.userId + "/" + friendUserId));
 
             }catch(Exception e)
             {
@@ -158,7 +174,7 @@ public class type_message_area extends AppCompatActivity {
         {
             try{
 
-                Set_WebServices.postJsonObject(Set_Configurations.User_Message + Set_Configurations.userId, messageToBeSend);
+                Set_WebServices.postJsonObject(Set_Configurations.User_Message_Send + Set_Configurations.userId, messageToBeSend);
 
             }catch(Exception e)
             {

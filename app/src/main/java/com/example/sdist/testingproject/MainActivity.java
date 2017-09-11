@@ -191,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 stat = Set_WebServices.putJsonObject(Set_Configurations.Web_Login, String.format(toPass, username, password));
                 ///
+                String.format(toPass, username, password);
             } catch (Exception e) {
                 stat = "Login Failed : Network Error";
             }
