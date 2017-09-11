@@ -14,6 +14,7 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -65,6 +66,28 @@ public class friendlist extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendlist);
         listOfFriends = (ListView)findViewById(R.id.list_of_friends);
+
+        listOfFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                switch (view.getId()) {
+                    //make csv
+                    case R.id.list_of_friends:
+                        intent = new Intent(getApplicationContext(), type_message_area.class);
+                        for(i = 0; i < listFriends.size(); i++){
+                            if(listOfFriends.getItemAtPosition(listOfFriends.getSelectedItemPosition()).toString()== listFriends.get(i).getFriendName()){
+                                friendUserId = listFriends.get(i).getFriendUserId();
+                            }
+                        }
+                        intent.putExtra("friendUserId", friendUserId);
+
+                        startActivity(intent);
+                        break;
+                }
+            }
+        });
+
         listFriends = new ArrayList<Friend>();
         new RefreshFriends().execute();
     }
