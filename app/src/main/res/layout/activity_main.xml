@@ -40,6 +40,20 @@
             android:paddingRight="24dp"
             android:paddingTop="56dp">
 
+            <TextView
+                android:id="@+id/CamShot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CamShot"
+                android:textSize="45dp"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:fontFamily="sans-serif-condensed"
+                android:textStyle="bold"
+                android:drawableLeft="@drawable/ic_camera_black_24dp"
+
+                />
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

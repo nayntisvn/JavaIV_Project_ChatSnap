@@ -14,7 +14,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
-import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -22,7 +21,6 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
@@ -41,6 +39,7 @@ import com.example.sdist.testingproject.FaceTracker.camera.CameraSourcePreview;
 import com.example.sdist.testingproject.FaceTracker.camera.GraphicOverlay;
 import com.example.sdist.testingproject.FaceTracker.facedetection.FaceGraphic;
 import com.example.sdist.testingproject.R;
+import com.example.sdist.testingproject.Sensors.LocationClass;
 import com.example.sdist.testingproject.Set_Configurations;
 import com.example.sdist.testingproject.Set_WebServices;
 import com.google.android.gms.common.ConnectionResult;
@@ -56,7 +55,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -92,7 +90,9 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
     SensorManager mSensorManager;
     Sensor tmpSensor, accSensor, lightSensor;
     String temperature = "";
-    boolean isDark = true;
+    boolean isDark;
+
+    int userFriendId = 0;
     //==============================================================================================
     // Activity Methods
     //==============================================================================================
@@ -105,6 +105,11 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras!=null){
+            userFriendId = Integer.parseInt(extras.getString("userFriendId"));
+        }
 
         cameraFacing = CameraSource.CAMERA_FACING_BACK;
         switchCamera = (ImageButton) findViewById(R.id.btnSwitchCam);
@@ -127,12 +132,6 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
         takePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                flashOnButton();
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 mCameraSource.takePicture(null, new CameraSource.PictureCallback(){
                     @Override
                     public void onPictureTaken(byte[] bytes) {
@@ -145,7 +144,7 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                         picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         Matrix matrix = new Matrix();
 
-                        //ERICK
+//                        //ERICK
                         if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
                             matrix.postRotate(-90f);
                             matrix.preScale(1, -1);
@@ -184,24 +183,15 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(CameraActivity.this);
-                builder.setTitle("Send");
-                builder.setMessage("Select where you want to send the image");
 
-                builder.setPositiveButton("Class_Story", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        new Send().execute("1");
-                        onBackPressed();
-                        Toast.makeText(CameraActivity.this, "Sent!", Toast.LENGTH_LONG);
-                    }
-                });
+            if(userFriendId == 0)
+            {
+                new Send().execute("1");
+            }
+            else{
+                new Send().execute("2");
+            }
 
-                builder.setPositiveButton("Class_Friend", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        new Send().execute("2");
-                    }
-                });
-
-                builder.show();
             }
         });
 
@@ -213,15 +203,15 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                     btnFlash.setImageResource(R.mipmap.flash_off);
                 }
 
-//                else if (flash == 1) {
-//                    flash++;
-//                    btnFlash.setImageResource(R.mipmap.flash_auto);
-//                }
-//
-//                else if (flash == 2) {
-//                    flash = 0;
-//                    btnFlash.setImageResource(R.mipmap.flash_on);
-//                }
+                else if (flash == 1) {
+                    flash++;
+                    btnFlash.setImageResource(R.mipmap.flash_auto);
+                }
+
+                else if (flash == 2) {
+                    flash = 0;
+                    btnFlash.setImageResource(R.mipmap.flash_on);
+                }
             }
         });
 
@@ -262,8 +252,10 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
             Paint paint = new Paint();
             String txt;
             public void onSwipeRight() {
+                LocationClass locationClass = new LocationClass(CameraActivity.this);
+                locationClass.getLocation();
                 if (preview.getHeight() > 0){
-                    txt = "LOCATiON";
+                    txt = locationClass.getLocality(CameraActivity.this);
                     Canvas canvas = new Canvas(picture);
                     canvas.drawColor(0, PorterDuff.Mode.CLEAR);
                     paint.setColor(Color.WHITE);
@@ -348,51 +340,6 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
         } else {
             requestCameraPermission();
         }
-    }
-
-    private Camera camera = null;
-    private void flashOnButton() {
-        camera=getCamera(mCameraSource);
-        if (camera != null) {
-            try {
-                Camera.Parameters param = camera.getParameters();
-                if (flash == 0)
-                    param.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-
-                else if (flash == 1)
-                    param.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-
-                else if (flash == 2)
-                    param.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
-
-
-                camera.setParameters(param);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
-
-    private static Camera getCamera(@NonNull CameraSource cameraSource) {
-        Field[] declaredFields = CameraSource.class.getDeclaredFields();
-
-        for (Field field : declaredFields) {
-            if (field.getType() == Camera.class) {
-                field.setAccessible(true);
-                try {
-                    Camera camera = (Camera) field.get(cameraSource);
-                    if (camera != null) {
-                        return camera;
-                    }
-                    return null;
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -629,11 +576,11 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
             temperature = String.valueOf(sensorEvent.values[0]);
         }
         if(sensor.getType()== sensor.TYPE_LIGHT){
-            if(sensorEvent.values[0] > 1000){
-                isDark = false;
+            if(sensorEvent.values[0] < 1000){
+                isDark = true;
             }
             else
-                isDark = true;
+                isDark = false;
         }
     }
 
@@ -730,7 +677,7 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
             Log.d("send", pic);
             String stringToPass;
 
-            if(params.equals("1"))
+            if(params[0].equals("1"))
             {
                 stringToPass = "{\"file\" : \"" + pic + "\", \"timestamp\" : \"null\"}";
 
@@ -741,12 +688,12 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                     Log.d("Error", ex.getMessage());
                 }
             }
-            else if(params.equals("2"))
+            else if(params[0].equals("2"))
             {
-                stringToPass = "{\"file\" : \"" + pic + "\", \"userId\" : {\"userId\" : %s}, \"timestamp\" : \"null\", \"recipient\" : %s}";
+                stringToPass = "{\"file\" : \"" + pic + "\", \"userId\" : {\"userId\" : %s}, \"timestamp\" : \"2009-09-17T00:00:00+08:01\", \"recipient\" : %s}";
 
                 try {
-                    Set_WebServices.postJsonObject(Set_Configurations.User_Object_Send + 1, String.format(stringToPass,Set_Configurations.userId, "" + 2));
+                    Set_WebServices.postJsonObject(Set_Configurations.User_Object_Send + 1, String.format(stringToPass,Set_Configurations.userId, "" + userFriendId));
                 }
                 catch (Exception ex) {
                     Log.d("Error", ex.getMessage());
