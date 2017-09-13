@@ -143,20 +143,20 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                         picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         Matrix matrix = new Matrix();
 
-                        //ERICK
-                        if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
-                            matrix.postRotate(-90f);
-                            matrix.preScale(1, -1);
-                        }
-
-                        else if (cameraFacing == CameraSource.CAMERA_FACING_BACK) {
-                            matrix.postRotate(90f);
-                        }
+//                        //ERICK
+//                        if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
+//                            matrix.postRotate(-90f);
+//                            matrix.preScale(1, -1);
+//                        }
+//
+//                        else if (cameraFacing == CameraSource.CAMERA_FACING_BACK) {
+//                            matrix.postRotate(90f);
+//                        }
 
                         //RJ
-//                        if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
-//                            matrix.preScale(-1, 1);
-//                        }
+                        if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
+                            matrix.preScale(-1, 1);
+                        }
 
                         picture = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(), picture.getHeight(), matrix, false);
                         picture = picture.copy(Bitmap.Config.ARGB_8888, true);

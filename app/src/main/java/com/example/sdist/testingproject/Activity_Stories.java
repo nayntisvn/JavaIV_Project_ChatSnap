@@ -126,6 +126,7 @@ public class Activity_Stories extends AppCompatActivity {
                 }
                 else if(userFriendId != 0 && mode.equals("FriendStory")){
 
+
                     resultSet = new JSONArray(Set_WebServices.getJsonObject(Set_Configurations.User_Objects + Set_Configurations.userId + "/" + userFriendId));
 
                 }

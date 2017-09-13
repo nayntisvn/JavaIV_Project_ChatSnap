@@ -112,7 +112,7 @@ public class Activity_Friendlist extends AppCompatActivity {
                         }
                     }
 
-                    intent.putExtra("friendUserId", friendUserId + "");
+                    intent.putExtra("friendUserId", friend + "");
 
                     startActivity(intent);
 

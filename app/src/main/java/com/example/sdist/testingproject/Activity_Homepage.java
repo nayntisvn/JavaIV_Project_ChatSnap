@@ -35,7 +35,7 @@ public class Activity_Homepage extends AppCompatActivity
             public void onClick(View view) {
 
                 intent = new Intent(getApplicationContext(), CameraActivity.class);
-                intent.putExtra("userFriendId", 0);
+                intent.putExtra("userFriendId", "0");
 
                 startActivity(intent);
 
