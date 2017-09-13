@@ -15,7 +15,7 @@ import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class SignUpActivity extends AppCompatActivity{
+public class Activity_SignUp extends AppCompatActivity{
 
 //    String for JSON transfer
     private String stringToPass;
@@ -82,7 +82,7 @@ public class SignUpActivity extends AppCompatActivity{
         // TODO: Implement your own Web_SignUp logic here.
 
         if(password.equals(conPassword)) {
-            final ProgressDialog progressDialog = new ProgressDialog(SignUpActivity.this,
+            final ProgressDialog progressDialog = new ProgressDialog(Activity_SignUp.this,
                     R.style.AppTheme);
             progressDialog.setIndeterminate(true);
             progressDialog.setMessage("Creating Account...");
@@ -117,7 +117,7 @@ public class SignUpActivity extends AppCompatActivity{
         _signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
 
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), Activity_Main.class);
         startActivity(intent);
     }
 
@@ -183,9 +183,9 @@ public class SignUpActivity extends AppCompatActivity{
         protected void onPostExecute(String result) {
 
             if(result.equals("true")){
-                Toast.makeText(SignUpActivity.this, "Sign Up Success", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_SignUp.this, "Sign Up Success", Toast.LENGTH_SHORT).show();
             }else{
-                Toast.makeText(SignUpActivity.this, "Mismatched Password", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_SignUp.this, "Mismatched Password", Toast.LENGTH_SHORT).show();
             }
         }
     }

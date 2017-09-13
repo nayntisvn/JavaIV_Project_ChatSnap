@@ -8,7 +8,7 @@ import java.util.Date;
  * Created by Sdist on 8/25/2017.
  */
 
-public class Data_Offline {
+public class Class_Data_Offline {
 
     private String message;
     private Bitmap file;

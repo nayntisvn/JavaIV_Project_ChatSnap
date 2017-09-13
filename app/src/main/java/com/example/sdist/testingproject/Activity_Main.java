@@ -16,22 +16,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.nio.Buffer;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class MainActivity extends AppCompatActivity {
+public class Activity_Main extends AppCompatActivity {
 
-    private static final String TAG = "SignUpActivity";
+    private static final String TAG = "Activity_SignUp";
     private static final int REQUEST_SIGNUP = 0;
 
 //    Controls/Swings/Views of page
@@ -67,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(CheckCurrentUser()) {
 
-            intent = new Intent(getApplicationContext(),homepage.class);
+            intent = new Intent(getApplicationContext(),Activity_Homepage.class);
             startActivity(intent);
         }
 
@@ -84,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
+                Intent intent = new Intent(getApplicationContext(), Activity_SignUp.class);
                 startActivityForResult(intent, REQUEST_SIGNUP);
             }
         });
@@ -101,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         _loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(MainActivity.this,
+        final ProgressDialog progressDialog = new ProgressDialog(Activity_Main.this,
                 R.style.AppTheme);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
@@ -133,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // disable going back to the MainActivity
+        // disable going back to the Activity_Main
         moveTaskToBack(true);
     }
 
@@ -141,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
         _loginButton.setEnabled(true);
 
-        intent = new Intent(getApplicationContext(), homepage.class);
+        intent = new Intent(getApplicationContext(), Activity_Homepage.class);
         startActivity(intent);
     }
 
@@ -205,25 +200,25 @@ public class MainActivity extends AppCompatActivity {
             switch (result.split(",")[0])
             {
                 case "0" : {
-                    Toast.makeText(MainActivity.this, "Username doesn't exist!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Activity_Main.this, "Username doesn't exist!", Toast.LENGTH_SHORT).show();
                     ClearToGo = 0;
 
                     break;
                 }
                 case "10": {
-                    Toast.makeText(MainActivity.this, "Incorrect Password!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Activity_Main.this, "Incorrect Password!", Toast.LENGTH_SHORT).show();
                     ClearToGo = 0;
 
                     break;
                 }
                 case "11": {
-                    Toast.makeText(MainActivity.this, "Login success", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Activity_Main.this, "Login success", Toast.LENGTH_SHORT).show();
 
                     try {
                         Set_Configurations.Username = username;
                         Set_Configurations.userId = Integer.parseInt(result.split(",")[1]);
                         Set_Configurations.Email = result.split(",")[2];
-                        
+
                         file_Write = new FileOutputStream(Set_Configurations.user_Details);
                         file_Write.write(username.getBytes());
                         file_Write.write(("," + Set_Configurations.userId + "").getBytes());
@@ -248,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 }
                 case "2": {
-                    Toast.makeText(MainActivity.this, "User already logged in!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Activity_Main.this, "User already logged in!", Toast.LENGTH_SHORT).show();
                     ClearToGo = 0;
 
                     break;
@@ -300,13 +295,13 @@ public class MainActivity extends AppCompatActivity {
     {
         if(v.getId() == R.id.button_login){
 
-            Intent i = new Intent(MainActivity.this, SignUpActivity.class);
+            Intent i = new Intent(Activity_Main.this, Activity_SignUp.class);
             startActivity(i);
 
         }
         if(v.getId() == R.id.button_signUp){
 
-//            Intent i = new Intent(MainActivity.this, SignUp.class);
+//            Intent i = new Intent(Activity_Main.this, SignUp.class);
 //
 //            startActivity(i);
         }

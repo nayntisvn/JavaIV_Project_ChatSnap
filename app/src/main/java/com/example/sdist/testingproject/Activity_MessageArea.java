@@ -21,15 +21,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class type_message_area extends AppCompatActivity {
+public class Activity_MessageArea extends AppCompatActivity {
     int friendUserId = 1;
     String messageToBeSend= "";
     EditText Message;
     ImageView Send;
 
-    public class mAdapter extends ArrayAdapter<ChatMessage>{
+    public class mAdapter extends ArrayAdapter<Class_ChatMessage>{
 
-        public mAdapter(@NonNull Context context, ArrayList<ChatMessage> objects) {
+        public mAdapter(@NonNull Context context, ArrayList<Class_ChatMessage> objects) {
             super(context, 0, objects);
         }
         @Override
@@ -39,7 +39,7 @@ public class type_message_area extends AppCompatActivity {
 
                 view = LayoutInflater.from(getContext()).inflate(R.layout.message, viewGroup, false);
 
-                viewHolder = new type_message_area.mAdapter.ViewHolder();
+                viewHolder = new Activity_MessageArea.mAdapter.ViewHolder();
 
                 viewHolder.textViewText = (TextView) view.findViewById(R.id.message_text);
                 viewHolder.textViewUser = (TextView) view.findViewById(R.id.story_image);
@@ -50,7 +50,7 @@ public class type_message_area extends AppCompatActivity {
                 viewHolder = (ViewHolder) view.getTag();
             }
 
-            ChatMessage myModel = getItem(position);
+            Class_ChatMessage myModel = getItem(position);
 
             viewHolder.textViewText.setText(myModel.getMessageText());
             viewHolder.textViewUser.setText(myModel.getMessageUser());
@@ -116,13 +116,13 @@ public class type_message_area extends AppCompatActivity {
 
     private void displayChatMessages(JSONArray result) {
         ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
-        ArrayList<ChatMessage> listMessages = new ArrayList<ChatMessage>();
+        ArrayList<Class_ChatMessage> listMessages = new ArrayList<Class_ChatMessage>();
 
         try {
             JSONArray ar = new JSONArray(result.toString());
             for (int i = 0; i < ar.length(); i++){
                 JSONObject a = ar.getJSONObject(i);
-                ChatMessage msg = new ChatMessage();
+                Class_ChatMessage msg = new Class_ChatMessage();
                 msg.setMessageUser(a.getJSONObject("userId").getString("username"));
                 msg.setMessageText(a.getString("message"));
                 msg.setMessageTime(a.getString("timestamp"));
@@ -132,7 +132,7 @@ public class type_message_area extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        mAdapter adapter = new mAdapter(type_message_area.this, listMessages);
+        mAdapter adapter = new mAdapter(Activity_MessageArea.this, listMessages);
         listOfMessages.setAdapter(adapter);
 
     }
@@ -149,7 +149,7 @@ public class type_message_area extends AppCompatActivity {
 
             }catch(Exception e)
             {
-                Toast.makeText(type_message_area.this, "No Network", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_MessageArea.this, "No Network", Toast.LENGTH_SHORT).show();
             }
 
             return resultSet;
@@ -179,7 +179,7 @@ public class type_message_area extends AppCompatActivity {
 
             }catch(Exception e)
             {
-                Toast.makeText(type_message_area.this, "Send Failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_MessageArea.this, "Send Failed", Toast.LENGTH_SHORT).show();
             }
 
             return null;
@@ -188,7 +188,7 @@ public class type_message_area extends AppCompatActivity {
         @Override
         public void onPostExecute(Void result){
 
-            Toast.makeText(type_message_area.this, "MessageSent", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Activity_MessageArea.this, "MessageSent", Toast.LENGTH_SHORT).show();
 
             new RefreshMessages().execute();
         }

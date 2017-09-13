@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
  * Created by Sdist on 9/13/2017.
  */
 
-public class Story {
+public class Class_Story {
 
     private Bitmap storySnap;
     private String storyTime;

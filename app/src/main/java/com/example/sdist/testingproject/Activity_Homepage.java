@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.example.sdist.testingproject.FaceTracker.CameraActivity;
 
-public class homepage extends AppCompatActivity
+public class Activity_Homepage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     Intent intent;
@@ -96,20 +96,21 @@ public class homepage extends AppCompatActivity
 
         if (id == R.id.nav_myStory) {
             // Handle the camera action
-            intent = new Intent(getApplicationContext(), Stories.class);
+            intent = new Intent(getApplicationContext(), Activity_Stories.class);
             intent.putExtra("Mode", "MyStory");
+            intent.putExtra("userFriendId", "0");
             startActivity(intent);
 
         } else if (id == R.id.nav_friends) {
 
-            intent = new Intent(getApplicationContext(), friendlist.class);
+            intent = new Intent(getApplicationContext(), Activity_Friendlist.class);
             intent.putExtra("Mode", "Messages");
             startActivity(intent);
 
         } else if (id == R.id.nav_stories) {
 
-            intent = new Intent(getApplicationContext(), friendlist.class);
-            intent.putExtra("Mode", "Stories");
+            intent = new Intent(getApplicationContext(), Activity_Friendlist.class);
+            intent.putExtra("Mode", "Activity_Stories");
             startActivity(intent);
 
         } else if (id == R.id.nav_send) {

@@ -21,13 +21,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Stories extends AppCompatActivity {
+public class Activity_Stories extends AppCompatActivity {
 
     Intent intent;
     ListView listOfStories;
-    ArrayList<Story> listStories;
+    ArrayList<Class_Story> listStories;
 
-    int friendUserId;
+    int friendUserId = 0;
     String mode = "";
 
     @Override
@@ -38,16 +38,17 @@ public class Stories extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras!=null){
             mode = extras.getString("Mode");
+            friendUserId = Integer.parseInt(extras.getString("friendUserId"));
         }
 
-        listStories = new ArrayList<Story>();
+        listStories = new ArrayList<Class_Story>();
 
         new RefreshStories().execute();
     }
 
-    public class mAdapter extends ArrayAdapter<Story> {
+    public class mAdapter extends ArrayAdapter<Class_Story> {
 
-        public mAdapter(@NonNull Context context, ArrayList<Story> objects) {
+        public mAdapter(@NonNull Context context, ArrayList<Class_Story> objects) {
             super(context, 0, objects);
         }
         @Override
@@ -56,7 +57,7 @@ public class Stories extends AppCompatActivity {
             if (view == null) {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.story, viewGroup, false);
 
-                viewHolder = new Stories.mAdapter.ViewHolder();
+                viewHolder = new Activity_Stories.mAdapter.ViewHolder();
 
                 viewHolder.storyImageView = (ImageView) view.findViewById(R.id.story_image);
                 viewHolder.storyTextView = (TextView) view.findViewById(R.id.story_time);
@@ -65,7 +66,7 @@ public class Stories extends AppCompatActivity {
                 viewHolder = (ViewHolder) view.getTag();
             }
 
-            Story myModel = getItem(position);
+            Class_Story myModel = getItem(position);
 
             viewHolder.storyImageView.setImageBitmap(myModel.getStorySnap());
             viewHolder.storyTextView.setText(myModel.getStoryTime());
@@ -84,7 +85,7 @@ public class Stories extends AppCompatActivity {
             JSONArray ar = new JSONArray(result.toString());
             for (int i = 0; i < ar.length(); i++){
                 JSONObject a = ar.getJSONObject(i);
-                Story story = new Story();
+                Class_Story story = new Class_Story();
 
 //                story.setStorySnap(a.getString("username"));
 //                story.setStoryTime(Integer.valueOf(a.getString("userFriendId")));
@@ -95,7 +96,7 @@ public class Stories extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Stories.mAdapter adapter = new Stories.mAdapter(Stories.this, listStories);
+        Activity_Stories.mAdapter adapter = new Activity_Stories.mAdapter(Activity_Stories.this, listStories);
 
         listOfStories.setAdapter(adapter);
 
@@ -109,11 +110,18 @@ public class Stories extends AppCompatActivity {
             JSONArray resultSet = null;
             try{
 
-//                resultSet = new JSONArray(Set_WebServices.getJsonObject(Set_Configurations. + Set_Configurations.userId));
+                if(friendUserId == 0 && mode.equals("MyStory")) {
 
+//                resultSet = new JSONArray(Set_WebServices.getJsonObject(Set_Configurations. + Set_Configurations.userId));
+                }
+                else if(friendUserId != 0 && mode.equals("FriendStory")){
+
+//                resultSet = new JSONArray();
+
+                }
             }catch(Exception e)
             {
-                Toast.makeText(Stories.this, "No Network", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Activity_Stories.this, "No Network", Toast.LENGTH_SHORT).show();
             }
 
             return resultSet;
