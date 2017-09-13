@@ -91,6 +91,8 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
     Sensor tmpSensor, accSensor, lightSensor;
     String temperature = "";
     boolean isDark;
+
+    int userFriendId = 0;
     //==============================================================================================
     // Activity Methods
     //==============================================================================================
@@ -103,6 +105,11 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras!=null){
+            userFriendId = Integer.parseInt(extras.getString("userFriendId"));
+        }
 
         cameraFacing = CameraSource.CAMERA_FACING_BACK;
         switchCamera = (ImageButton) findViewById(R.id.btnSwitchCam);
@@ -137,20 +144,20 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                         picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         Matrix matrix = new Matrix();
 
-                        //ERICK
-                        if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
-                            matrix.postRotate(-90f);
-                            matrix.preScale(1, -1);
-                        }
-
-                        else if (cameraFacing == CameraSource.CAMERA_FACING_BACK) {
-                            matrix.postRotate(90f);
-                        }
+//                        //ERICK
+//                        if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
+//                            matrix.postRotate(-90f);
+//                            matrix.preScale(1, -1);
+//                        }
+//
+//                        else if (cameraFacing == CameraSource.CAMERA_FACING_BACK) {
+//                            matrix.postRotate(90f);
+//                        }
 
                         //RJ
-//                        if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
-//                            matrix.preScale(-1, 1);
-//                        }
+                        if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
+                            matrix.preScale(-1, 1);
+                        }
 
                         picture = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(), picture.getHeight(), matrix, false);
                         picture = picture.copy(Bitmap.Config.ARGB_8888, true);
@@ -176,24 +183,15 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(CameraActivity.this);
-                builder.setTitle("Send");
-                builder.setMessage("Select where you want to send the image");
 
-                builder.setPositiveButton("Class_Story", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        new Send().execute("1");
-                        onBackPressed();
-                        Toast.makeText(CameraActivity.this, "Sent!", Toast.LENGTH_LONG);
-                    }
-                });
+            if(userFriendId == 0)
+            {
+                new Send().execute("1");
+            }
+            else{
+                new Send().execute("2");
+            }
 
-                builder.setPositiveButton("Class_Friend", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        new Send().execute("2");
-                    }
-                });
-
-                builder.show();
             }
         });
 
@@ -679,7 +677,7 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
             Log.d("send", pic);
             String stringToPass;
 
-            if(params.equals("1"))
+            if(params[0].equals("1"))
             {
                 stringToPass = "{\"file\" : \"" + pic + "\", \"timestamp\" : \"null\"}";
 
@@ -690,12 +688,12 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                     Log.d("Error", ex.getMessage());
                 }
             }
-            else if(params.equals("2"))
+            else if(params[0].equals("2"))
             {
-                stringToPass = "{\"file\" : \"" + pic + "\", \"userId\" : {\"userId\" : %s}, \"timestamp\" : \"null\", \"recipient\" : %s}";
+                stringToPass = "{\"file\" : \"" + pic + "\", \"userId\" : {\"userId\" : %s}, \"timestamp\" : \"2009-09-17T00:00:00+08:01\", \"recipient\" : %s}";
 
                 try {
-                    Set_WebServices.postJsonObject(Set_Configurations.User_Object_Send + 1, String.format(stringToPass,Set_Configurations.userId, "" + 2));
+                    Set_WebServices.postJsonObject(Set_Configurations.User_Object_Send + 1, String.format(stringToPass,Set_Configurations.userId, "" + userFriendId));
                 }
                 catch (Exception ex) {
                     Log.d("Error", ex.getMessage());
