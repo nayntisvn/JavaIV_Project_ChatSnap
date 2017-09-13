@@ -32,6 +32,8 @@ public class friendlist extends AppCompatActivity {
     ListView listOfFriends;
     ArrayList<Friend> listFriends;
     int friendUserId;
+    String mode = "";
+
     public class mAdapter extends ArrayAdapter<Friend>{
 
         public mAdapter(@NonNull Context context, ArrayList<Friend> objects) {
@@ -61,29 +63,68 @@ public class friendlist extends AppCompatActivity {
             TextView textView;
         }
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friendlist);
         listOfFriends = (ListView)findViewById(R.id.list_of_friends);
 
-        listOfFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Bundle extras = getIntent().getExtras();
+        if(extras!=null){
+            mode = extras.getString("friendUserId");
+        }
 
-               intent = new Intent(getApplicationContext(), type_message_area.class);
+        if(mode.equals("Stories"))
+        {
+            listOfFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                for(int z = 0; i < listFriends.size(); z++){
-                    if(listOfFriends.getSelectedItem().toString()== listFriends.get(z).getFriendName()){
-                        friendUserId = listFriends.get(z).getFriendUserId();
+                   intent = new Intent(getApplicationContext(), Stories.class);
+
+                    for(int z = 0; z < listFriends.size(); z++){
+
+                        Toast.makeText(friendlist.this, listFriends.get(z).getFriendName(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(friendlist.this, listOfFriends.getItemAtPosition(i).toString(), Toast.LENGTH_SHORT).show();
+                        if((listOfFriends.getItemAtPosition(i)).equals(listFriends.get(z).getFriendName())){
+                            friendUserId = listFriends.get(z).getFriendUserId();
+                            Toast.makeText(friendlist.this, "No Network", Toast.LENGTH_SHORT).show();
+                        }
                     }
+
+                    intent.putExtra("Mode", "FriendStory");
+                    intent.putExtra("friendUserId", friendUserId + "");
+
+                    startActivity(intent);
                 }
+            });
+        }
+        else if(mode.equals("Messages"))
+        {
+            listOfFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                intent.putExtra("friendUserId", friendUserId);
+                    intent = new Intent(getApplicationContext(), type_message_area.class);
 
-                startActivity(intent);
-            }
-        });
+                    for(int z = 0; z < listFriends.size(); z++){
+
+                        Toast.makeText(friendlist.this, listFriends.get(z).getFriendName(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(friendlist.this, listOfFriends.getItemAtPosition(i).toString(), Toast.LENGTH_SHORT).show();
+                        if((listOfFriends.getItemAtPosition(i)).equals(listFriends.get(z).getFriendName())){
+                            friendUserId = listFriends.get(z).getFriendUserId();
+                            Toast.makeText(friendlist.this, "No Network", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    intent.putExtra("friendUserId", friendUserId + "");
+
+                    startActivity(intent);
+
+                }
+            });
+        }
 
         listFriends = new ArrayList<Friend>();
         new RefreshFriends().execute();
@@ -98,7 +139,7 @@ public class friendlist extends AppCompatActivity {
                 JSONObject a = ar.getJSONObject(i);
                 Friend friend = new Friend();
                 friend.setFriendName(a.getString("username"));
-                friend.setFriendUserId(Integer.valueOf(a.getString("userId")));
+                friend.setFriendUserId(Integer.valueOf(a.getString("userFriendId")));
                 listFriends.add(friend);
             }
         } catch (JSONException e) {
@@ -112,7 +153,6 @@ public class friendlist extends AppCompatActivity {
 
     public class RefreshFriends extends AsyncTask<Void, Void, JSONArray>
     {
-
         @Override
         public JSONArray doInBackground(Void... params){
 
@@ -123,7 +163,7 @@ public class friendlist extends AppCompatActivity {
 
             }catch(Exception e)
             {
-                Toast.makeText(friendlist.this, "Testing", Toast.LENGTH_SHORT).show();
+                Toast.makeText(friendlist.this, "No Network", Toast.LENGTH_SHORT).show();
             }
 
             return resultSet;
@@ -134,7 +174,6 @@ public class friendlist extends AppCompatActivity {
 
             if(result != null)
             {
-                Toast.makeText(friendlist.this, "Result", Toast.LENGTH_SHORT).show();
                 displayFriends(result);
             }
 

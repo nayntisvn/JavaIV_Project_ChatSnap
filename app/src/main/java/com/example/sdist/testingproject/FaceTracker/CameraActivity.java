@@ -181,6 +181,7 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                 AlertDialog.Builder builder = new AlertDialog.Builder(CameraActivity.this);
                 builder.setTitle("Send");
                 builder.setMessage("Select where you want to send the image");
+
                 builder.setPositiveButton("Story", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         new Send().execute("1");
@@ -194,6 +195,7 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                         new Send().execute("2");
                     }
                 });
+
                 builder.show();
             }
         });
@@ -680,6 +682,7 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
             pic = pic.replaceAll(System.getProperty("line.separator"), "NEWLINE");
             Log.d("send", pic);
             String stringToPass;
+
             if(params.equals("1"))
             {
                 stringToPass = "{\"file\" : \"" + pic + "\", \"timestamp\" : \"null\"}";

@@ -222,10 +222,12 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         Set_Configurations.Username = username;
                         Set_Configurations.userId = Integer.parseInt(result.split(",")[1]);
-
+                        Set_Configurations.Email = result.split(",")[2];
+                        
                         file_Write = new FileOutputStream(Set_Configurations.user_Details);
                         file_Write.write(username.getBytes());
                         file_Write.write(("," + Set_Configurations.userId + "").getBytes());
+                        file_Write.write(("," + Set_Configurations.Email).getBytes());
                         file_Write.flush();
                         file_Write.close();
                     }

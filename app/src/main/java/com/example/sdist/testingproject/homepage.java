@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -34,8 +33,10 @@ public class homepage extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                intent = new Intent(getApplicationContext(), CameraActivity.class);
+                startActivity(intent);
+
             }
         });
 
@@ -93,34 +94,25 @@ public class homepage extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_myStory) {
             // Handle the camera action
-            intent = new Intent(getApplicationContext(), CameraActivity.class);
+            intent = new Intent(getApplicationContext(), Stories.class);
+            intent.putExtra("Mode", "MyStory");
             startActivity(intent);
 
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_friends) {
 
             intent = new Intent(getApplicationContext(), friendlist.class);
+            intent.putExtra("Mode", "Messages");
             startActivity(intent);
 
-            String asd = "";
+        } else if (id == R.id.nav_stories) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-            intent = new Intent(getApplicationContext(), type_message_area.class);
-            intent.putExtra("friendUserId", "3");
+            intent = new Intent(getApplicationContext(), friendlist.class);
+            intent.putExtra("Mode", "Stories");
             startActivity(intent);
-
-//            intent = new Intent(getApplicationContext(), CameraActivity.class);
-//            startActivity(intent);
-
-        } else if (id == R.id.nav_manage) {
-
-//            intent = new Intent(getApplicationContext(), CameraActivity.class);
-//            startActivity(intent);
 
         } else if (id == R.id.nav_send) {
-
             Set_Configurations.user_Details.delete();
 
             new Logout().execute();

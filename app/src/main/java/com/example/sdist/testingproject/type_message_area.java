@@ -2,12 +2,9 @@ package com.example.sdist.testingproject;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,14 +36,16 @@ public class type_message_area extends AppCompatActivity {
         public View getView(int position, View view, ViewGroup viewGroup) {
             ViewHolder viewHolder;
             if (view == null) {
+
                 view = LayoutInflater.from(getContext()).inflate(R.layout.message, viewGroup, false);
 
                 viewHolder = new type_message_area.mAdapter.ViewHolder();
 
                 viewHolder.textViewText = (TextView) view.findViewById(R.id.message_text);
-                viewHolder.textViewUser = (TextView) view.findViewById(R.id.message_user);
+                viewHolder.textViewUser = (TextView) view.findViewById(R.id.story_image);
                 viewHolder.textViewTime = (TextView) view.findViewById(R.id.message_time);
                 view.setTag(viewHolder);
+
             } else {
                 viewHolder = (ViewHolder) view.getTag();
             }
@@ -59,6 +58,7 @@ public class type_message_area extends AppCompatActivity {
 
             return view;
         }
+
         public class ViewHolder {
             TextView textViewText;
             TextView textViewUser;
@@ -68,10 +68,12 @@ public class type_message_area extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Bundle extras = getIntent().getExtras();
         if(extras!=null){
             friendUserId = Integer.valueOf(extras.getString("friendUserId"));
         }
+
         setContentView(R.layout.activity_type_message_area);
 
         Send = (ImageView) findViewById(R.id.imageView8);
@@ -147,7 +149,7 @@ public class type_message_area extends AppCompatActivity {
 
             }catch(Exception e)
             {
-                Toast.makeText(type_message_area.this, "Testing", Toast.LENGTH_SHORT).show();
+                Toast.makeText(type_message_area.this, "No Network", Toast.LENGTH_SHORT).show();
             }
 
             return resultSet;
@@ -158,7 +160,6 @@ public class type_message_area extends AppCompatActivity {
 
             if(result != null)
             {
-                Toast.makeText(type_message_area.this, "Result", Toast.LENGTH_SHORT).show();
                 displayChatMessages(result);
 
             }
