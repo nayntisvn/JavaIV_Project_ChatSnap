@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Sdist on 8/19/2017.
@@ -82,5 +84,11 @@ public class Set_Configurations {
 
     public void setBirthday(String birthday) {
         Birthday = birthday;
+    }
+
+    public String getTimeStamp(){
+        SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String format = s.format(new Date());
+        return format;
     }
 }
