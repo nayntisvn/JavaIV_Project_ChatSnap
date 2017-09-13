@@ -35,6 +35,7 @@ public class Activity_Homepage extends AppCompatActivity
             public void onClick(View view) {
 
                 intent = new Intent(getApplicationContext(), CameraActivity.class);
+
                 startActivity(intent);
 
             }

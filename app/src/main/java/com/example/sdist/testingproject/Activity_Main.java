@@ -83,7 +83,6 @@ public class Activity_Main extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_SIGNUP);
             }
         });
-
     }
 
     public void login() {
