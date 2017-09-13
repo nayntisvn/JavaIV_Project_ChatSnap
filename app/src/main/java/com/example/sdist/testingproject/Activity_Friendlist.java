@@ -101,12 +101,12 @@ public class Activity_Friendlist extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                     intent = new Intent(getApplicationContext(), Activity_MessageArea.class);
-
+                    String friend= (String.valueOf (listFriends.get(i).getFriendUserId()));
                     for(int z = 0; z < listFriends.size(); z++){
 
                         Toast.makeText(Activity_Friendlist.this, listFriends.get(z).getFriendName(), Toast.LENGTH_SHORT).show();
-                        Toast.makeText(Activity_Friendlist.this, listOfFriends.getItemAtPosition(i).toString(), Toast.LENGTH_SHORT).show();
-                        if((listOfFriends.getItemAtPosition(i).equals(listFriends.get(z).getFriendName()))){
+                        Toast.makeText(Activity_Friendlist.this,friend, Toast.LENGTH_SHORT).show();
+                        if((friend.equals(listFriends.get(z).getFriendName()))){
                             friendUserId = listFriends.get(z).getFriendUserId();
                             Toast.makeText(Activity_Friendlist.this, "No Network", Toast.LENGTH_SHORT).show();
                         }
