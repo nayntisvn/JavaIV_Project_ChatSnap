@@ -39,6 +39,7 @@ import com.example.sdist.testingproject.FaceTracker.camera.CameraSourcePreview;
 import com.example.sdist.testingproject.FaceTracker.camera.GraphicOverlay;
 import com.example.sdist.testingproject.FaceTracker.facedetection.FaceGraphic;
 import com.example.sdist.testingproject.R;
+import com.example.sdist.testingproject.Sensors.LocationClass;
 import com.example.sdist.testingproject.Set_Configurations;
 import com.example.sdist.testingproject.Set_WebServices;
 import com.google.android.gms.common.ConnectionResult;
@@ -204,15 +205,15 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                     btnFlash.setImageResource(R.mipmap.flash_off);
                 }
 
-//                else if (flash == 1) {
-//                    flash++;
-//                    btnFlash.setImageResource(R.mipmap.flash_auto);
-//                }
-//
-//                else if (flash == 2) {
-//                    flash = 0;
-//                    btnFlash.setImageResource(R.mipmap.flash_on);
-//                }
+                else if (flash == 1) {
+                    flash++;
+                    btnFlash.setImageResource(R.mipmap.flash_auto);
+                }
+
+                else if (flash == 2) {
+                    flash = 0;
+                    btnFlash.setImageResource(R.mipmap.flash_on);
+                }
             }
         });
 
@@ -253,11 +254,10 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
             Paint paint = new Paint();
             String txt;
             public void onSwipeRight() {
+                LocationClass locationClass = new LocationClass(CameraActivity.this);
+                locationClass.getLocation();
                 if (preview.getHeight() > 0){
-                    if(isDark == false)
-                    txt = "not dark";
-                    else
-                    txt = "dark";
+                    txt = locationClass.getLocality(CameraActivity.this);
                     Canvas canvas = new Canvas(picture);
                     canvas.drawColor(0, PorterDuff.Mode.CLEAR);
                     paint.setColor(Color.WHITE);

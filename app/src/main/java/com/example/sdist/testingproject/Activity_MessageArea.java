@@ -1,6 +1,10 @@
 package com.example.sdist.testingproject;
 
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -19,13 +23,56 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
-public class Activity_MessageArea extends AppCompatActivity {
+public class Activity_MessageArea extends AppCompatActivity implements SensorEventListener{
     int friendUserId = 1;
     String messageToBeSend= "";
     EditText Message;
     ImageView Send;
+    private static final int SHAKE_THRESHOLD = 800;
+    long lastUpdate;
+    float x,y,z, last_x=0, last_y=0, last_z=0;
+
+    SensorManager sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
+    private Sensor mAccelerometer;
+
+    public String getTimeStamp(){
+        SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String format = s.format(new Date());
+        return format;
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        float g[] = sensorEvent.values.clone();
+            long curTime = System.currentTimeMillis();
+            // only allow one update every 100ms.
+            if ((curTime - lastUpdate) > 100) {
+                long diffTime = (curTime - lastUpdate);
+                lastUpdate = curTime;
+
+                x = g[0];
+                y = g[1];
+                z = g[2];
+
+                float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
+
+                if (speed > SHAKE_THRESHOLD) {
+                    Send.performClick();
+                }
+                last_x = x;
+                last_y = y;
+                last_z = z;
+            }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
 
     public class mAdapter extends ArrayAdapter<Class_ChatMessage>{
 
@@ -42,7 +89,7 @@ public class Activity_MessageArea extends AppCompatActivity {
                 viewHolder = new Activity_MessageArea.mAdapter.ViewHolder();
 
                 viewHolder.textViewText = (TextView) view.findViewById(R.id.message_text);
-                viewHolder.textViewUser = (TextView) view.findViewById(R.id.story_image);
+                viewHolder.textViewUser = (TextView) view.findViewById(R.id.message_user);
                 viewHolder.textViewTime = (TextView) view.findViewById(R.id.message_time);
                 view.setTag(viewHolder);
 
@@ -85,11 +132,11 @@ public class Activity_MessageArea extends AppCompatActivity {
 
                 messageToBeSend = "{ \n" +
                         "\t\"message\" : \"%s\",\n" +
-                        "\t\"timestamp\" : \"2009-09-17T00:00:00+08:00\",\n" +
+                        "\t\"timestamp\" : \"%s\",\n" +
                         "\t\"recipient\" : %s\n" +
                         "}";
 
-                messageToBeSend = String.format(messageToBeSend, Message.getText().toString(), friendUserId);
+                messageToBeSend = String.format(messageToBeSend, Message.getText().toString(), getTimeStamp(), friendUserId);
 
                 new SendMessages().execute();
 
@@ -109,7 +156,8 @@ public class Activity_MessageArea extends AppCompatActivity {
                 }
             }
         };
-
+        mAccelerometer = sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorMgr.registerListener(Activity_MessageArea.this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
         thread.start();
 
     }

@@ -44,6 +44,7 @@ public class Set_Configurations {
     public static String Password;
     public static String Email;
     public static String Birthday;
+    public static String timeStamp;
 
 //    Encapsulation
     public String getUsername() {
