@@ -2,10 +2,13 @@ package com.example.sdist.testingproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +29,10 @@ public class Activity_Stories extends AppCompatActivity {
     Intent intent;
     ListView listOfStories;
     ArrayList<Class_Story> listStories;
+    Bitmap currPicture;
+    String prePicture;
 
-    int friendUserId = 0;
+    int userFriendId = 0;
     String mode = "";
 
     @Override
@@ -38,7 +43,7 @@ public class Activity_Stories extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras!=null){
             mode = extras.getString("Mode");
-            friendUserId = Integer.parseInt(extras.getString("friendUserId"));
+            userFriendId = Integer.parseInt(extras.getString("userFriendId"));
         }
 
         listStories = new ArrayList<Class_Story>();
@@ -73,6 +78,7 @@ public class Activity_Stories extends AppCompatActivity {
 
             return view;
         }
+
         public class ViewHolder {
             ImageView storyImageView;
             TextView storyTextView;
@@ -87,8 +93,14 @@ public class Activity_Stories extends AppCompatActivity {
                 JSONObject a = ar.getJSONObject(i);
                 Class_Story story = new Class_Story();
 
-//                story.setStorySnap(a.getString("username"));
-//                story.setStoryTime(Integer.valueOf(a.getString("userFriendId")));
+                prePicture = a.getString("file");
+
+                byte[] imgByte = Base64.decode(prePicture.replaceAll("NEWLINE", System.getProperty("line.separator")), Base64.DEFAULT);
+
+                currPicture = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+
+                story.setStorySnap(currPicture);
+                story.setStoryTime(a.getString("timestamp"));
 
                 listStories.add(story);
             }
@@ -96,10 +108,9 @@ public class Activity_Stories extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Activity_Stories.mAdapter adapter = new Activity_Stories.mAdapter(Activity_Stories.this, listStories);
+        mAdapter adapter = new mAdapter(Activity_Stories.this, listStories);
 
         listOfStories.setAdapter(adapter);
-
     }
 
     public class RefreshStories extends AsyncTask<Void, Void, JSONArray>
@@ -109,14 +120,13 @@ public class Activity_Stories extends AppCompatActivity {
 
             JSONArray resultSet = null;
             try{
+                if(userFriendId == 0 && mode.equals("MyStory")) {
 
-                if(friendUserId == 0 && mode.equals("MyStory")) {
-
-//                resultSet = new JSONArray(Set_WebServices.getJsonObject(Set_Configurations. + Set_Configurations.userId));
+                    resultSet = new JSONArray(Set_WebServices.getJsonObject(Set_Configurations.User_Stories + Set_Configurations.userId));
                 }
-                else if(friendUserId != 0 && mode.equals("FriendStory")){
+                else if(userFriendId != 0 && mode.equals("FriendStory")){
 
-//                resultSet = new JSONArray();
+                    resultSet = new JSONArray(Set_WebServices.getJsonObject(Set_Configurations.User_Objects + Set_Configurations.userId + "/" + userFriendId));
 
                 }
             }catch(Exception e)

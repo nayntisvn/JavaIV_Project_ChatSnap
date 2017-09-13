@@ -66,7 +66,7 @@ public class Activity_Friendlist extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if(extras!=null){
-            mode = extras.getString("friendUserId");
+            mode = extras.getString("Mode");
         }
 
         if(mode.equals("Activity_Stories"))
@@ -88,7 +88,7 @@ public class Activity_Friendlist extends AppCompatActivity {
                     }
 
                     intent.putExtra("Mode", "FriendStory");
-                    intent.putExtra("friendUserId", friendUserId + "");
+                    intent.putExtra("userFriendId", 2 + "");
 
                     startActivity(intent);
                 }
@@ -121,6 +121,7 @@ public class Activity_Friendlist extends AppCompatActivity {
         }
 
         listFriends = new ArrayList<Class_Friend>();
+
         new RefreshFriends().execute();
 
     }
@@ -141,6 +142,7 @@ public class Activity_Friendlist extends AppCompatActivity {
         }
 
         mAdapter adapter = new mAdapter(Activity_Friendlist.this, listFriends);
+
         listOfFriends.setAdapter(adapter);
 
     }
