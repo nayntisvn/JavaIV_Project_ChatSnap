@@ -6,20 +6,20 @@ import java.util.Date;
  * Created by ezeki on 09/09/2017.
  */
 
-public class ChatMessage {
+public class Class_ChatMessage {
 
     private String messageText;
     private String messageUser;
     private String messageTime;
 
-    public ChatMessage(String messageText, String messageUser, String messageTime) {
+    public Class_ChatMessage(String messageText, String messageUser, String messageTime) {
         this.messageText = messageText;
         this.messageUser = messageUser;
         this.messageTime = messageTime;
         // Initialize to current time
     }
 
-    public ChatMessage(){
+    public Class_ChatMessage(){
 
     }
 

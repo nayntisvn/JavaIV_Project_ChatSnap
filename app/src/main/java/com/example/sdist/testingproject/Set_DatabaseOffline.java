@@ -1,11 +1,8 @@
 package com.example.sdist.testingproject;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
 
 /**
  * Created by Sdist on 8/23/2017.
@@ -44,7 +41,7 @@ public class Set_DatabaseOffline extends SQLiteOpenHelper{
         this.db = db;
     }
 
-    public void insertContact(Data_Offline c, int table){
+    public void insertContact(Class_Data_Offline c, int table){
 
     }
 

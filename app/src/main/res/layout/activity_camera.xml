@@ -98,8 +98,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="#ffffff"
-                app:srcCompat="@mipmap/flash_on" />
+                android:background="#ffffff"/>
+                <!--app:srcCompat="@mipmap/flash_on" />-->
 
             <ImageButton
                 android:id="@+id/btnCapture"

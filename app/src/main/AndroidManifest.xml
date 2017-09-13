@@ -27,21 +27,21 @@
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="face" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activity_Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUpActivity" />
+        <activity android:name=".Activity_SignUp" />
         <activity
-            android:name=".homepage"
+            android:name=".Activity_Homepage"
             android:label="@string/title_activity_homepage"
             android:theme="@style/AppTheme" />
-        <activity android:name=".type_message_area" />
-        <activity android:name=".chat" />
-        <activity android:name=".friendlist" />
+        <activity android:name=".Activity_MessageArea" />
+        <activity android:name=".Activity_Stories" />
+        <activity android:name=".Activity_Friendlist" />
         <activity android:name=".FaceTracker.CameraActivity"></activity>
     </application>
 

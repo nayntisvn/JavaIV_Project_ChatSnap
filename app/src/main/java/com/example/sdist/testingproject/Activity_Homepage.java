@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,10 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.sdist.testingproject.FaceTracker.CameraActivity;
 
-public class homepage extends AppCompatActivity
+public class Activity_Homepage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     Intent intent;
@@ -33,8 +33,10 @@ public class homepage extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                intent = new Intent(getApplicationContext(), CameraActivity.class);
+                startActivity(intent);
+
             }
         });
 
@@ -46,6 +48,12 @@ public class homepage extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        TextView user = (TextView) findViewById(R.id.user_profile_name);
+        TextView userwelcome = (TextView) findViewById(R.id.user_profile_short_bio);
+
+        user.setText(Set_Configurations.Username);
+        userwelcome.setText("Welcome back " + Set_Configurations.Username);
     }
 
     @Override
@@ -86,28 +94,26 @@ public class homepage extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_myStory) {
             // Handle the camera action
-            intent = new Intent(getApplicationContext(), CameraActivity.class);
+            intent = new Intent(getApplicationContext(), Activity_Stories.class);
+            intent.putExtra("Mode", "MyStory");
+            intent.putExtra("userFriendId", "0");
             startActivity(intent);
 
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_friends) {
 
-            intent = new Intent(getApplicationContext(), friendlist.class);
+            intent = new Intent(getApplicationContext(), Activity_Friendlist.class);
+            intent.putExtra("Mode", "Messages");
             startActivity(intent);
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_stories) {
 
-//            intent = new Intent(getApplicationContext(), CameraActivity.class);
-//            startActivity(intent);
-
-        } else if (id == R.id.nav_manage) {
-
-//            intent = new Intent(getApplicationContext(), CameraActivity.class);
-//            startActivity(intent);
+            intent = new Intent(getApplicationContext(), Activity_Friendlist.class);
+            intent.putExtra("Mode", "Activity_Stories");
+            startActivity(intent);
 
         } else if (id == R.id.nav_send) {
-
             Set_Configurations.user_Details.delete();
 
             new Logout().execute();
