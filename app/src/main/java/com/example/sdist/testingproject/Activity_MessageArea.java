@@ -36,14 +36,8 @@ public class Activity_MessageArea extends AppCompatActivity implements SensorEve
     long lastUpdate;
     float x,y,z, last_x=0, last_y=0, last_z=0;
 
-    SensorManager sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
     private Sensor mAccelerometer;
-
-    public String getTimeStamp(){
-        SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String format = s.format(new Date());
-        return format;
-    }
+    SensorManager sensorMgr;
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
@@ -116,6 +110,8 @@ public class Activity_MessageArea extends AppCompatActivity implements SensorEve
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
+
         Bundle extras = getIntent().getExtras();
         if(extras!=null){
             friendUserId = Integer.valueOf(extras.getString("friendUserId"));
@@ -132,11 +128,11 @@ public class Activity_MessageArea extends AppCompatActivity implements SensorEve
 
                 messageToBeSend = "{ \n" +
                         "\t\"message\" : \"%s\",\n" +
-                        "\t\"timestamp\" : \"%s\",\n" +
+                        "\t\"timestamp\" : \"2009-09-17T00:00:00+08:00\",\n" +
                         "\t\"recipient\" : %s\n" +
                         "}";
 
-                messageToBeSend = String.format(messageToBeSend, Message.getText().toString(), getTimeStamp(), friendUserId);
+                messageToBeSend = String.format(messageToBeSend, Message.getText().toString(), friendUserId);
 
                 new SendMessages().execute();
 
@@ -156,6 +152,7 @@ public class Activity_MessageArea extends AppCompatActivity implements SensorEve
                 }
             }
         };
+
         mAccelerometer = sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorMgr.registerListener(Activity_MessageArea.this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
         thread.start();
@@ -182,7 +179,6 @@ public class Activity_MessageArea extends AppCompatActivity implements SensorEve
 
         mAdapter adapter = new mAdapter(Activity_MessageArea.this, listMessages);
         listOfMessages.setAdapter(adapter);
-
     }
 
     public class RefreshMessages extends AsyncTask<Void, Void, JSONArray>
@@ -241,6 +237,12 @@ public class Activity_MessageArea extends AppCompatActivity implements SensorEve
             new RefreshMessages().execute();
         }
 
+    }
+
+    public String getTimeStamp(){
+        SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-ddThh:mm:ss");
+        String format = s.format(new Date());
+        return format;
     }
 
 }

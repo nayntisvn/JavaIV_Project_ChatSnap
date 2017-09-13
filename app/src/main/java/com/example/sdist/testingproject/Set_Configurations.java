@@ -18,7 +18,7 @@ import java.util.Date;
 public class Set_Configurations {
 
 //    Ip Address of server
-    private static String IpAddress = "192.168.1.103";
+    private static String IpAddress = "10.1.14.192";
 
 //    Address of user details file
     protected static File user_Details;

@@ -7,12 +7,12 @@
         android:id="@+id/story_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/story_image" />
+        android:layout_alignBottom="@+id/message_user" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/story_image"
+        android:id="@+id/message_user"
         android:textStyle="normal|bold" />
 
 </LinearLayout>

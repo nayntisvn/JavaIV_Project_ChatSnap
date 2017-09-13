@@ -64,7 +64,7 @@ public class Activity_Stories extends AppCompatActivity {
 
                 viewHolder = new Activity_Stories.mAdapter.ViewHolder();
 
-                viewHolder.storyImageView = (ImageView) view.findViewById(R.id.story_image);
+                viewHolder.storyImageView = (ImageView) view.findViewById(R.id.message_user);
                 viewHolder.storyTextView = (TextView) view.findViewById(R.id.story_time);
                 view.setTag(viewHolder);
             } else {
@@ -95,7 +95,7 @@ public class Activity_Stories extends AppCompatActivity {
 
                 prePicture = a.getString("file");
 
-                byte[] imgByte = Base64.decode(prePicture.replaceAll("NEWLINE", System.getProperty("line.separator")), Base64.DEFAULT);
+                byte[] imgByte = Base64.decode(prePicture.replace("NEWLINE", System.getProperty("line.separator")), Base64.DEFAULT);
 
                 currPicture = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
 
@@ -125,7 +125,6 @@ public class Activity_Stories extends AppCompatActivity {
                     resultSet = new JSONArray(Set_WebServices.getJsonObject(Set_Configurations.User_Stories + Set_Configurations.userId));
                 }
                 else if(userFriendId != 0 && mode.equals("FriendStory")){
-
 
                     resultSet = new JSONArray(Set_WebServices.getJsonObject(Set_Configurations.User_Objects + Set_Configurations.userId + "/" + userFriendId));
 

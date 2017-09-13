@@ -88,7 +88,7 @@ public class Activity_Friendlist extends AppCompatActivity {
                     }
 
                     intent.putExtra("Mode", "FriendStory");
-                    intent.putExtra("userFriendId", 2 + "");
+                    intent.putExtra("userFriendId", friend + "");
 
                     startActivity(intent);
                 }
