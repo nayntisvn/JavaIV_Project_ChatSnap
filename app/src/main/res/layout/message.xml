@@ -7,13 +7,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/message_user"
-        android:textStyle="normal|bold" />
+        android:textStyle="normal|bold"
+        android:textSize="18sp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/message_user"
-        android:id="@+id/message_time" />
+        android:id="@+id/message_time"
+        android:textSize="18sp"/>
 
     <TextView
         android:layout_width="wrap_content"
