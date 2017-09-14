@@ -8,6 +8,9 @@
         android:id="@+id/friend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="normal|bold" />
+        android:textStyle="normal|bold"
+        android:textSize="5dp"
+        android:paddingTop="3dip"
+        android:paddingBottom="3dip"/>
 
 </LinearLayout>
