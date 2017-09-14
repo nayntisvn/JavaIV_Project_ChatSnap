@@ -18,7 +18,7 @@ import java.util.Date;
 public class Set_Configurations {
 
 //    Ip Address of server
-    private static String IpAddress = "192.168.1.102";
+    private static String IpAddress = "192.168.1.103";
 
 //    Address of user details file
     protected static File user_Details;
@@ -35,13 +35,12 @@ public class Set_Configurations {
     public static String User_Friends = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.friend/friends/";
     public static String User_Message = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.message/message/";
     public static String User_Objects = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.object1/object/";
-    public static String User_Stories = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.stories/";
+    public static String User_Stories = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.stories/story/";
 
 //    Sending of JSON object or Data to WebService
     public static String User_Object_Send = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.object1/new/";
     public static String User_Stories_Send = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.stories/new/";
     public static String User_Message_Send = "http://" + IpAddress + ":8080/JavaProject4_CamShot_Server/webresources/com.camshot.message/send/";
-
 
     //    Public Variables
     public static int userId;

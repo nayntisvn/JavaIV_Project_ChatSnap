@@ -219,8 +219,8 @@ public class Activity_Main extends AppCompatActivity {
                         Set_Configurations.Email = result.split(",")[2];
 
                         file_Write = new FileOutputStream(Set_Configurations.user_Details);
-                        file_Write.write(username.getBytes());
-                        file_Write.write(("," + Set_Configurations.userId + "").getBytes());
+                        file_Write.write((Set_Configurations.userId + "").getBytes());
+                        file_Write.write(("," + username).getBytes());
                         file_Write.write(("," + Set_Configurations.Email).getBytes());
                         file_Write.flush();
                         file_Write.close();
@@ -273,8 +273,9 @@ public class Activity_Main extends AppCompatActivity {
                     loggedIn += sCurrentLine;
                 }
 
-                Set_Configurations.userId = Integer.parseInt(loggedIn.substring(loggedIn.lastIndexOf(',') + 1,loggedIn.length()));
-                Set_Configurations.Username = loggedIn.substring(0, loggedIn.lastIndexOf(','));
+                Set_Configurations.userId = Integer.parseInt(loggedIn.substring(0, loggedIn.indexOf(",")));
+                Set_Configurations.Username = loggedIn.substring(loggedIn.indexOf(',') + 1, loggedIn.lastIndexOf(','));
+
             }
             catch(Exception e)
             {
