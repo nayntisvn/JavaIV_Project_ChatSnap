@@ -53,9 +53,11 @@ public class Activity_Homepage extends AppCompatActivity
 
         TextView user = (TextView) findViewById(R.id.user_profile_name);
         TextView userwelcome = (TextView) findViewById(R.id.user_profile_short_bio);
+        TextView email = (TextView) findViewById(R.id.txt_Email);
 
         user.setText(Set_Configurations.Username);
         userwelcome.setText("Welcome back " + Set_Configurations.Username);
+//        email.setText(Set_Configurations.Email);
     }
 
     @Override

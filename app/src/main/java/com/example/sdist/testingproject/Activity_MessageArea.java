@@ -32,7 +32,7 @@ public class Activity_MessageArea extends AppCompatActivity implements SensorEve
     String messageToBeSend= "";
     EditText Message;
     ImageView Send;
-    private static final int SHAKE_THRESHOLD = 800;
+    private static final int SHAKE_THRESHOLD = 1500;
     long lastUpdate;
     float x,y,z, last_x=0, last_y=0, last_z=0;
 
@@ -128,11 +128,11 @@ public class Activity_MessageArea extends AppCompatActivity implements SensorEve
 
                 messageToBeSend = "{ \n" +
                         "\t\"message\" : \"%s\",\n" +
-                        "\t\"timestamp\" : \"2009-09-17T00:00:00+08:00\",\n" +
+                        "\t\"timestamp\" : \"%s\",\n" +
                         "\t\"recipient\" : %s\n" +
                         "}";
 
-                messageToBeSend = String.format(messageToBeSend, Message.getText().toString(), friendUserId);
+                messageToBeSend = String.format(messageToBeSend, Message.getText().toString(), Set_Configurations.getTimeStamp(), friendUserId);
 
                 new SendMessages().execute();
 
@@ -155,6 +155,7 @@ public class Activity_MessageArea extends AppCompatActivity implements SensorEve
 
         mAccelerometer = sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorMgr.registerListener(Activity_MessageArea.this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+
         thread.start();
 
     }

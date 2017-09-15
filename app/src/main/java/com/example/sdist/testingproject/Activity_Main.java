@@ -273,6 +273,7 @@ public class Activity_Main extends AppCompatActivity {
                     loggedIn += sCurrentLine;
                 }
 
+                Set_Configurations.Email = loggedIn.substring(loggedIn.lastIndexOf(',') + 1, loggedIn.length());
                 Set_Configurations.userId = Integer.parseInt(loggedIn.substring(0, loggedIn.indexOf(",")));
                 Set_Configurations.Username = loggedIn.substring(loggedIn.indexOf(',') + 1, loggedIn.lastIndexOf(','));
 

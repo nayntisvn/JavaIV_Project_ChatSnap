@@ -16,6 +16,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
+import com.example.sdist.testingproject.FaceTracker.CameraActivity;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -60,7 +62,6 @@ public class LocationClass extends Service implements LocationListener {
 
     public LocationClass(Context context) {
         mContext = context;
-        getLocation();
     }
 
     public void getLocation() {
@@ -75,10 +76,10 @@ public class LocationClass extends Service implements LocationListener {
             isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
             // Try to get location if you GPS Service is enabled
-            if (isGPSEnabled) {
+            if (isNetworkEnabled) {
                 this.isGPSTrackingEnabled = true;
+                Log.d(TAG, "Application use Network State to get GPS coordinates");
 
-                Log.d(TAG, "Application use GPS Service");
 
                 /*
                  * This provider determines location using
@@ -86,31 +87,29 @@ public class LocationClass extends Service implements LocationListener {
                  * a location fix.
                  */
 
-                provider_info = LocationManager.GPS_PROVIDER;
+                provider_info = LocationManager.NETWORK_PROVIDER;
 
-            } else if (isNetworkEnabled) { // Try to get location if you Network Service is enabled
+            } else if (isGPSEnabled) { // Try to get location if you Network Service is enabled
                 this.isGPSTrackingEnabled = true;
+                Log.d(TAG, "Application use GPS Service");
 
-                Log.d(TAG, "Application use Network State to get GPS coordinates");
 
                 /*
                  * This provider determines location based on
                  * availability of cell tower and WiFi access points. Results are retrieved
                  * by means of a network lookup.
                  */
-                provider_info = LocationManager.NETWORK_PROVIDER;
+                provider_info = LocationManager.GPS_PROVIDER;
             }
             // Application can use GPS or Network Provider
             if (!provider_info.isEmpty()) {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
+                if (ActivityCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions((CameraActivity) mContext, new String[]{
+                            android.Manifest.permission.ACCESS_FINE_LOCATION
+                    }, 10);
+                    ActivityCompat.requestPermissions((CameraActivity) mContext, new String[]{
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION
+                    }, 10);
                 }
                 locationManager.requestLocationUpdates(
                         provider_info,
@@ -123,11 +122,9 @@ public class LocationClass extends Service implements LocationListener {
                     location = locationManager.getLastKnownLocation(provider_info);
                     updateGPSCoordinates();
                 }
-                location.getSpeed();
+//                location.getSpeed();
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             //e.printStackTrace();
             Log.e(TAG, "Impossible to connect to LocationManager", e);
         }
@@ -200,9 +197,12 @@ public class LocationClass extends Service implements LocationListener {
                  * Geocoder.getFromLocation - Returns an array of Addresses
                  * that are known to describe the area immediately surrounding the given latitude and longitude.
                  */
-                List<Address> addresses = geocoder.getFromLocation(latitude, longitude, this.geocoderMaxResults);
-
-                return addresses;
+                if(geocoder.isPresent()){
+                    List<Address> a = geocoder.getFromLocation(latitude, longitude, this.geocoderMaxResults);
+                    return a;
+                }
+                else
+                    Log.e(TAG, "Impossible to connect to Geocoder");
             } catch (IOException e) {
                 //e.printStackTrace();
                 Log.e(TAG, "Impossible to connect to Geocoder", e);
@@ -241,8 +241,7 @@ public class LocationClass extends Service implements LocationListener {
             String locality = address.getLocality();
 
             return locality;
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -305,4 +304,31 @@ public class LocationClass extends Service implements LocationListener {
     public void onProviderDisabled(String s) {
 
     }
+
+//    private Location getLastKnownLocation() {
+//        locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+//        List<String> providers = locationManager.getProviders(true);
+//        Location bestLocation = null;
+//        for (String provider : providers) {
+//            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                // TODO: Consider calling
+//                //    ActivityCompat#requestPermissions
+//                // here to request the missing permissions, and then overriding
+//                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//                //                                          int[] grantResults)
+//                // to handle the case where the user grants the permission. See the documentation
+//                // for ActivityCompat#requestPermissions for more details.
+//                return TODO;
+//            }
+//            Location l = LocationManager.getLastKnownLocation(provider);
+//            if (l == null) {
+//                continue;
+//            }
+//            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+//                // Found best last known location: %s", l);
+//                bestLocation = l;
+//            }
+//        }
+//        return bestLocation;
+//    }
 }

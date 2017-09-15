@@ -18,7 +18,7 @@ import java.util.Date;
 public class Set_Configurations {
 
 //    Ip Address of server
-    private static String IpAddress = "192.168.1.103";
+    private static String IpAddress = "10.1.16.198";
 
 //    Address of user details file
     protected static File user_Details;
@@ -92,9 +92,12 @@ public class Set_Configurations {
         Birthday = birthday;
     }
 
-    public String getTimeStamp(){
+    public static String getTimeStamp(){
         SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String format = s.format(new Date());
+
+        format = format.replace(" ", "T") + "+08:00";
+
         return format;
     }
 }
