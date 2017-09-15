@@ -32,52 +32,62 @@
 
             </com.example.sdist.testingproject.FaceTracker.camera.CameraSourcePreview>
 
+
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            >
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                >
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btnCapture"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/circle_button"
+                    app:srcCompat="@mipmap/take_picture" />
 
                 <ImageButton
                     android:id="@+id/btnBack"
                     style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="#ffffff"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/circle_button"
                     app:srcCompat="@mipmap/back_arrow" />
 
                 <ImageButton
                     android:id="@+id/btnFlash"
                     style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="#ffffff" />
-                <!--app:srcCompat="@mipmap/flash_on" />-->
-
-                <ImageButton
-                    android:id="@+id/btnCapture"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="#ffffff"
-                    android:gravity="center"
-                    app:srcCompat="@mipmap/take_picture" />
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/circle_button" />
 
                 <ImageButton
                     android:id="@+id/btnSwitchCam"
                     style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="#ffffff"
-                    android:gravity="right"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_margin="10dp"
                     app:srcCompat="@mipmap/switch_to_front_cam"
-                    tools:background="#ffffff" />
+                    tools:background="@drawable/circle_button" />
             </LinearLayout>
-        </LinearLayout>
+
+            <!--app:srcCompat="@mipmap/flash_on" />-->
+
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/previewLayout"
@@ -90,7 +100,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:orientation="horizontal"
                 android:gravity="center"
                 >
