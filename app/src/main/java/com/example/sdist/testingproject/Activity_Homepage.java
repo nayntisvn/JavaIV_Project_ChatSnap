@@ -65,6 +65,7 @@ public class Activity_Homepage extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+
         }
     }
 
@@ -119,6 +120,7 @@ public class Activity_Homepage extends AppCompatActivity
             Set_Configurations.user_Details.delete();
 
             new Logout().execute();
+
             super.onBackPressed();
         }
 

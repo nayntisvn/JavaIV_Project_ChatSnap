@@ -672,17 +672,20 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
             picture.compress(Bitmap.CompressFormat.JPEG, 90, bos);
 
             byte[] test = bos.toByteArray();
+
             pic = Base64.encodeToString(test, Base64.DEFAULT);
             pic = pic.replaceAll(System.getProperty("line.separator"), "NEWLINE");
+
             Log.d("send", pic);
             String stringToPass;
 
             if(params[0].equals("1"))
             {
-                stringToPass = "{\"file\" : \"" + pic + "\", \"timestamp\" : \"null\"}";
+                stringToPass = "{\"timestamp\" : \"2009-09-17T00:00:00+08:45\", \"file\" : \"" + pic + "\"}";
 
                 try {
-                    Set_WebServices.postJsonObject(Set_Configurations.User_Stories_Send + 1, stringToPass);
+                    Set_WebServices.postJsonObject(Set_Configurations.User_Stories_Send + Set_Configurations.userId, stringToPass);
+
                 }
                 catch (Exception ex) {
                     Log.d("Error", ex.getMessage());
@@ -702,6 +705,10 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
             return null;
         }
 
-
+        @Override
+        public void onPostExecute(Void result)
+        {
+            Toast.makeText(CameraActivity.this, "Sent", Toast.LENGTH_SHORT);
+        }
     }
 }

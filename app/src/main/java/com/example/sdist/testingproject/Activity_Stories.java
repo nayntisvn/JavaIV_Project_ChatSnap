@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class Activity_Stories extends AppCompatActivity {
@@ -59,6 +60,7 @@ public class Activity_Stories extends AppCompatActivity {
         @Override
         public View getView(int position, View view, ViewGroup viewGroup) {
             ViewHolder viewHolder;
+
             if (view == null) {
                 view = LayoutInflater.from(getContext()).inflate(R.layout.story, viewGroup, false);
 
@@ -87,30 +89,40 @@ public class Activity_Stories extends AppCompatActivity {
 
     private void displayStories(JSONArray result) {
 
-        try {
-            JSONArray ar = new JSONArray(result.toString());
-            for (int i = 0; i < ar.length(); i++){
-                JSONObject a = ar.getJSONObject(i);
-                Class_Story story = new Class_Story();
+        ListView listOfStories = (ListView)findViewById(R.id.list_of_snaps);
+        ArrayList<Class_Story> listStories = new ArrayList<Class_Story>();
 
-                prePicture = a.getString("file");
+        if(result.isNull(0)){
 
-                byte[] imgByte = Base64.decode(prePicture.replace("NEWLINE", System.getProperty("line.separator")), Base64.DEFAULT);
+        }else {
+            try {
+                JSONArray ar = new JSONArray(result.toString());
 
-                currPicture = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+                for (int i = 0; i < ar.length(); i++) {
+                    JSONObject a = ar.getJSONObject(i);
+                    Class_Story story = new Class_Story();
 
-                story.setStorySnap(currPicture);
-                story.setStoryTime(a.getString("timestamp"));
+                    prePicture = a.getString("file");
+                    prePicture = prePicture.replace("NEWLINE", System.getProperty("line.separator"));
 
-                listStories.add(story);
+                    byte[] imgByte = Base64.decode(prePicture, Base64.DEFAULT);
+
+                    currPicture = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+
+                    story.setStorySnap(currPicture);
+                    story.setStoryTime(a.getString("timestamp"));
+
+                    listStories.add(story);
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+
+            mAdapter adapter = new mAdapter(Activity_Stories.this, listStories);
+
+            listOfStories.setAdapter(adapter);
         }
-
-        mAdapter adapter = new mAdapter(Activity_Stories.this, listStories);
-
-        listOfStories.setAdapter(adapter);
     }
 
     public class RefreshStories extends AsyncTask<Void, Void, JSONArray>
@@ -131,7 +143,7 @@ public class Activity_Stories extends AppCompatActivity {
                 }
             }catch(Exception e)
             {
-                Toast.makeText(Activity_Stories.this, "No Network", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
             }
 
             return resultSet;

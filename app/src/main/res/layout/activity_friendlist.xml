@@ -18,7 +18,7 @@
         <ListView
             android:id="@+id/list_of_friends"
             android:layout_width="match_parent"
-            android:layout_height="513dp" />
+            android:layout_height="571dp" />
 
         <!--<LinearLayout-->
         <!--android:layout_width="match_parent"-->
