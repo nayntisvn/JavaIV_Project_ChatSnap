@@ -666,6 +666,11 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
     public class Send extends AsyncTask<String, Void, Void>
     {
         @Override
+        public void onPreExecute(){
+            Toast.makeText(CameraActivity.this, "Sending", Toast.LENGTH_LONG);
+        }
+
+        @Override
         public Void doInBackground(String... params)
         {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -708,6 +713,7 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
         @Override
         public void onPostExecute(Void result)
         {
+
             Toast.makeText(CameraActivity.this, "Sent", Toast.LENGTH_SHORT);
         }
     }
