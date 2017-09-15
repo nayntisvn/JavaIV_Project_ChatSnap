@@ -32,7 +32,8 @@ public class Activity_MessageArea extends AppCompatActivity implements SensorEve
     String messageToBeSend= "";
     EditText Message;
     ImageView Send;
-    private static final int SHAKE_THRESHOLD = 1500;
+    private static final int SHAKE_THRESHOLD = 3000, SHAKE_COUNT= 5;
+    int shake = 0;
     long lastUpdate;
     float x,y,z, last_x=0, last_y=0, last_z=0;
 
@@ -55,7 +56,12 @@ public class Activity_MessageArea extends AppCompatActivity implements SensorEve
                 float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
 
                 if (speed > SHAKE_THRESHOLD) {
-                    Send.performClick();
+                    shake++;
+                    if(shake > SHAKE_COUNT){
+                        shake = 0;
+                        Send.performClick();
+                    }
+
                 }
                 last_x = x;
                 last_y = y;
