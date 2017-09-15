@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -21,6 +22,7 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
@@ -33,6 +35,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.sdist.testingproject.FaceTracker.camera.CameraSourcePreview;
@@ -55,6 +58,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -79,7 +83,8 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
     ImageButton takePicture;
     LinearLayout cameraLayout;
     ImageView preview;
-
+    RelativeLayout camLayout;
+    LinearLayout prevLayout;
     ImageButton btnBack;
     ImageButton btnBack2;
     ImageButton btnSend;
@@ -117,6 +122,7 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
         filter = BitmapFactory.decodeResource(getResources(), filters[0]);
         takePicture = (ImageButton) findViewById(R.id.btnCapture);
+        camLayout = (RelativeLayout) findViewById(R.id.cam_layout);
         cameraLayout = (LinearLayout) findViewById(R.id.cameraLayout);
         preview = (ImageView) findViewById(R.id.imgViewPreview);
         btnBack = (ImageButton) findViewById(R.id.btnBack);
@@ -124,6 +130,7 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
         btnSend = (ImageButton) findViewById(R.id.btnSend);
         btnSave = (ImageButton) findViewById(R.id.btnSave);
         btnFlash = (ImageButton) findViewById(R.id.btnFlash);
+        prevLayout = (LinearLayout) findViewById(R.id.previewLayout);
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         tmpSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
@@ -135,11 +142,11 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                 mCameraSource.takePicture(null, new CameraSource.PictureCallback(){
                     @Override
                     public void onPictureTaken(byte[] bytes) {
+                        flashOnButton();
+                        prevLayout.setVisibility(View.VISIBLE);
+                        camLayout.setVisibility(View.INVISIBLE);
+
                         mCameraSource.stop();
-                        Resources r = getResources();
-                        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 512, r.getDisplayMetrics());
-                        cameraLayout.getLayoutParams().height = 0;
-                        preview.getLayoutParams().height = (int) px;
 
                         picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         Matrix matrix = new Matrix();
@@ -214,6 +221,7 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                     flash = 0;
                     btnFlash.setImageResource(R.mipmap.flash_on);
                 }
+
             }
         });
 
@@ -349,11 +357,56 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
         }
     }
 
+    private Camera camera = null;
+    private void flashOnButton() {
+        camera=getCamera(mCameraSource);
+        if (camera != null) {
+            try {
+                Camera.Parameters param = camera.getParameters();
+                if (flash == 0)
+                    param.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+
+                else if (flash == 1)
+                    param.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+
+                else if (flash == 2)
+                    param.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
+
+
+                camera.setParameters(param);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private static Camera getCamera(@NonNull CameraSource cameraSource) {
+        Field[] declaredFields = CameraSource.class.getDeclaredFields();
+
+        for (Field field : declaredFields) {
+            if (field.getType() == Camera.class) {
+                field.setAccessible(true);
+                try {
+                    Camera camera = (Camera) field.get(cameraSource);
+                    if (camera != null) {
+                        return camera;
+                    }
+                    return null;
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
+        }
+        return null;
+    }
+
     @Override
     public void onBackPressed() {
         if(cameraLayout.getHeight() == 0) {
-            cameraLayout.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
-            preview.setImageDrawable(null);
+            prevLayout.setVisibility(View.INVISIBLE);
+            camLayout.setVisibility(View.VISIBLE);
             startCameraSource();
         }
 
