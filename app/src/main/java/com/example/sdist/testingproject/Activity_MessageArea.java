@@ -134,11 +134,11 @@ public class Activity_MessageArea extends AppCompatActivity implements SensorEve
 
                 messageToBeSend = "{ \n" +
                         "\t\"message\" : \"%s\",\n" +
-                        "\t\"timestamp\" : \"2009-09-17T00:00:00+08:00\",\n" +
+                        "\t\"timestamp\" : \"%s\",\n" +
                         "\t\"recipient\" : %s\n" +
                         "}";
 
-                messageToBeSend = String.format(messageToBeSend, Message.getText().toString(), friendUserId);
+                messageToBeSend = String.format(messageToBeSend, Message.getText().toString(), Set_Configurations.getTimeStamp(), friendUserId);
 
                 new SendMessages().execute();
 
@@ -161,6 +161,7 @@ public class Activity_MessageArea extends AppCompatActivity implements SensorEve
 
         mAccelerometer = sensorMgr.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorMgr.registerListener(Activity_MessageArea.this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+
         thread.start();
 
     }

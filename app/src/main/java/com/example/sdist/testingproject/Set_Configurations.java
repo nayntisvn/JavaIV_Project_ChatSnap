@@ -92,9 +92,12 @@ public class Set_Configurations {
         Birthday = birthday;
     }
 
-    public String getTimeStamp(){
+    public static String getTimeStamp(){
         SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String format = s.format(new Date());
+
+        format = format.replace(" ", "T") + "+08:00";
+
         return format;
     }
 }

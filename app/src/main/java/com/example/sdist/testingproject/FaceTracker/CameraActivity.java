@@ -666,6 +666,11 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
     public class Send extends AsyncTask<String, Void, Void>
     {
         @Override
+        public void onPreExecute(){
+            Toast.makeText(CameraActivity.this, "Sending", Toast.LENGTH_LONG);
+        }
+
+        @Override
         public Void doInBackground(String... params)
         {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -681,10 +686,10 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
 
             if(params[0].equals("1"))
             {
-                stringToPass = "{\"timestamp\" : \"2009-09-17T00:00:00+08:45\", \"file\" : \"" + pic + "\"}";
+                stringToPass = "{\"timestamp\" : \"%s\", \"file\" : \"" + pic + "\"}";
 
                 try {
-                    Set_WebServices.postJsonObject(Set_Configurations.User_Stories_Send + Set_Configurations.userId, stringToPass);
+                    Set_WebServices.postJsonObject(Set_Configurations.User_Stories_Send + Set_Configurations.userId, String.format(stringToPass, Set_Configurations.getTimeStamp()));
 
                 }
                 catch (Exception ex) {
@@ -708,6 +713,7 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
         @Override
         public void onPostExecute(Void result)
         {
+
             Toast.makeText(CameraActivity.this, "Sent", Toast.LENGTH_SHORT);
         }
     }
