@@ -73,7 +73,25 @@ public class Activity_Stories extends AppCompatActivity {
 
         listStories = new ArrayList<Class_Story>();
 
+
+//        Thread thread = new Thread() {
+//            @Override
+//            public void run() {
+//                try {
+//                    while(true) {
+//                        sleep(1000);
+//
+//                    }
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        };
+
+//        thread.start();
+
         new RefreshStories().execute();
+
     }
 
     public class mAdapter extends ArrayAdapter<Class_Story> {

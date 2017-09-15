@@ -108,13 +108,13 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
         height = (int) ((filter.getHeight() + face.getHeight() + 60) * 0.65f);
 
         //ANNE
-        width = (int) ((filter.getWidth() + face.getWidth()) * 0.75f);
-        height = (int) ((filter.getHeight() + face.getHeight() + 60) * 0.75f);
+//        width = (int) ((filter.getWidth() + face.getWidth()) * 0.75f);
+//        height = (int) ((filter.getHeight() + face.getHeight() + 60) * 0.75f);
 
         posX = (x - filter.getWidth()/2);
 
-        posY = y - (filter.getHeight()/2) + 80; //ERICK
-//        posY = y - (filter.getHeight()/2) + 120; //RJ
+//        posY = y - (filter.getHeight()/2) + 80; //ERICK
+        posY = y - (filter.getHeight()/2) + 120; //RJ
 
         filter = filter.copy(Bitmap.Config.ARGB_8888, true);
         filter = Bitmap.createScaledBitmap(filter, width, height, false);
