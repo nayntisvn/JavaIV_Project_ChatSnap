@@ -267,12 +267,6 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
 
             Paint paint = new Paint();
             String txt;
-//            int index = 0;
-//            if(index == 0){
-//                LocationClass locationClass = new LocationClass(CameraActivity.this);
-//                locationClass.getLocation();
-//                txt = locationClass.getLocality(CameraActivity.this);
-//            }
 
             public void onSwipeRight() {
 
