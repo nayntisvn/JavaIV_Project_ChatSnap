@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="@color/black_overlay"
     android:orientation="vertical"
     tools:context="com.example.sdist.testingproject.FaceTracker.CameraActivity">
 
@@ -104,6 +104,12 @@
             android:background="@android:color/transparent"
             >
 
+            <ImageView
+                android:id="@+id/imgViewPreview"
+                android:layout_width="match_parent"
+                android:layout_height="512dp"
+                app:srcCompat="@color/common_google_signin_btn_text_dark_focused" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -138,11 +144,6 @@
                     android:src="@drawable/ic_send" />
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imgViewPreview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:srcCompat="@color/common_google_signin_btn_text_dark_focused" />
 
 
         </LinearLayout>

@@ -26,10 +26,5 @@
             android:text="xxx"
             android:textSize="12dp"
             />
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="25dp" />
     </LinearLayout>
-
 </LinearLayout>
