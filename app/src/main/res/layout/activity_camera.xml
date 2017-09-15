@@ -75,7 +75,8 @@
                     android:layout_width="72dp"
                     android:layout_height="72dp"
                     android:layout_margin="10dp"
-                    android:background="@drawable/circle_button" />
+                    android:background="@drawable/circle_button"
+                    app:srcCompat="@mipmap/flash_on" />
 
                 <ImageButton
                     android:id="@+id/btnSwitchCam"
@@ -87,7 +88,7 @@
                     tools:background="@drawable/circle_button" />
             </LinearLayout>
 
-            <!--app:srcCompat="@mipmap/flash_on" />-->
+            <!-- />-->
 
         </RelativeLayout>
 
