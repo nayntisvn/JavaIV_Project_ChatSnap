@@ -144,7 +144,7 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                     public void onPictureTaken(byte[] bytes) {
                         flashOnButton();
                         prevLayout.setVisibility(View.VISIBLE);
-                        camLayout.setVisibility(View.INVISIBLE);
+                        cameraLayout.setVisibility(View.INVISIBLE);
 
                         mCameraSource.stop();
 
@@ -404,9 +404,9 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
 
     @Override
     public void onBackPressed() {
-        if(cameraLayout.getHeight() == 0) {
+        if(cameraLayout.getVisibility() == View.INVISIBLE) {
             prevLayout.setVisibility(View.INVISIBLE);
-            camLayout.setVisibility(View.VISIBLE);
+            cameraLayout.setVisibility(View.VISIBLE);
             startCameraSource();
         }
 
