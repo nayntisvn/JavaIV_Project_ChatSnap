@@ -7,28 +7,15 @@
     android:orientation="vertical"
     tools:context="com.example.sdist.testingproject.Activity_Stories">
 
+    <ListView
+        android:id="@+id/list_of_snaps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom"
-                android:orientation="vertical">
-
-                <ListView
-                    android:id="@+id/list_of_snaps"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </LinearLayout>
-        </LinearLayout>
     </ScrollView>
 
     <LinearLayout
