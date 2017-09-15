@@ -2,14 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/friends"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawableLeft="@drawable/ic_account"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:text="FRIENDLIST"
+        android:textColor="@android:color/white"
+        android:textSize="35dp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/friend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="normal|bold"
-        android:text="Mahal0h_6969"
+        android:text="Mahalq0uh_6969"
         android:textSize="20dp"
         android:fontFamily="sans-serif"
         android:textColor="@android:color/white"
