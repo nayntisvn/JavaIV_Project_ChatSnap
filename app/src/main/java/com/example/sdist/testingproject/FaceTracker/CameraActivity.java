@@ -705,10 +705,10 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
             }
             else if(params[0].equals("2"))
             {
-                stringToPass = "{\"file\" : \"" + pic + "\", \"userId\" : {\"userId\" : %s}, \"timestamp\" : \"2009-09-17T00:00:00+08:01\", \"recipient\" : %s}";
+                stringToPass = "{\"file\" : \"" + pic + "\", \"timestamp\" : \"%s\", \"recipient\" : %s}";
 
                 try {
-                    Set_WebServices.postJsonObject(Set_Configurations.User_Object_Send + 1, String.format(stringToPass,Set_Configurations.userId, "" + userFriendId));
+                    Set_WebServices.postJsonObject(Set_Configurations.User_Object_Send + 1, String.format(stringToPass,Set_Configurations.userId, Set_Configurations.getTimeStamp(), "" + userFriendId));
                 }
                 catch (Exception ex) {
                     Log.d("Error", ex.getMessage());

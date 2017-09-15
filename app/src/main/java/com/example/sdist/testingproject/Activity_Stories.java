@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Camera;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.sdist.testingproject.FaceTracker.CameraActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,6 +36,8 @@ public class Activity_Stories extends AppCompatActivity {
     Bitmap currPicture;
     String prePicture;
 
+    ImageView Send;
+
     int userFriendId = 0;
     String mode = "";
 
@@ -45,6 +50,25 @@ public class Activity_Stories extends AppCompatActivity {
         if(extras!=null){
             mode = extras.getString("Mode");
             userFriendId = Integer.parseInt(extras.getString("userFriendId"));
+        }
+
+        Send = (ImageView) findViewById(R.id.imageView8);
+
+        if(mode.equals("FriendStory"))
+        {
+            Send.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    intent = new Intent(getApplicationContext(), CameraActivity.class);
+                    intent.putExtra("userFriendId", userFriendId + "");
+                    startActivity(intent);
+                }
+            });
+        }
+        else if(mode.equals("MyStory"))
+        {
+            Send.setEnabled(false);
         }
 
         listStories = new ArrayList<Class_Story>();
@@ -112,6 +136,7 @@ public class Activity_Stories extends AppCompatActivity {
                     story.setStorySnap(currPicture);
                     story.setStoryTime(a.getString("timestamp"));
 
+
                     listStories.add(story);
 
                 }
@@ -125,24 +150,21 @@ public class Activity_Stories extends AppCompatActivity {
         }
     }
 
-    public class RefreshStories extends AsyncTask<Void, Void, JSONArray>
-    {
+    public class RefreshStories extends AsyncTask<Void, Void, JSONArray> {
         @Override
-        public JSONArray doInBackground(Void... params){
+        public JSONArray doInBackground(Void... params) {
 
             JSONArray resultSet = null;
-            try{
-                if(userFriendId == 0 && mode.equals("MyStory")) {
+            try {
+                if (userFriendId == 0 && mode.equals("MyStory")) {
 
                     resultSet = new JSONArray(Set_WebServices.getJsonObject(Set_Configurations.User_Stories + Set_Configurations.userId));
-                }
-                else if(userFriendId != 0 && mode.equals("FriendStory")){
+                } else if (userFriendId != 0 && mode.equals("FriendStory")) {
 
                     resultSet = new JSONArray(Set_WebServices.getJsonObject(Set_Configurations.User_Objects + Set_Configurations.userId + "/" + userFriendId));
 
                 }
-            }catch(Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -150,10 +172,9 @@ public class Activity_Stories extends AppCompatActivity {
         }
 
         @Override
-        public void onPostExecute(JSONArray result){
+        public void onPostExecute(JSONArray result) {
 
-            if(result != null)
-            {
+            if (result != null) {
                 displayStories(result);
             }
 
