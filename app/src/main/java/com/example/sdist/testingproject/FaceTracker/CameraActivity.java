@@ -152,19 +152,19 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                         Matrix matrix = new Matrix();
 
 //                        //ERICK
-                        if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
-                            matrix.postRotate(-90f);
-                            matrix.preScale(1, -1);
-                        }
-
-                        else if (cameraFacing == CameraSource.CAMERA_FACING_BACK) {
-                            matrix.postRotate(90f);
-                        }
+//                        if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
+//                            matrix.postRotate(-90f);
+//                            matrix.preScale(1, -1);
+//                        }
+//
+//                        else if (cameraFacing == CameraSource.CAMERA_FACING_BACK) {
+//                            matrix.postRotate(90f);
+//                        }
 
                         //RJ
-//                        if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
-//                            matrix.preScale(-1, 1);
-//                        }
+                        if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
+                            matrix.preScale(-1, 1);
+                        }
 
                         picture = Bitmap.createBitmap(picture, 0, 0, picture.getWidth(), picture.getHeight(), matrix, false);
                         picture = picture.copy(Bitmap.Config.ARGB_8888, true);
@@ -172,11 +172,11 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
 
                         try {
                             if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
-//                                filter = Bitmap.createScaledBitmap(filter, (int) (mFaceGraphic.width * 2.5), (int) (mFaceGraphic.height * 2.5), false); //ERICK
-                                filter = Bitmap.createScaledBitmap(filter, (int) (mFaceGraphic.width * 1.5), (int) (mFaceGraphic.height * 1.5), false); //ANNE
+                                filter = Bitmap.createScaledBitmap(filter, (int) (mFaceGraphic.width * 2.5), (int) (mFaceGraphic.height * 2.5), false); //ERICK
+                                //filter = Bitmap.createScaledBitmap(filter, (int) (mFaceGraphic.width * 1.5), (int) (mFaceGraphic.height * 1.5), false); //ANNE
                                 //canvas.drawBitmap(filter, mFaceGraphic.posX * 3, mFaceGraphic.posY  * 3, new Paint()); //ERICK
-                                //canvas.drawBitmap(filter, (int) (mFaceGraphic.posX * 2), (int) (mFaceGraphic.posY  * 2), new Paint()); //RJ
-                                canvas.drawBitmap(filter, (int) (mFaceGraphic.posX * 1.2f), (int) (mFaceGraphic.posY  * 1.2f), new Paint()); //ANNE
+                                canvas.drawBitmap(filter, (int) (mFaceGraphic.posX * 2), (int) (mFaceGraphic.posY  * 2), new Paint()); //RJ
+//                                canvas.drawBitmap(filter, (int) (mFaceGraphic.posX * 1.2f), (int) (mFaceGraphic.posY  * 1.2f), new Paint()); //ANNE
                             }
                         }
 
@@ -270,7 +270,7 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                 LocationClass locationClass = new LocationClass(CameraActivity.this);
                 locationClass.getLocation();
                 if (preview.getHeight() > 0){
-                    txt = locationClass.getLocality(CameraActivity.this);
+                    txt = locationClass.getAddressLine(CameraActivity.this);
                     Canvas canvas = new Canvas(picture);
                     canvas.drawColor(0, PorterDuff.Mode.CLEAR);
                     paint.setColor(Color.WHITE);
@@ -759,9 +759,9 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
             else if(params[0].equals("2"))
             {
                 stringToPass = "{\"file\" : \"" + pic + "\", \"timestamp\" : \"%s\", \"recipient\" : %s}";
-
+                stringToPass = String.format(stringToPass, Set_Configurations.getTimeStamp(), "" + userFriendId);
                 try {
-                    Set_WebServices.postJsonObject(Set_Configurations.User_Object_Send + 1, String.format(stringToPass,Set_Configurations.userId, Set_Configurations.getTimeStamp(), "" + userFriendId));
+                    Set_WebServices.postJsonObject(Set_Configurations.User_Object_Send + 1, stringToPass);
                 }
                 catch (Exception ex) {
                     Log.d("Error", ex.getMessage());
