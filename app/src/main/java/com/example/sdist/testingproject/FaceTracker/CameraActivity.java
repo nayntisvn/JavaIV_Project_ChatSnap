@@ -62,7 +62,7 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
     private static final String TAG = "FaceTracker";
     private CameraSource mCameraSource = null;
     public static int cameraFacing;
-    private int[] filters = new int[] { R.drawable.dog, R.drawable.cat };
+    private int[] filters = new int[] { R.drawable.dog, R.drawable.cat, R.drawable.dog2 };
     private int i = 0;
     private CameraSourcePreview mPreview;
     private GraphicOverlay mGraphicOverlay;
@@ -165,9 +165,11 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
 
                         try {
                             if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
-                                filter = Bitmap.createScaledBitmap(filter, (int) (mFaceGraphic.width * 2.5), (int) (mFaceGraphic.height * 2.5), false);
-                                canvas.drawBitmap(filter, mFaceGraphic.posX * 3, mFaceGraphic.posY  * 3, new Paint()); //ERICK
+//                                filter = Bitmap.createScaledBitmap(filter, (int) (mFaceGraphic.width * 2.5), (int) (mFaceGraphic.height * 2.5), false); //ERICK
+                                filter = Bitmap.createScaledBitmap(filter, (int) (mFaceGraphic.width * 1.5), (int) (mFaceGraphic.height * 1.5), false); //ANNE
+                                //canvas.drawBitmap(filter, mFaceGraphic.posX * 3, mFaceGraphic.posY  * 3, new Paint()); //ERICK
                                 //canvas.drawBitmap(filter, (int) (mFaceGraphic.posX * 2), (int) (mFaceGraphic.posY  * 2), new Paint()); //RJ
+                                canvas.drawBitmap(filter, (int) (mFaceGraphic.posX * 1.2f), (int) (mFaceGraphic.posY  * 1.2f), new Paint()); //ANNE
                             }
                         }
 
@@ -224,8 +226,13 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                 }
 
                 else if (i == 1) {
+                    filter = BitmapFactory.decodeResource(getResources(), filters[2]);
+                    i++;
+                }
+
+                else if (i == 2) {
                     filter = BitmapFactory.decodeResource(getResources(), filters[0]);
-                    i--;
+                    i = 0;
                 }
                 mCameraSource.release();
                 createCameraSource(cameraFacing);

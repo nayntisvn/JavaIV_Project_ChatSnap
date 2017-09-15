@@ -100,14 +100,19 @@ public class FaceGraphic extends GraphicOverlay.Graphic {
 
 
         //ERICK
-        width = (int) ((filter.getWidth() + face.getWidth()) * 0.63f);
-        height = (int) ((filter.getHeight() + face.getHeight() + 60) * 0.63f);
+//        width = (int) ((filter.getWidth() + face.getWidth()) * 0.63f);
+//        height = (int) ((filter.getHeight() + face.getHeight() + 60) * 0.63f);
 
         //RJ
-//        width = (int) ((filter.getWidth() + face.getWidth()) * 0.65f);
-//        height = (int) ((filter.getHeight() + face.getHeight() + 60) * 0.65f);
+        width = (int) ((filter.getWidth() + face.getWidth()) * 0.65f);
+        height = (int) ((filter.getHeight() + face.getHeight() + 60) * 0.65f);
+
+        //ANNE
+        width = (int) ((filter.getWidth() + face.getWidth()) * 0.75f);
+        height = (int) ((filter.getHeight() + face.getHeight() + 60) * 0.75f);
 
         posX = (x - filter.getWidth()/2);
+
         posY = y - (filter.getHeight()/2) + 80; //ERICK
 //        posY = y - (filter.getHeight()/2) + 120; //RJ
 
