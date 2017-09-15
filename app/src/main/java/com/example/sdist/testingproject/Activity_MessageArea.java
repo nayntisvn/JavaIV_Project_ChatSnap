@@ -32,7 +32,7 @@ public class Activity_MessageArea extends AppCompatActivity implements SensorEve
     String messageToBeSend= "";
     EditText Message;
     ImageView Send;
-    private static final int SHAKE_THRESHOLD = 800;
+    private static final int SHAKE_THRESHOLD = 1500;
     long lastUpdate;
     float x,y,z, last_x=0, last_y=0, last_z=0;
 
