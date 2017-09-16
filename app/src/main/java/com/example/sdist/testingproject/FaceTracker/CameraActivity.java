@@ -222,7 +222,6 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
                     flash = 0;
                     btnFlash.setImageResource(R.mipmap.flash_on);
                 }
-
             }
         });
 
@@ -269,8 +268,10 @@ public class CameraActivity extends AppCompatActivity implements SensorEventList
             String txt;
 
             public void onSwipeRight() {
-
+                LocationClass locationClass = new LocationClass(CameraActivity.this);
+                locationClass.getLocation();
                 if (preview.getHeight() > 0){
+                    txt = locationClass.getAddressLine(CameraActivity.this);
                     Canvas canvas = new Canvas(picture);
                     canvas.drawColor(0, PorterDuff.Mode.CLEAR);
                     paint.setColor(Color.WHITE);
